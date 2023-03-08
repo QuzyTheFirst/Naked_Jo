@@ -119,14 +119,22 @@ public class Weapon : MonoBehaviour, IWeapon
         _rig.velocity *= .2f;
         _rig.angularVelocity *= .2f;
 
+        Vector2 dirToWeapon = (transform.position - collision.transform.position).normalized;
+        Vector2 dirToCollision = -dirToWeapon;
+        float sign = Mathf.Sign(dirToWeapon.x);
+
+        Rigidbody2D rig = collision.transform.GetComponent<Rigidbody2D>();
+        if(rig != null)
+        {
+            rig.velocity = dirToCollision * 3f;
+        }
+
         SimpleEnemy enemy = collision.transform.GetComponent<SimpleEnemy>();
         if (enemy != null)
         {
             enemy.Stun(2f);
 
-            float dir = Mathf.Sign((transform.position - collision.transform.position).x);
-
-            enemy.WeaponController.DropWeapon(new Vector2(dir, 0f));
+            enemy.WeaponController.DropWeapon(new Vector2(sign, 0f));
         }
     }
 

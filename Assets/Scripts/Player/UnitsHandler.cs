@@ -16,7 +16,7 @@ public class UnitsHandler : PlayerInputHandler
     [SerializeField] private LineRenderer _possessionLineRenderer;
     [SerializeField] private LayerMask _possessionMask;
     [SerializeField] private LayerMask _unpossessionMask;
-    private float _cooldownTimer = 0f;
+    [SerializeField] private float _cooldownTimer = 0f;
 
     [Header("Attack Masks")]
     [SerializeField] private LayerMask _enemyAttackMask;
@@ -26,6 +26,8 @@ public class UnitsHandler : PlayerInputHandler
     [SerializeField] private float _explosionRadius;
     [SerializeField] private float _timeToExplode;
     [SerializeField] private float _explosionStunTime;
+    [SerializeField] private ParticleSystem _explosionParticles;
+    [SerializeField] private Transform _explosionRadiusVisuals;
     private float _explosionTimer;
     private bool _isExplosionGoing;
 
@@ -158,7 +160,11 @@ public class UnitsHandler : PlayerInputHandler
 
         CheckForPlayerExplosion();
 
-        _cooldownTimer -= Time.deltaTime;
+
+        if (_cooldownTimer >= 0)
+        {
+            _cooldownTimer -= Time.deltaTime;
+        }
     }
 
     private void CheckForPlayerExplosion()
@@ -174,6 +180,10 @@ public class UnitsHandler : PlayerInputHandler
             SpriteRenderer enemyGraphics = _currentUnit.Enemy.GetGraphics();
             Color newColor = Color.white - Color.white * explosionProcentage;
             enemyGraphics.color = new Color(newColor.r, newColor.g, newColor.b, 255);
+
+            _explosionRadiusVisuals.transform.position = _currentUnit.transform.position;
+            Debug.Log($"Current unit: {_currentUnit.transform.position} | {_currentUnit.transform.name}");
+            _explosionRadiusVisuals.gameObject.SetActive(true);
 
             if (_explosionTimer >= _timeToExplode)
             {
@@ -203,8 +213,14 @@ public class UnitsHandler : PlayerInputHandler
                     }
                 }
 
+                _explosionParticles.transform.position = _playerUnit.transform.position;
+                _explosionParticles.Play();
+
                 _explosionTimer = 0;
+                _cooldownTimer = 0f;
                 _isExplosionGoing = false;
+
+                _explosionRadiusVisuals.gameObject.SetActive(false);
             }
         }
         else
@@ -217,6 +233,8 @@ public class UnitsHandler : PlayerInputHandler
                 enemyGraphics.color = Color.white;
                 _currentUnit.Player.SetMaxSpeedModifier(1f);
                 _isExplosionGoing = false;
+
+                _explosionRadiusVisuals.gameObject.SetActive(false);
             }
         }
     }
@@ -339,6 +357,8 @@ public class UnitsHandler : PlayerInputHandler
 
             _units.Remove(unit);
 
+            _cooldownTimer = 0f;
+
             Destroy(unit.transform.gameObject);
             return;
         }
@@ -356,8 +376,8 @@ public class UnitsHandler : PlayerInputHandler
         _units.Remove(unit);
 
         _isExplosionGoing = false;
+        _explosionRadiusVisuals.gameObject.SetActive(false);
         _explosionTimer = 0f;
-        _cooldownTimer = 0f;
 
         Destroy(unit.transform.gameObject);
     }
@@ -583,13 +603,17 @@ public class UnitsHandler : PlayerInputHandler
     private IEnumerator EnableCollision(Collider2D col1, Collider2D col2, float time)
     {
         yield return new WaitForSeconds(time);
-        Physics2D.IgnoreCollision(col1, col2, false);
+
+        if (col1 != null && col2 != null)
+        { 
+            Physics2D.IgnoreCollision(col1, col2, false);
+        }
     }
     #endregion
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.cyan;
 
         if (_currentUnit != null)
             Gizmos.DrawWireSphere(_currentUnit.transform.position, _explosionRadius);
