@@ -10,6 +10,12 @@ public class UnitsHandler : PlayerInputHandler
     [Header("Level")]
     [SerializeField] private GameObject _nextLevelLoader;
 
+    [Header("Cursor")]
+    [SerializeField] private CursorController _cursorController;
+    [SerializeField] private Color _canPossessColor;
+    [SerializeField] private Color _canOnlyUnpossessColor;
+    private Vector2 _mousePosInWorld;
+
     [Header("Possession")]
     [SerializeField] private float _possessionRadius;
     [SerializeField] private float _cooldownTime;
@@ -148,6 +154,10 @@ public class UnitsHandler : PlayerInputHandler
 
     private void Update()
     {
+        Camera mainCamera = Camera.main;
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        _mousePosInWorld = mainCamera.ScreenToWorldPoint(mousePos);
+
         UpdateWeaponTargetPos();
 
         if (_currentUnit != null)
@@ -159,6 +169,18 @@ public class UnitsHandler : PlayerInputHandler
             ShowPossessionLine();
 
         CheckForPlayerExplosion();
+
+
+        _cursorController.SetCursorPosition(_mousePosInWorld);
+        if(_cooldownTimer <= 0)
+        {
+            _cursorController.ChangePossessionIconColor(_canPossessColor);
+        }
+        else
+        {
+            _cursorController.ChangePossessionIconColor(_canOnlyUnpossessColor);
+        }
+        _cursorController.TogglePossessionIcon(_playerUnit != _currentUnit || _cooldownTimer <= 0);
 
 
         if (_cooldownTimer >= 0)
@@ -244,11 +266,7 @@ public class UnitsHandler : PlayerInputHandler
         if (_currentUnit == _playerUnit)
             return;
 
-        Camera mainCamera = Camera.main;
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        Vector2 mousePosInWorld = mainCamera.ScreenToWorldPoint(mousePos);
-
-        _currentUnit.WeaponController.TargetPos = mousePosInWorld;
+        _currentUnit.WeaponController.TargetPos = _mousePosInWorld;
     }
 
     private void CheckForNextLevelLoaderSpawn()
@@ -402,20 +420,23 @@ public class UnitsHandler : PlayerInputHandler
     #region Inputs
     private void UnitsHandler_PossessPerformed(object sender, System.EventArgs e)
     {
-        if (!_isSlowMotionButtonPressed || _isExplosionButtonPressed || _cooldownTimer >= 0)
+        if (!_isSlowMotionButtonPressed || _isExplosionButtonPressed)
             return;
 
-        Camera mainCamera = Camera.main;
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        Vector2 mousePosInWorld = mainCamera.ScreenToWorldPoint(mousePos);
-
-        if (PossessionRay(mousePosInWorld))
+        if(_cooldownTimer <= 0)
         {
-            _cooldownTimer = _cooldownTime;
+            if (PossessionRay(_mousePosInWorld))
+            {
+                _cooldownTimer = _cooldownTime;
+            }
+            else
+            {
+                UnpossessionRay(_mousePosInWorld);
+            }
         }
-        else if (UnpossessionRay(mousePosInWorld))
+        else
         {
-            _cooldownTimer = _cooldownTime;
+            UnpossessionRay(_mousePosInWorld);
         }
     }
 
@@ -557,8 +578,7 @@ public class UnitsHandler : PlayerInputHandler
     private void ShowPossessionLine()
     {
         Vector2 playerPos = _currentUnit.transform.position;
-        Vector2 mousePosInWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Vector2 possessionDir = (mousePosInWorld - playerPos).normalized;
+        Vector2 possessionDir = (_mousePosInWorld - playerPos).normalized;
 
         Vector2 possessionVector = possessionDir * _possessionRadius;
 
