@@ -232,7 +232,7 @@ MonoBehaviour:
   _accelInAir: 7
   _deccelInAir: 7
   _doConserveMomentum: 0
-  _jumpHeight: 5
+  _jumpHeight: 2
   _jumpPressedRememberTime: 0.2
   _maxAirJumps: 0
   _downwardMovementMultiplier: 3
@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 4551318844141774568}
   - component: {fileID: 2606127102694703421}
   - component: {fileID: 3511332605532346751}
-  m_Layer: 7
+  m_Layer: 14
   m_Name: HeadTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

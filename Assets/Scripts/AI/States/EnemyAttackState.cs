@@ -25,7 +25,7 @@ public class EnemyAttackState : EnemyBaseState
         //{
             if (Time.time > context.TimeToNextShoot)
             {
-                context.WeaponController.Shoot();
+                context.WeaponController.Shoot(context.TargetUnit);
 
                 context.WeaponController.ResetAmmo();
 

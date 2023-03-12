@@ -302,7 +302,7 @@ MonoBehaviour:
   _accelInAir: 7
   _deccelInAir: 7
   _doConserveMomentum: 0
-  _jumpHeight: 5
+  _jumpHeight: 2
   _jumpPressedRememberTime: 0.2
   _maxAirJumps: 0
   _downwardMovementMultiplier: 3

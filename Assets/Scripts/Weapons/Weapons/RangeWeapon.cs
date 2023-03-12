@@ -18,7 +18,7 @@ public class RangeWeapon : Weapon
         _currentAmmo = _weaponParams.Ammo;
     }
 
-    public override void Shoot(Vector2 targetPos)
+    public override void Shoot(Transform target)
     {
         if (Time.time < _lastAttackTime + _weaponParams.FireRate)
             return;
@@ -30,7 +30,7 @@ public class RangeWeapon : Weapon
         }
 
         float distanceFromPlayer = 1.25f;
-        Vector2 dir = (targetPos - (Vector2)UnitController.transform.position).normalized;
+        Vector2 dir = (target.position - UnitController.transform.position).normalized;
         Vector2 spawnPos = (Vector2)UnitController.transform.position + (dir * distanceFromPlayer);
 
         float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;

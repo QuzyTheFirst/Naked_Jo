@@ -50,9 +50,9 @@ public class Weapon : MonoBehaviour, IWeapon
         _mainTf.localPosition = dir * distanceFromPlayer;
     }
 
-    public virtual void Shoot(Vector2 targetPos)
+    public virtual void Shoot(Transform target)
     {
-        Debug.Log("Shooted");
+        Debug.Log("Shooted tf");
     }
 
     public virtual void DropWeapon()
@@ -184,5 +184,14 @@ public class Weapon : MonoBehaviour, IWeapon
     public void SetAttackMask(LayerMask attackMask)
     {
         _attackMask = attackMask;
+    }
+
+    protected Vector2 FindMousePosInWorld()
+    {
+        Camera mainCamera = Camera.main;
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        Vector2 mousePosInWorld = mainCamera.ScreenToWorldPoint(mousePos);
+
+        return mousePosInWorld;
     }
 }

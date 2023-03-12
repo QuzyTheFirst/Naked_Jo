@@ -197,14 +197,14 @@ public class UnitsHandler : PlayerInputHandler
             _currentUnit.Player.SetMaxSpeedModifier(.1f);
             _explosionTimer += Time.deltaTime;
             float explosionProcentage = _explosionTimer / _timeToExplode;
-            Debug.Log("Exp proc: " + explosionProcentage);
+            //Debug.Log("Exp proc: " + explosionProcentage);
 
             SpriteRenderer enemyGraphics = _currentUnit.Enemy.GetGraphics();
             Color newColor = Color.white - Color.white * explosionProcentage;
             enemyGraphics.color = new Color(newColor.r, newColor.g, newColor.b, 255);
 
             _explosionRadiusVisuals.transform.position = _currentUnit.transform.position;
-            Debug.Log($"Current unit: {_currentUnit.transform.position} | {_currentUnit.transform.name}");
+            //Debug.Log($"Current unit: {_currentUnit.transform.position} | {_currentUnit.transform.name}");
             _explosionRadiusVisuals.gameObject.SetActive(true);
 
             if (_explosionTimer >= _timeToExplode)
@@ -558,7 +558,7 @@ public class UnitsHandler : PlayerInputHandler
     public void UnitsHandler_AttackPerformed(object sender, EventArgs e)
     {
         if (_currentUnit.WeaponController != null)
-            _currentUnit.WeaponController.Shoot();
+            _currentUnit.WeaponController.Shoot(_cursorController.transform);
     }
 
     public void UnitsHandler_SlowMotionPerformed(object sender, EventArgs e)

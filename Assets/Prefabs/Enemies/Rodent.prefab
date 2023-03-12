@@ -179,8 +179,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   _timerBeforeAttack: 0
-  _runSpeed: 6
-  _walkSpeed: 3
+  _runSpeed: 10
+  _walkSpeed: 5
   _lerpAmount: 8
   _acceleration: 10
   _deceleration: 8
@@ -231,7 +231,7 @@ MonoBehaviour:
   _accelInAir: 7
   _deccelInAir: 7
   _doConserveMomentum: 0
-  _jumpHeight: 5
+  _jumpHeight: 2
   _jumpPressedRememberTime: 0.2
   _maxAirJumps: 0
   _downwardMovementMultiplier: 3
@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 5012600792315294304}
   - component: {fileID: 4857451196985996578}
   - component: {fileID: 8204688326067080358}
-  m_Layer: 7
+  m_Layer: 14
   m_Name: HeadTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

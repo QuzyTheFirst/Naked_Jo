@@ -19,14 +19,14 @@ public class MelleeWeapon : Weapon
         _anim = GetComponent<Animator>();
     }
 
-    public override void Shoot(Vector2 targetPos)
+    public override void Shoot(Transform target)
     {
         if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
             return;
 
         _anim.SetTrigger("Prepare");
 
-        StartCoroutine(Attack(targetPos, _weaponParams.PrepareTime));
+        StartCoroutine(Attack(target, _weaponParams.PrepareTime));
 
         _lastAttackTime = Time.time;
     }
@@ -37,7 +37,43 @@ public class MelleeWeapon : Weapon
 
         _anim.SetTrigger("Attack");
 
-            dir = (targetPos - (Vector2)UnitController.transform.position).normalized;
+        dir = (targetPos - (Vector2)UnitController.transform.position).normalized;
+        
+        while (_attackTimer < _weaponParams.AttackTime)
+        {
+            _attackTimer += Time.fixedDeltaTime;
+            Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
+
+            foreach (Collider2D obj in hitObjs)
+            {
+                if (obj.transform == UnitController.transform)
+                    continue;
+
+                IDamagable iDamagable = obj.GetComponent<IDamagable>();
+
+                if (iDamagable != null)
+                {
+                    iDamagable.Damage(60f);
+                }
+            }
+            yield return new WaitForFixedUpdate();
+        }
+
+        _attackTimer = 0;
+    }
+
+
+    private IEnumerator Attack(Transform target, float timeToWait)
+    {
+        yield return new WaitForSeconds(timeToWait);
+
+        if (target == null)
+            yield break;
+
+        _anim.SetTrigger("Attack");
+
+        dir = (target.position - UnitController.transform.position).normalized;
+
         while (_attackTimer < _weaponParams.AttackTime)
         {
             _attackTimer += Time.fixedDeltaTime;

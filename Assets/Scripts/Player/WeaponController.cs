@@ -59,12 +59,12 @@ public class WeaponController : MonoBehaviour
             renderer.flipY = false;
     }
 
-    public void Shoot()
+    public void Shoot(Transform target)
     {
         if (_currentWeapon == null)
             return;
 
-        _currentWeapon.Shoot(_targetPos);
+        _currentWeapon.Shoot(target);
     }
 
     public void DropWeapon()

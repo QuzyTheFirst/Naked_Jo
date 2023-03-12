@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    public void Shoot(Vector2 targetPos);
+    public void Shoot(Transform target);
 
     public void OnUpdate(Vector2 targetPos);
 
