@@ -41,7 +41,14 @@ public class EnemyGroundedState : EnemyBaseState
 
     public override void InitializeSubState(SimpleEnemy context)
     {
-        SetSubState(Factory.Patrol());
+        if (context.StunTime > 0f)
+        {
+            SwitchState(Factory.Stun());
+        }
+        else 
+        { 
+            SetSubState(Factory.Patrol());
+        }
     }
 
     public override void OnExit(SimpleEnemy context)

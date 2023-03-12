@@ -8,20 +8,20 @@ public class EnemyStunState : EnemyBaseState
 
     public override void OnEnter(SimpleEnemy context)
     {
-        Debug.Log("Stunned");
+        context.StunAnimGO.SetActive(true);
         context.Movement = SimpleEnemy.MovementState.Stop;
     }
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        context.StanTime -= Time.fixedDeltaTime;
+        context.StunTime -= Time.fixedDeltaTime;
 
         CheckSwitchStates(context);
     }
 
     public override void CheckSwitchStates(SimpleEnemy context)
     {
-        if (context.StanTime <= 0f)
+        if (context.StunTime <= 0f)
         {
             SwitchState(Factory.Patrol());
         }
@@ -30,7 +30,8 @@ public class EnemyStunState : EnemyBaseState
     public override void OnExit(SimpleEnemy context)
     {
         context.gameObject.layer = 7;
-        Debug.Log("Exit Stun");
+        context.StunAnimGO.SetActive(false);
+        //Debug.Log("Exit Stun");
     }
 
     public override void InitializeSubState(SimpleEnemy context)

@@ -118,6 +118,8 @@ public class PlayerInputHandler : PlayerComponentGetter
 
     private void Possess_performed(InputAction.CallbackContext obj)
     {
+        //Debug.Log($"Possess Performed: {Time.time}");
+
         PossessCanceled?.Invoke(this, EventArgs.Empty);
     }
 

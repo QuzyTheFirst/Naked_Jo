@@ -58,7 +58,7 @@ public class EnemyPatrolState : EnemyBaseState
 
     public override void CheckSwitchStates(SimpleEnemy context)
     {
-        if(context.StanTime > 0f)
+        if(context.StunTime > 0f)
         {
             SwitchState(Factory.Stun());
         }

@@ -29,7 +29,10 @@ public class EnemyNotGroundedState : EnemyBaseState
 
     public override void InitializeSubState(SimpleEnemy context)
     {
-        
+        if (context.StunTime > 0f)
+        {
+            SwitchState(Factory.Stun());
+        }
     }
 
     public override void OnExit(SimpleEnemy context)

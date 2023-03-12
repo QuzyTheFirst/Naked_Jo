@@ -411,7 +411,7 @@ public class UnitsHandler : PlayerInputHandler
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        Debug.Log("You are dead");
+        //Debug.Log("You are dead");
     }
     #endregion
 
@@ -422,6 +422,8 @@ public class UnitsHandler : PlayerInputHandler
     {
         if (!_isSlowMotionButtonPressed || _isExplosionButtonPressed)
             return;
+
+        //Debug.Log($"Possess Time: {Time.time}");
 
         if(_cooldownTimer <= 0)
         {
@@ -461,8 +463,8 @@ public class UnitsHandler : PlayerInputHandler
                 else
                 {
                     EnemyUnit currentEnemy = _currentUnit.Enemy;
-                    currentEnemy.UnPossess(_enemyAttackMask, unit.transform);
                     currentEnemy.Stun(3f);
+                    currentEnemy.UnPossess(_enemyAttackMask, unit.transform);
                 }
 
                 unit.Enemy.Possess(_playerAttackMask);
@@ -510,8 +512,8 @@ public class UnitsHandler : PlayerInputHandler
             _playerUnit.transform.position = (Vector2)unit.transform.position + unpossessionVector.normalized * unpossessionDistance;
         }
 
-        unit.Enemy.UnPossess(_enemyAttackMask, _playerUnit.transform);
         unit.Enemy.Stun(3f);
+        unit.Enemy.UnPossess(_enemyAttackMask, _playerUnit.transform);
 
         SetUnit(_playerUnit);
 

@@ -59,6 +59,7 @@ public class SimpleEnemy : MonoBehaviour
     [Header("AI")]
     [SerializeField] private Sprite _possesedStateSprite;
     [SerializeField] private Sprite _normalStateSprite;
+    [SerializeField] private GameObject _stunAnimGO;
     [SerializeField] private LayerMask _playerMask;
     [SerializeField] private float _unpossessFlyPower;
     private float _attackRadius;
@@ -86,7 +87,7 @@ public class SimpleEnemy : MonoBehaviour
     public float TimeToNextShoot { get { return _timeToNextShoot; } set { _timeToNextShoot = value; } }
     public float TimerBeforeAttack { get { return _timerBeforeAttack; } }
     public float ShootEvery { get { return _shootEvery; } }
-    public float StanTime { get { return _stunTime; } set { _stunTime = value; } }
+    public float StunTime { get { return _stunTime; } set { _stunTime = value; } }
     public float RunSpeed { get { return _runSpeed; } }
     public float WalkSpeed { get { return _walkSpeed; } }
     public float MovementSpeed { get { return _movementSpeed; } set { _movementSpeed = value; } }
@@ -94,6 +95,9 @@ public class SimpleEnemy : MonoBehaviour
     public float Acceleration { get { return _acceleration; } }
     public float Deceleration { get { return _deceleration; } }
     public bool IsGrounded { get { return _isGrounded; } }
+
+    public GameObject StunAnimGO { get { return _stunAnimGO; } }
+
     public PlayerController UnitController { get { return _unitController; } }
     public WeaponController WeaponController { get { return _weaponController; } }
 
@@ -157,7 +161,7 @@ public class SimpleEnemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isPossessed && _stepsSincePossessed >= 1)
+        if (_isPossessed)
             return;
 
         _isGrounded = GroundCheck();
@@ -217,6 +221,9 @@ public class SimpleEnemy : MonoBehaviour
 
         _unitController.enabled = true;
 
+        _currentState.UpdateStates(this);
+        _stunAnimGO.SetActive(false);
+
         _isPossessed = true;
 
         _attackMask = attackMask;
@@ -233,12 +240,15 @@ public class SimpleEnemy : MonoBehaviour
 
         _unitController.enabled = false;
 
+        _stunAnimGO.SetActive(true);
+        _currentState.UpdateStates(this);
+
         _isPossessed = false;
 
         _attackMask = attackMask;
         _weaponController.SetAttackMask(attackMask);
 
-        Debug.Log(GroundCheck());
+        //Debug.Log(GroundCheck());
         if (!GroundCheck()) {
 
             Vector2 dir = (transform.position - targetUnit.position).normalized;
