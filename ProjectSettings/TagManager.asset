@@ -38,12 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2896989221
+    locked: 0
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Explosion
-    uniqueID: 2382074331
-    locked: 0
-  - name: Possession
-    uniqueID: 658594237
     locked: 0
