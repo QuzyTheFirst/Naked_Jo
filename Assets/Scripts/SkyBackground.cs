@@ -26,7 +26,7 @@ public class SkyBackground : MonoBehaviour
 
     private void Awake()
     {
-        int numberOfClouds =  Mathf.RoundToInt(_skyBG.size.x / 10f);
+        int numberOfClouds =  Mathf.RoundToInt((_skyBG.size.x + _skyBG.size.y) / 10f);
         _clouds = new Cloud[numberOfClouds];
 
         _skyHalfWidth = _skyBG.size.x / 2;
@@ -51,7 +51,7 @@ public class SkyBackground : MonoBehaviour
         {
             if(cloud.CloudTransform.localPosition.x >= _skyBG.size.x / 2)
             {
-                Vector2 newPos = new Vector2(-_skyHalfWidth, cloud.CloudTransform.position.y);
+                Vector2 newPos = new Vector2(-_skyHalfWidth, cloud.CloudTransform.localPosition.y);
                 cloud.CloudTransform.localPosition = newPos;
             }
 
