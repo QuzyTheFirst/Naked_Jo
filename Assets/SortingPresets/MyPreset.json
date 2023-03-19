@@ -1,0 +1,51 @@
+{
+    "SortedItems": [
+        {
+            "FolderName": "Doors",
+            "Tags": [
+                "door"
+            ]
+        },
+        {
+            "FolderName": "Platforms",
+            "Tags": [
+                "platform"
+            ]
+        },
+        {
+            "FolderName": "Enemies",
+            "Tags": [
+                "enemy",
+                "rodent"
+            ]
+        },
+        {
+            "FolderName": "Weapons",
+            "Tags": [
+                "wrapper"
+            ]
+        },
+        {
+            "FolderName": "Windows",
+            "Tags": [
+                "window"
+            ]
+        },
+        {
+            "FolderName": "Background",
+            "Tags": [
+                "wall",
+                "sky"
+            ]
+        },
+        {
+            "FolderName": "Other",
+            "Tags": [
+                "DeathZone",
+                "NextLevelLoader",
+                "player unit",
+                "grid"
+            ]
+        }
+    ]
+}

@@ -8,8 +8,21 @@ public class SortingItem
     public string[] Tags;
 }
 
+[System.Serializable]
+public class SortedItemsArray
+{
+    public SortingItem[] SortedItems;
+
+    public SortedItemsArray(SortingItem[] items)
+    {
+        SortedItems = items;
+    }
+}
+
 public class SortingWindow : EditorWindow
 {
+    private Vector2 _scrollPos;
+    private string _fileName;
     public SortingItem[] Items;
     SerializedObject so;
 
@@ -27,20 +40,42 @@ public class SortingWindow : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("Sort your level!");
+        EditorGUILayout.BeginVertical();
+        _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height));
 
+        GUILayout.Label("Sort your level!", EditorStyles.boldLabel);
+
+        DrawSortingItems();
+
+        ButtonSort();
+
+        GUILayout.Space(30);
+
+        GUILayout.Label("Save or load your preset.", EditorStyles.boldLabel);
+
+        GUILayout.BeginHorizontal();
+            _fileName = EditorGUILayout.TextField("File Name:", _fileName);
+        GUILayout.EndHorizontal();
+
+        SavePreset();
+        LoadPreset();
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
+    }
+
+    private void DrawSortingItems()
+    {
         so.Update();
-        SerializedProperty itemsProperty = so.FindProperty("Items");        
+        SerializedProperty itemsProperty = so.FindProperty("Items");
 
         EditorGUILayout.PropertyField(itemsProperty, true);
         so.ApplyModifiedProperties();
-
-        ButtonSort();
     }
 
     private void ButtonSort()
     {
-        if (GUILayout.Button("Sort!"))
+        if (GUILayout.Button("Sort!", GUILayout.Height(50)))
         {
             GameObject[] allObjects = FindObjectsOfType<GameObject>();
 
@@ -64,8 +99,70 @@ public class SortingWindow : EditorWindow
                     }
                 }
             }
+        }
+    }
 
-            SaveChanges();
+    private void SavePreset()
+    {
+        if (GUILayout.Button("Save Preset", GUILayout.Height(50)))
+        {
+            string filePath = EditorUtility.SaveFolderPanel("Save preset to folder","Assets/","");
+
+            if (string.IsNullOrEmpty(filePath))
+            {
+                Debug.LogWarning("Path is empty");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_fileName))
+            {
+                Debug.LogWarning("File name is empty");
+                return;
+            }
+
+            if (!_fileName.EndsWith(".json")) 
+            {
+                _fileName += ".json";
+            }
+
+            filePath += "/" + _fileName;
+
+            SortedItemsArray sortedItemsArray = new SortedItemsArray(Items);
+
+            string data = JsonUtility.ToJson(sortedItemsArray, true);
+
+            System.IO.File.WriteAllText(filePath, data);
+        }
+    }
+
+    private void LoadPreset()
+    {
+        if (GUILayout.Button("Load Preset", GUILayout.Height(50)))
+        {
+            string filePath = EditorUtility.OpenFolderPanel("Save preset to folder", "Assets/", "");
+
+            if (string.IsNullOrEmpty(filePath))
+            {
+                Debug.LogWarning("Path is empty");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_fileName))
+            {
+                Debug.LogWarning("File name is empty");
+                return;
+            }
+
+            if (!_fileName.EndsWith(".json"))
+            {
+                _fileName += ".json";
+            }
+
+            filePath += "/" + _fileName;
+
+            string sortingItemsData = System.IO.File.ReadAllText(filePath);
+            SortedItemsArray sortedItemsArray = JsonUtility.FromJson<SortedItemsArray>(sortingItemsData);
+            Items = sortedItemsArray.SortedItems;
         }
     }
 
