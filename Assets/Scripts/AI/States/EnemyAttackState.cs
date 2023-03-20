@@ -15,24 +15,22 @@ public class EnemyAttackState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        //Debug.Log($"Attack State: {Time.time}");
-
         Vector2 dir = context.TargetUnit.position - context.transform.position;
         context.Flip.TryToFlip(Mathf.Sign(dir.x));
 
-        //_timer += Time.deltaTime;
-        //if (_timer >= context.TimerBeforeAttack)
-        //{
-            if (Time.time > context.TimeToNextShoot)
-            {
-                context.WeaponController.Shoot(context.TargetUnit);
+        context.TimerBeforeAction -= Time.fixedDeltaTime;
+        if (context.TimerBeforeAction > 0f)
+            return;
 
-                context.WeaponController.ResetAmmo();
+        if (Time.time > context.TimeToNextShoot)
+        {
+            context.WeaponController.Shoot(context.TargetUnit);
 
-                context.TimeToNextShoot = Time.time + context.ShootEvery;
-            }
-        //}
-        
+            context.WeaponController.ResetAmmo();
+
+            context.TimeToNextShoot = Time.time + context.ShootEvery;
+        }
+
         CheckSwitchStates(context);
     }
 

@@ -54,7 +54,7 @@ public class SortingWindow : EditorWindow
         GUILayout.Label("Save or load your preset.", EditorStyles.boldLabel);
 
         GUILayout.BeginHorizontal();
-            _fileName = EditorGUILayout.TextField("File Name:", _fileName);
+            _fileName = EditorGUILayout.TextField("Preset Name:", _fileName);
         GUILayout.EndHorizontal();
 
         SavePreset();

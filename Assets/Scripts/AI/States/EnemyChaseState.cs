@@ -16,6 +16,9 @@ public class EnemyChaseState : EnemyBaseState
     public override void OnUpdate(SimpleEnemy context)
     {
         //Debug.Log($"Chase State: {Time.time}");
+        context.TimerBeforeAction -= Time.fixedDeltaTime;
+        if (context.TimerBeforeAction > 0f)
+            return;
 
         Vector2 dir = context.TargetUnit.position - context.transform.position;
         float movementDir = Mathf.Sign(dir.x);
@@ -26,6 +29,7 @@ public class EnemyChaseState : EnemyBaseState
             context.Movement = SimpleEnemy.MovementState.Left;
 
         context.Flip.TryToFlip(movementDir);
+
 
         RaycastHit2D floorHit = Physics2D.Raycast(context.transform.position, Vector2.down + Vector2.right * movementDir, 1f, context.GroundMask);
 

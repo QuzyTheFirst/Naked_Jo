@@ -12673,6 +12673,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unpossession
       objectReference: {fileID: 0}
+    - target: {fileID: 8670054098224086207, guid: ff24584ae11e7be4d87787265345bbfe, type: 3}
+      propertyPath: m_fontSize
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8670054098224086207, guid: ff24584ae11e7be4d87787265345bbfe, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8670054098726177305, guid: ff24584ae11e7be4d87787265345bbfe, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8670054099415924105, guid: ff24584ae11e7be4d87787265345bbfe, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff24584ae11e7be4d87787265345bbfe, type: 3}
 --- !u!4 &2068060927 stripped

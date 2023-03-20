@@ -14,6 +14,8 @@ public class EnemyPatrolState : EnemyBaseState
         context.MovementSpeed = context.WalkSpeed;
 
         context.Flip.TryToFlip(context.MovementDirection);
+
+        context.TimerBeforeAction = context.TimeBeforeAction;
     }
 
     public override void OnUpdate(SimpleEnemy context)

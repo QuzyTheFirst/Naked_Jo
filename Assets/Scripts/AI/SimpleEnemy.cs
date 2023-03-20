@@ -38,9 +38,10 @@ public class SimpleEnemy : MonoBehaviour
     [SerializeField] private float _shootEvery = 1f;
     [SerializeField] private float _visionRadius;
     [SerializeField] private LayerMask _weaponMask;
-
-    [SerializeField] private float _timerBeforeAttack;
     private float _timeToNextShoot;
+
+    [SerializeField] private float _timeBeforeAction;
+    private float _timerBeforeAction;
 
     [Header("Movement")]
     [SerializeField] private float _runSpeed;
@@ -85,7 +86,8 @@ public class SimpleEnemy : MonoBehaviour
     public LayerMask AttackMask { set { _attackMask = value; } }
 
     public float TimeToNextShoot { get { return _timeToNextShoot; } set { _timeToNextShoot = value; } }
-    public float TimerBeforeAttack { get { return _timerBeforeAttack; } }
+    public float TimeBeforeAction { get { return _timeBeforeAction; } }
+    public float TimerBeforeAction { get { return _timerBeforeAction; } set { _timerBeforeAction = value; } }
     public float ShootEvery { get { return _shootEvery; } }
     public float StunTime { get { return _stunTime; } set { _stunTime = value; } }
     public float RunSpeed { get { return _runSpeed; } }

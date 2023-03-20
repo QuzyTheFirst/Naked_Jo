@@ -150,6 +150,12 @@ public class UnitsHandler : PlayerInputHandler
 
         if(_nextLevelLoader != null)
             _nextLevelLoader.SetActive(false);
+
+        if ((_units.Count - 1) == 0)
+        {
+            if (_playerUnit != null && _nextLevelLoader != null)
+                GameUIController.Instance.ActivateLevelEndPointer(_playerUnit.transform, _nextLevelLoader.transform);
+        }
     }
 
     private void Update()
@@ -362,6 +368,12 @@ public class UnitsHandler : PlayerInputHandler
         }
 
         KillEnemy(unit);
+
+        if ((_units.Count - 1) == 0)
+        {
+            if(_playerUnit != null && _nextLevelLoader != null)
+                GameUIController.Instance.ActivateLevelEndPointer(_playerUnit.transform, _nextLevelLoader.transform);
+        }
     }
 
     private void KillEnemy(Unit unit)

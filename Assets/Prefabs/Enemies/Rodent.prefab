@@ -179,7 +179,7 @@ MonoBehaviour:
   _weaponMask:
     serializedVersion: 2
     m_Bits: 2048
-  _timerBeforeAttack: 0
+  _timeBeforeAction: 0.2
   _runSpeed: 10
   _walkSpeed: 5
   _lerpAmount: 8
