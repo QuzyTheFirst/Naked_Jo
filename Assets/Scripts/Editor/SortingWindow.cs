@@ -53,10 +53,6 @@ public class SortingWindow : EditorWindow
 
         GUILayout.Label("Save or load your preset.", EditorStyles.boldLabel);
 
-        GUILayout.BeginHorizontal();
-            _fileName = EditorGUILayout.TextField("Preset Name:", _fileName);
-        GUILayout.EndHorizontal();
-
         SavePreset();
         LoadPreset();
 
@@ -106,26 +102,13 @@ public class SortingWindow : EditorWindow
     {
         if (GUILayout.Button("Save Preset", GUILayout.Height(50)))
         {
-            string filePath = EditorUtility.SaveFolderPanel("Save preset to folder","Assets/","");
+            string filePath = EditorUtility.SaveFilePanel("Save preset to folder","Assets/","MyPreset.json", "json");
 
             if (string.IsNullOrEmpty(filePath))
             {
                 Debug.LogWarning("Path is empty");
                 return;
             }
-
-            if (string.IsNullOrEmpty(_fileName))
-            {
-                Debug.LogWarning("File name is empty");
-                return;
-            }
-
-            if (!_fileName.EndsWith(".json")) 
-            {
-                _fileName += ".json";
-            }
-
-            filePath += "/" + _fileName;
 
             SortedItemsArray sortedItemsArray = new SortedItemsArray(Items);
 
@@ -139,26 +122,13 @@ public class SortingWindow : EditorWindow
     {
         if (GUILayout.Button("Load Preset", GUILayout.Height(50)))
         {
-            string filePath = EditorUtility.OpenFolderPanel("Save preset to folder", "Assets/", "");
+            string filePath = EditorUtility.OpenFilePanel("Save preset to folder", "Assets/", "json");
 
             if (string.IsNullOrEmpty(filePath))
             {
                 Debug.LogWarning("Path is empty");
                 return;
             }
-
-            if (string.IsNullOrEmpty(_fileName))
-            {
-                Debug.LogWarning("File name is empty");
-                return;
-            }
-
-            if (!_fileName.EndsWith(".json"))
-            {
-                _fileName += ".json";
-            }
-
-            filePath += "/" + _fileName;
 
             string sortingItemsData = System.IO.File.ReadAllText(filePath);
             SortedItemsArray sortedItemsArray = JsonUtility.FromJson<SortedItemsArray>(sortingItemsData);
