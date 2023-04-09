@@ -10,6 +10,7 @@ public class EnemyStunState : EnemyBaseState
     {
         context.StunAnimGO.SetActive(true);
         context.Movement = SimpleEnemy.MovementState.Stop;
+        SoundManager.Instance.Play("Confused");
     }
 
     public override void OnUpdate(SimpleEnemy context)

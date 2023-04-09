@@ -213,6 +213,8 @@ public class UnitsHandler : PlayerInputHandler
             //Debug.Log($"Current unit: {_currentUnit.transform.position} | {_currentUnit.transform.name}");
             _explosionRadiusVisuals.gameObject.SetActive(true);
 
+            SoundManager.Instance.FadeInVolume("Explode", 1f, .2f);
+
             if (_explosionTimer >= _timeToExplode)
             {
                 EnemyUnit enemy = _currentUnit.Enemy;
@@ -245,6 +247,7 @@ public class UnitsHandler : PlayerInputHandler
                 _explosionParticles.Play();
 
                 _explosionTimer = 0;
+                //SoundManager.Instance.Stop("Explode");
                 _cooldownTimer = 0f;
                 _isExplosionGoing = false;
 
@@ -256,6 +259,7 @@ public class UnitsHandler : PlayerInputHandler
             if (_isExplosionGoing)
             {
                 _explosionTimer = 0;
+                SoundManager.Instance.FadeAwayVolume("Explode", .2f);
 
                 SpriteRenderer enemyGraphics = _currentUnit.Enemy.GetGraphics();
                 enemyGraphics.color = Color.white;
@@ -410,6 +414,8 @@ public class UnitsHandler : PlayerInputHandler
         _isExplosionGoing = false;
         _explosionRadiusVisuals.gameObject.SetActive(false);
         _explosionTimer = 0f;
+        //SoundManager.Instance.FadeAwayVolume("Explode", .2f);
+        SoundManager.Instance.Play("ExplodeConsequences");
 
         Destroy(unit.transform.gameObject);
     }
@@ -444,15 +450,16 @@ public class UnitsHandler : PlayerInputHandler
             if (PossessionRay(_mousePosInWorld))
             {
                 _cooldownTimer = _cooldownTime;
+                SoundManager.Instance.Play("Possess");
             }
-            else
+            else if(UnpossessionRay(_mousePosInWorld))
             {
-                UnpossessionRay(_mousePosInWorld);
+                SoundManager.Instance.Play("Unpossess");
             }
         }
-        else
+        else if(UnpossessionRay(_mousePosInWorld))
         {
-            UnpossessionRay(_mousePosInWorld);
+            SoundManager.Instance.Play("Unpossess");
         }
     }
 

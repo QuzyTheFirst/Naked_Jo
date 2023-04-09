@@ -41,6 +41,8 @@ public class RangeWeapon : Weapon
         bullet.Rig.velocity = dir * bulletPower;
         bullet.ShootPos = transform.position;
 
+        SoundManager.Instance.Play("PistolShoot");
+
         CurrentAmmo--;
         _lastAttackTime = Time.time;
     }

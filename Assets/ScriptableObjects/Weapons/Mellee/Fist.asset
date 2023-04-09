@@ -17,4 +17,5 @@ MonoBehaviour:
   AttackRate: 0.4
   AttackTime: 0.1
   PrepareTime: 0.1
+  AttackSoundName: FistAttack
   DistanceBeforeAttack: 1.75

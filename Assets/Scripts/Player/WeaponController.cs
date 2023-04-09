@@ -92,6 +92,8 @@ public class WeaponController : MonoBehaviour
         if (_currentWeapon == _unremovableIWeapon || _currentWeapon == null)
             return;
 
+        SoundManager.Instance.Play("Throw");
+
         _currentWeapon.ThrowWeapon(_targetPos);
 
         ActivateUnremovableWeapon();

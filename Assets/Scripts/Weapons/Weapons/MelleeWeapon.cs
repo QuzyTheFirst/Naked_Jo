@@ -13,6 +13,8 @@ public class MelleeWeapon : Weapon
 
     private Vector2 dir;
 
+    private bool _hitted = false;
+
     private new void Awake()
     {
         base.Awake();
@@ -31,42 +33,6 @@ public class MelleeWeapon : Weapon
         _lastAttackTime = Time.time;
     }
 
-    private IEnumerator Attack(Vector2 targetPos, float timeToWait)
-    {
-        yield return new WaitForSeconds(timeToWait);
-
-        _anim.SetTrigger("Attack");
-
-        dir = (targetPos - (Vector2)UnitController.transform.position).normalized;
-        
-        while (_attackTimer < _weaponParams.AttackTime)
-        {
-            _attackTimer += Time.fixedDeltaTime;
-            Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
-
-            foreach (Collider2D obj in hitObjs)
-            {
-                if (obj.transform == UnitController.transform)
-                    continue;
-
-                RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir);
-                if (hit.transform != obj.transform)
-                    continue;
-
-                IDamagable iDamagable = obj.GetComponent<IDamagable>();
-
-                if (iDamagable != null)
-                {
-                    iDamagable.Damage(60f);
-                }
-            }
-            yield return new WaitForFixedUpdate();
-        }
-
-        _attackTimer = 0;
-    }
-
-
     private IEnumerator Attack(Transform target, float timeToWait)
     {
         yield return new WaitForSeconds(timeToWait);
@@ -75,6 +41,8 @@ public class MelleeWeapon : Weapon
             yield break;
 
         _anim.SetTrigger("Attack");
+
+        SoundManager.Instance.Play(_weaponParams.AttackSoundName);
 
         dir = (target.position - UnitController.transform.position).normalized;
 
@@ -96,12 +64,19 @@ public class MelleeWeapon : Weapon
 
                 if (iDamagable != null)
                 {
+                    _hitted = true;
                     iDamagable.Damage(60f);
                 }
             }
+
+            if (_hitted)
+            {
+                SoundManager.Instance.Play("Hit");
+                _hitted = false;
+            }
+
             yield return new WaitForFixedUpdate();
         }
-
         _attackTimer = 0;
     }
 

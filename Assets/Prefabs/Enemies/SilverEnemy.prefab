@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 1231440164}
   - component: {fileID: 1606344783254122035}
   - component: {fileID: 2932653826142218395}
+  - component: {fileID: 7651586508552450}
   m_Layer: 7
   m_Name: SilverEnemy
   m_TagString: Untagged
@@ -432,6 +433,19 @@ MonoBehaviour:
   _silverKeyPf: {fileID: 1938531038230644482, guid: d980358be5af37a48b48ac105c945e52, type: 3}
   _bronzeKeyPf: {fileID: 4037860497649604304, guid: 23eee59a0cc677c4ab14fbeaecdebb8c, type: 3}
   KeyList: 01000000
+--- !u!114 &7651586508552450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6241506870422636143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40e2b5103cbcc54780b4c177ded46cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stepEvery: 0.2
 --- !u!1 &7766286296622512282
 GameObject:
   m_ObjectHideFlags: 0

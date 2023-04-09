@@ -17,4 +17,5 @@ MonoBehaviour:
   AttackRate: 0.8
   AttackTime: 0.2
   PrepareTime: 0.15
+  AttackSoundName: ClubAttack
   DistanceBeforeAttack: 2.25

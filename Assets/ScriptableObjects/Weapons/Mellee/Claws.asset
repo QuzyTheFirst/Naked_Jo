@@ -17,4 +17,5 @@ MonoBehaviour:
   AttackRate: 0.15
   AttackTime: 0.05
   PrepareTime: 0.1
+  AttackSoundName: ClawAttack
   DistanceBeforeAttack: 1.25

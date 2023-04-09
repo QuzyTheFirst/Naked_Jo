@@ -8,7 +8,7 @@ public class WalkingSound : PlayerComponentGetter
     private float _timer;
     private void Update()
     {
-        if (Mathf.Abs(_rig.velocity.x) >= .4f && _player.IsGrounded)
+        if (_player.IsWalking && _player.IsGrounded)
         {
             _timer += Time.deltaTime;
             if (_timer >= _stepEvery)

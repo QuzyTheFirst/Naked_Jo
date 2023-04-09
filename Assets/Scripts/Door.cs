@@ -30,7 +30,9 @@ public class Door : MonoBehaviour
     {
         if(value > 0)
             _spriteRenderer.flipX = true;
-        
+
+        SoundManager.Instance.Play("DoorOpen");
+
         _spriteRenderer.sprite = _openedSprite;
         _boxCollider.enabled = false;
     }

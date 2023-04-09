@@ -16,6 +16,8 @@ public class MelleeWeaponParams : ScriptableObject
 
     public float PrepareTime;
 
+    public string AttackSoundName;
+
     [Header("AI")]
     public float DistanceBeforeAttack;
 }

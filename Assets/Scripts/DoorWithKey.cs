@@ -26,6 +26,8 @@ public class DoorWithKey : MonoBehaviour
         if (value > 0)
             _spriteRenderer.flipX = true;
 
+        SoundManager.Instance.Play("DoorOpen");
+
         _boxCollider.enabled = false;
     }
 }

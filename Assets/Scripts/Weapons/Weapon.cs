@@ -135,6 +135,12 @@ public class Weapon : MonoBehaviour, IWeapon
             enemy.Stun(2f);
 
             enemy.WeaponController.DropWeapon(new Vector2(sign, 0f));
+
+            SoundManager.Instance.Play("HitInFlight");
+        }
+        else
+        {
+            SoundManager.Instance.Play("HitWall");
         }
     }
 
