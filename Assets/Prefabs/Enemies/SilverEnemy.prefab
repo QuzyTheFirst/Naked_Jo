@@ -351,7 +351,7 @@ MonoBehaviour:
   _maxGroundAngle: 50
   _groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1032
   _frictionLessMat: {fileID: 6200000, guid: 671994ccf2d39e9449e4a0fb45b590c6, type: 2}
   _fullFrictionMat: {fileID: 6200000, guid: a5b45bee8e58ef34aa10b66d61d26ddc, type: 2}
 --- !u!50 &6241506870422636142

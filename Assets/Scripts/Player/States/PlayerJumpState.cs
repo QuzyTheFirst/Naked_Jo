@@ -29,7 +29,7 @@ public class PlayerJumpState : PlayerBaseState
         }
 
         if (player.GroundRemember <= 0 && player.JumpPhase == 0)
-            player.JumpPhase = 1;
+            player.JumpPhase++;
 
         if (_isJumping && !player.IsJumpButtonPressed && player.Velocity.y > 0)
         {
@@ -62,6 +62,8 @@ public class PlayerJumpState : PlayerBaseState
         if(player.GroundRemember > 0f || player.JumpPhase < player.MaxAirJumps)
         {
             player.JumpPhase++;
+
+            SoundManager.Instance.Play("Jump");
 
             _jumpPower = Mathf.Sqrt(-2f * Physics.gravity.y * player.JumpHeight);
 

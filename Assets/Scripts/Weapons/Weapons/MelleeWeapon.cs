@@ -49,6 +49,10 @@ public class MelleeWeapon : Weapon
                 if (obj.transform == UnitController.transform)
                     continue;
 
+                RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir);
+                if (hit.transform != obj.transform)
+                    continue;
+
                 IDamagable iDamagable = obj.GetComponent<IDamagable>();
 
                 if (iDamagable != null)
@@ -82,6 +86,10 @@ public class MelleeWeapon : Weapon
             foreach (Collider2D obj in hitObjs)
             {
                 if (obj.transform == UnitController.transform)
+                    continue;
+
+                RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir);
+                if (hit.transform != obj.transform)
                     continue;
 
                 IDamagable iDamagable = obj.GetComponent<IDamagable>();

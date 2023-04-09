@@ -70,7 +70,7 @@ public class UnitsHandler : PlayerInputHandler
         Unit.OnDeath -= OnUnitDeath;
         Unit.OnCollisionEnter -= Unit_OnCollisionEnter;
     }
-
+    
     private new void Awake()
     {
         base.Awake();
@@ -357,6 +357,8 @@ public class UnitsHandler : PlayerInputHandler
     #region OnDeath
     private void OnUnitDeath(object sender, EventArgs e)
     {
+        Debug.Log("On Unit Death");
+
         Unit unit = sender as Unit;
 
         if (unit.IsPlayer || _currentUnit == unit)

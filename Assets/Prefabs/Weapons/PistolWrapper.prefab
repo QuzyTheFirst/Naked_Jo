@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponWrapper: {fileID: 6122107630185250650}
+  _attackMask:
+    serializedVersion: 2
+    m_Bits: 0
   _weaponParams: {fileID: 11400000, guid: 28a1bcb2a2b58bd43a6904659913e98b, type: 2}
 --- !u!61 &8093808985686945208
 BoxCollider2D:
@@ -206,7 +209,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: fb4542ed3a15fd648a1d09667cc11fa4, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &6122107630185250650
 MonoBehaviour:

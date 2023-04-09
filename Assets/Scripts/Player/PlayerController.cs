@@ -164,18 +164,8 @@ public class PlayerController : PlayerComponentGetter
         _rig.velocity = _velocity;
 
         _jumpPressedRemember -= Time.fixedDeltaTime;
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        EvaluateCollision(collision);
-        RetrieveFriction(collision);
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        EvaluateCollision(collision);
-        RetrieveFriction(collision);
+        _isGrounded = GroundCheck();
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -184,35 +174,9 @@ public class PlayerController : PlayerComponentGetter
         _friction = 0;
     }
 
-    private void EvaluateCollision(Collision2D collision)
+    private bool GroundCheck()
     {
-        if (StopLookingForGroundSteps > 0)
-        {
-            StopLookingForGroundSteps--;
-            return;
-        }
-
-        for (int i = 0; i < collision.contactCount; i++)
-        {
-            Vector2 normal = collision.GetContact(i).normal;
-
-            _isGrounded |= normal.y >= _minGroundDotProduct;
-        }
-    }
-
-    private void RetrieveFriction(Collision2D collision)
-    {
-        if (collision.rigidbody == null)
-            return;
-
-        PhysicsMaterial2D material = collision.rigidbody.sharedMaterial;
-
-        _friction = 0;
-
-        if(material != null)
-        {
-            _friction = material.friction;
-        }
+        return Physics2D.CircleCast(transform.position, _col.radius, Vector2.down, _groundCheckDistance, _groundMask);
     }
 
     // Inputs Yes

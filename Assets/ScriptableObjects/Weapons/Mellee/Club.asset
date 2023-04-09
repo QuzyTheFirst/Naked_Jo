@@ -16,5 +16,5 @@ MonoBehaviour:
   AttackDistance: 0.9
   AttackRate: 0.8
   AttackTime: 0.2
-  PrepareTime: 0.2
-  DistanceBeforeAttack: 2.5
+  PrepareTime: 0.15
+  DistanceBeforeAttack: 2.25

@@ -80,7 +80,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: fb4542ed3a15fd648a1d09667cc11fa4, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &1694885886
 MonoBehaviour:
@@ -142,6 +142,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponWrapper: {fileID: 1694885886}
+  _attackMask:
+    serializedVersion: 2
+    m_Bits: 0
   _weaponParams: {fileID: 11400000, guid: d0710b6d7c2924142a4b199d3e03b9f8, type: 2}
 --- !u!95 &527060077104225548
 Animator:
