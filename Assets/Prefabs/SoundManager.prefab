@@ -111,7 +111,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: DoorOpen
     clip: {fileID: 8300000, guid: 3d822cd393d3fe9469c6b560abab3308, type: 3}
-    volume: 0.4
+    volume: 1
     pitch: 1
     loop: 0
     randomPitch: 1
@@ -167,9 +167,25 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: PistolShoot
     clip: {fileID: 8300000, guid: 1be1ff21ddba61e408aeff861076cab6, type: 3}
-    volume: 0.4
+    volume: 0.2
     pitch: 1
     loop: 0
     randomPitch: 1
     canPlayWhilePlaying: 1
+    source: {fileID: 0}
+  - name: WindowBreak
+    clip: {fileID: 8300000, guid: b3b0801bf7c2ea447b356c861d9349e9, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    randomPitch: 0
+    canPlayWhilePlaying: 1
+    source: {fileID: 0}
+  - name: KeyPickUp
+    clip: {fileID: 8300000, guid: cf6c0e7fbef9449c98a0cdb5ea0c4d9f, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    randomPitch: 0
+    canPlayWhilePlaying: 0
     source: {fileID: 0}

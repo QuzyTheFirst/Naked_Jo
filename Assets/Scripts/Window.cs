@@ -6,6 +6,8 @@ public class Window : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        SoundManager.Instance.Play("WindowBreak");
+
         Destroy(gameObject);
     }
 }

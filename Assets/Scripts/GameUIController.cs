@@ -21,6 +21,8 @@ public class GameUIController : MonoBehaviour
     private Transform _endTransform;
     private bool _isPointerActivated;
 
+    private float _currentKeyCount;
+
     public static GameUIController Instance;
 
     private void Awake()
@@ -76,6 +78,11 @@ public class GameUIController : MonoBehaviour
     {
         HideAllKeys();
 
+        if(_currentKeyCount < keys.Count)
+        {
+            SoundManager.Instance.Play("KeyPickUp");
+        }
+
         for(int i = 0; i < keys.Count; i++)
         {
             if (i == 5)
@@ -84,6 +91,8 @@ public class GameUIController : MonoBehaviour
             _keysImages[i].color = Color.white;
             _keysImages[i].sprite = GetKeySrite(keys[i]);
         }
+
+        _currentKeyCount = keys.Count;
     }
 
     private void HideAllKeys()

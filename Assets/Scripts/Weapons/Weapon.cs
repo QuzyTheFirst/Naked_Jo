@@ -89,12 +89,17 @@ public class Weapon : MonoBehaviour, IWeapon
         _weaponState = WeaponState.Flying;
         _mainTf.gameObject.layer = 9;
 
-        _unitController = null;
-
-        Vector2 dir = (targetPos - (Vector2)_mainTf.position).normalized;
         float distanceFromPlayer = 1.25f;
+        Vector2 dir = (targetPos - (Vector2)_mainTf.position).normalized;
 
-        Vector2 spawnPos = (Vector2)_mainTf.position + (dir * distanceFromPlayer);
+        Vector2 newDir = (targetPos - (Vector2)_unitController.transform.position).normalized;
+
+        RaycastHit2D hit = Physics2D.Raycast(_unitController.transform.position, newDir, distanceFromPlayer);
+        if (hit.transform != null)
+            distanceFromPlayer = 0f;     
+
+        //Vector2 spawnPos = (Vector2)_mainTf.position + (dir * distanceFromPlayer);
+        Vector2 spawnPos = (Vector2)_unitController.transform.position + (newDir * distanceFromPlayer);
         float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         _mainTf.position = spawnPos;
@@ -105,6 +110,8 @@ public class Weapon : MonoBehaviour, IWeapon
         float speed = 15f;
         _rig.velocity = dir * speed;
         _rig.angularVelocity = 1440f;
+
+        _unitController = null;
     }
 
     private void _weaponWrapper_OnCollisionTouch(object sender, Collision2D collision)

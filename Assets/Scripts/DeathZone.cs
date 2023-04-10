@@ -9,6 +9,7 @@ public class DeathZone : MonoBehaviour
         IDamagable iDamagable = collision.GetComponent<IDamagable>();
         if(iDamagable != null)
         {
+            SoundManager.Instance.Play("ExplodeConsequences");
             iDamagable.Damage(0f);
         }
     }

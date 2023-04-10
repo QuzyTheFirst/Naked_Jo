@@ -34,22 +34,47 @@ public class RangeWeapon : Weapon
         Vector2 spawnPos = (Vector2)UnitController.transform.position + (dir * distanceFromPlayer);
 
         float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Transform bulletTf = SpawnBullet(spawnPos, Quaternion.Euler(0, 0, rotZ));
-        Bullet bullet = bulletTf.GetComponent<Bullet>();
+        Transform bulletTf = SpawnBullet(spawnPos, dir, distanceFromPlayer, _weaponParams.BulletFlyingMask, Quaternion.Euler(0, 0, rotZ));
 
-        float bulletPower = 20f;
-        bullet.Rig.velocity = dir * bulletPower;
-        bullet.ShootPos = transform.position;
+        if (bulletTf != null)
+        {
+            Bullet bullet = bulletTf.GetComponent<Bullet>();
 
-        SoundManager.Instance.Play("PistolShoot");
+            float bulletPower = 20f;
+            bullet.Rig.velocity = dir * bulletPower;
+            bullet.ShootPos = transform.position;
+        }
+
+        SoundManager.Instance.Play("PistolShoot"); 
 
         CurrentAmmo--;
         _lastAttackTime = Time.time;
     }
 
-    protected Transform SpawnBullet(Vector2 spawnPos, Quaternion rotation)
+    protected Transform SpawnBullet(Vector2 spawnPos, Vector3 dir, float distanceFromPlayer, LayerMask mask, Quaternion rotation)
     {
-        return Instantiate(_weaponParams.BulletPf, spawnPos, rotation);
+        RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir, distanceFromPlayer, mask);
+        if(hit.transform != null)
+        {
+            IDamagable iDamagable = hit.transform.GetComponent<IDamagable>();
+            if (iDamagable != null)
+            {
+                iDamagable.Damage(0f);
+            }
+
+            Rigidbody2D rig = hit.transform.GetComponent<Rigidbody2D>();
+            if (rig != null)
+            {
+                Vector2 flyDir = (hit.transform.position - UnitController.transform.position).normalized;
+                rig.velocity = flyDir * 6;
+            }
+        }
+        else
+        {
+            return Instantiate(_weaponParams.BulletPf, spawnPos, rotation);
+        }
+
+        return null;
     }
 
     public override void ResetAmmo()

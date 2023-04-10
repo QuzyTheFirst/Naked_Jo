@@ -15,4 +15,7 @@ MonoBehaviour:
   Ammo: 12
   FireRate: 0.1
   BulletPf: {fileID: 7248175095755955575, guid: 1b56769e54a49bc49a2738038f348a35, type: 3}
+  BulletFlyingMask:
+    serializedVersion: 2
+    m_Bits: 8584
   DistanceBeforeAttack: 100

@@ -133,7 +133,7 @@ public class WeaponController : MonoBehaviour
 
         foreach (Collider2D hit in hits)
         {
-            Debug.Log(hit.transform.name);
+            //Debug.Log(hit.transform.name);
 
             IWeapon iWeapon = hit.transform.GetComponent<IWeapon>();
 
