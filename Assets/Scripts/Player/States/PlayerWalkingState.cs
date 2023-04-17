@@ -56,6 +56,11 @@ public class PlayerWalkingState : PlayerBaseState
         {
             SwitchState(Factory.Idle());
         }
+
+        if(player.DoRoll)
+        {
+            SwitchState(Factory.Rolling());
+        }
     }
 
     public override void InitializeSubState(PlayerController player)

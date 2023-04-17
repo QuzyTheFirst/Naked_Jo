@@ -17,7 +17,7 @@ public class EnemyUnit
         _enemy.Stun(time);
     }
 
-    public void SetTargetUnit(Transform target)
+    public void SetTargetUnit(Unit target)
     {
         _enemy.TargetUnit = target;
     }

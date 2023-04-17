@@ -81,6 +81,14 @@ public class PlayerController : PlayerComponentGetter
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
 
+    // Rolling
+    [Header("Rolling")]
+    [SerializeField] private float _rollingDistance;
+    [SerializeField] private float _rollingSpeed;
+    [SerializeField] private LayerMask _rollingObstacles;
+    private bool _doRoll = false;
+    private float _rollingDirection;
+
     // Look For Ground
     public float StopLookingForGroundSteps { get { return _stopLookingForGroundSteps; } set { _stopLookingForGroundSteps = value; } }
 
@@ -126,6 +134,13 @@ public class PlayerController : PlayerComponentGetter
 
     // Weapon
     public WeaponController WeaponController { get { return _weaponController; } }
+
+    // Roll
+    public bool DoRoll { get { return _doRoll; } set { _doRoll = value; } }
+    public float RollingDirection { get { return _rollingDirection; } set { _rollingDirection = value; } }
+    public float RollingDistance { get { return _rollingDistance; }}
+    public float RollingSpeed { get { return _rollingSpeed; } }
+    public LayerMask RollingObstacles { get { return _rollingObstacles; } }
 
     private void OnValidate()
     {

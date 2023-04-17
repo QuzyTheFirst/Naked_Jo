@@ -23,6 +23,8 @@ public class WeaponController : MonoBehaviour
 
     public Vector2 TargetPos { get { return _targetPos; } set { _targetPos = value; } }
     public bool IsWeaponTaken { get { return _currentWeapon != _unremovableIWeapon; } }
+    public float FullAttackTime { get { return _currentWeapon.GetFullAttackTime(); } }
+
 
     private void Awake()
     {
@@ -59,12 +61,28 @@ public class WeaponController : MonoBehaviour
             renderer.flipY = false;
     }
 
-    public void Shoot(Transform target)
+    public bool Shoot(Transform target)
     {
         if (_currentWeapon == null)
-            return;
+            return false;
 
-        _currentWeapon.Shoot(target);
+        return _currentWeapon.Shoot(target);
+    }
+
+    /*public bool Shoot(Vector2 position)
+    {
+        if (_currentWeapon == null)
+            return false;
+
+        return _currentWeapon.Shoot(position);
+    }*/
+
+    public bool AIShoot(Unit targetUnit)
+    {
+        if (_currentWeapon == null)
+            return false;
+
+        return _currentWeapon.AIShoot(targetUnit);
     }
 
     public void DropWeapon()

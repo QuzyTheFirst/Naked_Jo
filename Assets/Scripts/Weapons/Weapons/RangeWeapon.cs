@@ -18,15 +18,15 @@ public class RangeWeapon : Weapon
         _currentAmmo = _weaponParams.Ammo;
     }
 
-    public override void Shoot(Transform target)
+    public override bool Shoot(Transform target)
     {
         if (Time.time < _lastAttackTime + _weaponParams.FireRate)
-            return;
+            return false;
 
         if (CurrentAmmo <= 0)
         {
             Debug.Log("No Ammo");
-            return;
+            return false;
         }
 
         float distanceFromPlayer = 1.25f;
@@ -49,7 +49,42 @@ public class RangeWeapon : Weapon
 
         CurrentAmmo--;
         _lastAttackTime = Time.time;
+        return true;
     }
+
+    /*public override bool Shoot(Vector2 position)
+    {
+        if (Time.time < _lastAttackTime + _weaponParams.FireRate)
+            return false;
+
+        if (CurrentAmmo <= 0)
+        {
+            Debug.Log("No Ammo");
+            return false;
+        }
+
+        float distanceFromPlayer = 1.25f;
+        Vector2 dir = (position - (Vector2)UnitController.transform.position).normalized;
+        Vector2 spawnPos = (Vector2)UnitController.transform.position + (dir * distanceFromPlayer);
+
+        float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Transform bulletTf = SpawnBullet(spawnPos, dir, distanceFromPlayer, _weaponParams.BulletFlyingMask, Quaternion.Euler(0, 0, rotZ));
+
+        if (bulletTf != null)
+        {
+            Bullet bullet = bulletTf.GetComponent<Bullet>();
+
+            float bulletPower = 20f;
+            bullet.Rig.velocity = dir * bulletPower;
+            bullet.ShootPos = transform.position;
+        }
+
+        SoundManager.Instance.Play("PistolShoot");
+
+        CurrentAmmo--;
+        _lastAttackTime = Time.time;
+        return true;
+    }*/
 
     protected Transform SpawnBullet(Vector2 spawnPos, Vector3 dir, float distanceFromPlayer, LayerMask mask, Quaternion rotation)
     {

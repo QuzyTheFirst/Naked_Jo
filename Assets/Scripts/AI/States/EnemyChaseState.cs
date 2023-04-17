@@ -20,7 +20,7 @@ public class EnemyChaseState : EnemyBaseState
         if (context.TimerBeforeAction > 0f)
             return;
 
-        Vector2 dir = context.TargetUnit.position - context.transform.position;
+        Vector2 dir = context.TargetUnitTf.position - context.transform.position;
         float movementDir = Mathf.Sign(dir.x);
 
         if(movementDir == 1)
@@ -38,6 +38,8 @@ public class EnemyChaseState : EnemyBaseState
             context.Rig.velocity *= Vector2.up;
         }
 
+        UpdateWeaponTargetPos(context);
+
         CheckSwitchStates(context);
     }
 
@@ -48,7 +50,7 @@ public class EnemyChaseState : EnemyBaseState
             SwitchState(Factory.Stun());
         }
 
-        float distance = Vector2.Distance(context.transform.position, context.TargetUnit.position);
+        float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
         if(distance < context.AttackRadius)
         {
             SwitchState(Factory.Attack());
@@ -58,6 +60,17 @@ public class EnemyChaseState : EnemyBaseState
         {
             SwitchState(Factory.Patrol());
         }
+    }
+
+    private void UpdateWeaponTargetPos(SimpleEnemy context)
+    {
+        if (context.TargetUnit == null)
+        {
+            Debug.LogWarning("Target Unit hasn't been setted up!");
+            return;
+        }
+
+        context.WeaponController.TargetPos = context.TargetUnitTf.position;
     }
 
     public override void OnExit(SimpleEnemy context)

@@ -10,6 +10,7 @@ public class PlayerStateFactory : MonoBehaviour
         Walking,
         Jump,
         Grounded,
+        Rolling,
     }
 
     private PlayerController _context;
@@ -24,6 +25,7 @@ public class PlayerStateFactory : MonoBehaviour
         _states.Add(PlayerStates.Walking, new PlayerWalkingState(_context, this));
         _states.Add(PlayerStates.Jump, new PlayerJumpState(_context, this));
         _states.Add(PlayerStates.Grounded, new PlayerGroundedState(_context, this));
+        _states.Add(PlayerStates.Rolling, new PlayerRollingState(_context, this));
     }
 
     public PlayerBaseState Idle()
@@ -44,6 +46,11 @@ public class PlayerStateFactory : MonoBehaviour
     public PlayerBaseState Grounded()
     {
         return _states[PlayerStates.Grounded];
+    }
+
+    public PlayerBaseState Rolling()
+    {
+        return _states[PlayerStates.Rolling];
     }
 }
 

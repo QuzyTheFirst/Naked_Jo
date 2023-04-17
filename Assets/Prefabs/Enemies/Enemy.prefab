@@ -357,8 +357,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   _timeBeforeAction: 0.2
-  _runSpeed: 4
-  _walkSpeed: 2
+  _runSpeed: 6
+  _walkSpeed: 4
   _lerpAmount: 8
   _acceleration: 10
   _deceleration: 8
@@ -403,7 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5975b52f8f3a774ba0610d52d1e8e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxSpeed: 10
+  _maxSpeed: 6
   _acceleration: 8
   _decceleration: 10
   _lerpAmount: 8

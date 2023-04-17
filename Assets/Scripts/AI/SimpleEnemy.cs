@@ -22,7 +22,7 @@ public class SimpleEnemy : MonoBehaviour
 
     private Flip _flip;
 
-    private Transform _targetUnit;
+    private Unit _targetUnit;
 
     private bool _isPossessed = false;
 
@@ -78,7 +78,8 @@ public class SimpleEnemy : MonoBehaviour
     public SpriteRenderer SpriteRenderer { get { return _spriteRenderer; } }
     public Rigidbody2D Rig { get { return _rig; } }
     public Flip Flip { get { return _flip; } }
-    public Transform TargetUnit { get { return _targetUnit; } set { _targetUnit = value; } }
+    public Transform TargetUnitTf { get { return _targetUnit.transform; } }
+    public Unit TargetUnit { get { return _targetUnit; } set { _targetUnit = value; } }
     public float VisionRadius { get { return _visionRadius; } }
     public LayerMask WeaponMask { get { return _weaponMask; } }
     public LayerMask GroundMask { get { return _groundMask; } }
@@ -170,29 +171,9 @@ public class SimpleEnemy : MonoBehaviour
 
         _currentState.UpdateStates(this);
 
-        UpdateWeaponTargetPos();
-
         SearchForNewWeapon();
 
         _stepsSincePossessed++;
-    }
-
-    private void UpdateWeaponTargetPos()
-    {
-        if (_targetUnit == null)
-        {
-            Debug.LogWarning("Target Unit hasn't been setted up!");
-            return;
-        }
-
-        if (_currentState.SubState == _states.Patrol())
-        {
-            _weaponController.TargetPos = (Vector2)transform.position + Vector2.right * MovementDirection;
-        }
-        else if (_currentState.SubState == _states.Chase() || _currentState.SubState == _states.Attack())
-        {
-            _weaponController.TargetPos = _targetUnit.position;
-        }
     }
 
     private void SearchForNewWeapon()
@@ -260,10 +241,10 @@ public class SimpleEnemy : MonoBehaviour
 
     public bool CanISeeMyTarget()
     {
-        Vector2 dir = (_targetUnit.position - transform.position).normalized;
+        Vector2 dir = (_targetUnit.transform.position - transform.position).normalized;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, float.PositiveInfinity, _groundMask + _playerMask);
-        if (hit.transform == _targetUnit)
+        if (hit.transform == _targetUnit.transform)
         {
             return true;
         }

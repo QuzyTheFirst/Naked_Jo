@@ -50,9 +50,22 @@ public class Weapon : MonoBehaviour, IWeapon
         _mainTf.localPosition = dir * distanceFromPlayer;
     }
 
-    public virtual void Shoot(Transform target)
+    public virtual bool Shoot(Transform target)
     {
-        Debug.Log("Shooted tf");
+        Debug.Log("Shooted Transform");
+        return false;
+    }
+
+    /*public virtual bool Shoot(Vector2 targetPos)
+    {
+        Debug.Log("Shooted Pos");
+        return false;
+    }*/
+
+    public virtual bool AIShoot(Unit targetUnit)
+    {
+        Debug.Log("AI Shooted");
+        return false;
     }
 
     public virtual void DropWeapon()
@@ -190,6 +203,11 @@ public class Weapon : MonoBehaviour, IWeapon
     }
 
     public virtual float GetAttackDistance()
+    {
+        return 0;
+    }
+
+    public virtual float GetFullAttackTime()
     {
         return 0;
     }

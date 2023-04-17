@@ -43,6 +43,11 @@ public class PlayerIdleState : PlayerBaseState
         {
             SwitchState(Factory.Walk());
         }
+
+        if (player.DoRoll)
+        {
+            SwitchState(Factory.Rolling());
+        }
     }
 
     public override void OnExit(PlayerController player)

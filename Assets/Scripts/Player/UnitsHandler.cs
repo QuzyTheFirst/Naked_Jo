@@ -48,7 +48,7 @@ public class UnitsHandler : PlayerInputHandler
     private KeyHolder _keyHolder;
 
     // Inputs
-    private bool _isSlowMotionButtonPressed = false;
+    private bool _isPossessionModeEnabled = false;
     private bool _isExplosionButtonPressed = false;
 
     private float _movementDirection = 0f;
@@ -117,7 +117,7 @@ public class UnitsHandler : PlayerInputHandler
             {
                 _playerUnit = unit;
                 _currentUnit = _playerUnit;
-                Debug.Log("Player Setted");
+                //Debug.Log("Player Setted");
                 break;
             }
         }
@@ -171,7 +171,7 @@ public class UnitsHandler : PlayerInputHandler
 
         CheckForNextLevelLoaderSpawn();
 
-        if (_isSlowMotionButtonPressed)
+        if (_isPossessionModeEnabled)
             ShowPossessionLine();
 
         CheckForPlayerExplosion();
@@ -309,7 +309,7 @@ public class UnitsHandler : PlayerInputHandler
             if (_units[i] == _playerUnit)
                 continue;
 
-            _units[i].Enemy.SetTargetUnit(_currentUnit.transform);
+            _units[i].Enemy.SetTargetUnit(_currentUnit);
         }
     }
 
@@ -361,7 +361,7 @@ public class UnitsHandler : PlayerInputHandler
     #region OnDeath
     private void OnUnitDeath(object sender, EventArgs e)
     {
-        Debug.Log("On Unit Death");
+        //Debug.Log("On Unit Death");
 
         Unit unit = sender as Unit;
 
@@ -440,7 +440,7 @@ public class UnitsHandler : PlayerInputHandler
     #region Inputs
     private void UnitsHandler_PossessPerformed(object sender, System.EventArgs e)
     {
-        if (!_isSlowMotionButtonPressed || _isExplosionButtonPressed)
+        if (!_isPossessionModeEnabled || _isExplosionButtonPressed)
             return;
 
         //Debug.Log($"Possess Time: {Time.time}");
@@ -580,19 +580,22 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_AttackPerformed(object sender, EventArgs e)
     {
+        if (_isPossessionModeEnabled)
+            return;
+
         if (_currentUnit.WeaponController != null)
             _currentUnit.WeaponController.Shoot(_cursorController.transform);
     }
 
     public void UnitsHandler_SlowMotionPerformed(object sender, EventArgs e)
     {
-        _isSlowMotionButtonPressed = true;
+        _isPossessionModeEnabled = true;
         Time.timeScale = .25f;
     }
 
     public void UnitsHandler_SlowMotionCanceled(object sender, EventArgs e)
     {
-        _isSlowMotionButtonPressed = false;
+        _isPossessionModeEnabled = false;
         Time.timeScale = 1f;
 
         HidePossessionLine();
@@ -622,7 +625,7 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_PickUpThrowPerformed(object sender, EventArgs e)
     {
-        if (_isSlowMotionButtonPressed)
+        if (_isPossessionModeEnabled)
             return;
 
         if(_currentUnit.WeaponController != null)
@@ -639,8 +642,20 @@ public class UnitsHandler : PlayerInputHandler
                 BoxCollider2D collider = hit.transform.GetComponent<BoxCollider2D>();
                 Physics2D.IgnoreCollision(collider, _currentUnit.Col, true);
                 StartCoroutine(EnableCollision(collider, _currentUnit.Col, .5f));
+                Debug.Log("Going Down Through");
+                return;
             }
         }
+
+        if(_movementDirection != 0 && _currentUnit == _playerUnit)
+        {
+            StartRolling(_movementDirection);
+        }
+    }
+
+    private void StartRolling(float dir)
+    {
+        _currentUnit.Player.Roll(dir);
     }
 
     private IEnumerator EnableCollision(Collider2D col1, Collider2D col2, float time)

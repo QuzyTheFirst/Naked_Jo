@@ -6,6 +6,14 @@ public class EnemyAttackState : EnemyBaseState
 {
     private float _timer = 0;
 
+    private bool _isAttacking = false;
+    private float _attackTime;
+
+    private Vector2 _attackPos;
+    private Transform _attackTf;
+
+    private bool _aimAtPlayer;
+
     public EnemyAttackState(SimpleEnemy context, EnemyStateFactory factory) : base(context, factory) { }
 
     public override void OnEnter(SimpleEnemy context)
@@ -15,8 +23,29 @@ public class EnemyAttackState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        Vector2 dir = context.TargetUnit.position - context.transform.position;
-        context.Flip.TryToFlip(Mathf.Sign(dir.x));
+        if (_attackTime > 0)
+        {
+            _attackTime -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            _isAttacking = false;
+            _aimAtPlayer = true;
+        }
+
+        if (_isAttacking && _aimAtPlayer)
+        {
+            if (context.TargetUnit.Player.IsRolling)
+            {
+                _aimAtPlayer = false;
+            }
+        }
+
+        if (!_isAttacking)
+        {
+            Vector2 dir = context.TargetUnitTf.position - context.transform.position;
+            context.Flip.TryToFlip(Mathf.Sign(dir.x));
+        }
 
         context.TimerBeforeAction -= Time.fixedDeltaTime;
         if (context.TimerBeforeAction > 0f)
@@ -24,12 +53,22 @@ public class EnemyAttackState : EnemyBaseState
 
         if (Time.time > context.TimeToNextShoot)
         {
-            context.WeaponController.Shoot(context.TargetUnit);
+            // Here is my text bitch
+            _isAttacking = context.WeaponController.AIShoot(context.TargetUnit);
+
+            if (_isAttacking)
+            {
+                _attackTime = context.WeaponController.FullAttackTime;
+                _attackPos = context.TargetUnitTf.position;
+                _attackTf = context.TargetUnitTf;
+            }
 
             context.WeaponController.ResetAmmo();
 
             context.TimeToNextShoot = Time.time + context.ShootEvery;
         }
+
+        UpdateWeaponTargetPos(context);
 
         CheckSwitchStates(context);
     }
@@ -41,7 +80,10 @@ public class EnemyAttackState : EnemyBaseState
             SwitchState(Factory.Stun());
         }
 
-        float distance = Vector2.Distance(context.transform.position, context.TargetUnit.position);
+        if (_isAttacking)
+            return;
+
+        float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
         if (distance > context.AttackRadius)
         {
             SwitchState(Factory.Chase());
@@ -51,6 +93,20 @@ public class EnemyAttackState : EnemyBaseState
         {
             SwitchState(Factory.Patrol());
         }
+    }
+
+    private void UpdateWeaponTargetPos(SimpleEnemy context)
+    {
+        if (context.TargetUnit == null)
+        {
+            Debug.LogWarning("Target Unit hasn't been setted up!");
+            return;
+        }
+
+        if (_aimAtPlayer)
+            context.WeaponController.TargetPos = context.TargetUnitTf.position;
+        else
+            context.WeaponController.TargetPos = _attackPos;
     }
 
     public override void OnExit(SimpleEnemy context)

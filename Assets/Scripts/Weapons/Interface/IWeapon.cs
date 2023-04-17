@@ -4,7 +4,11 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    public void Shoot(Transform target);
+    public bool Shoot(Transform target);
+
+    //public bool Shoot(Vector2 targetPos);
+
+    public bool AIShoot(Unit targetUnit);
 
     public void OnUpdate(Vector2 targetPos);
 
@@ -20,6 +24,7 @@ public interface IWeapon
     public bool IsFlying();
 
     public float GetAttackDistance();
+    public float GetFullAttackTime();
 
     public void SetAttackMask(LayerMask attackMask);
 

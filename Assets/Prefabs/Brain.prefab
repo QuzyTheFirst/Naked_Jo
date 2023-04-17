@@ -10750,6 +10750,8 @@ MonoBehaviour:
   _explosionStunTime: 4
   _explosionParticles: {fileID: 1650481719}
   _explosionRadiusVisuals: {fileID: 6170221789838216315}
+  _rollingSpeed: 20
+  _rollingDistance: 2.5
 --- !u!114 &3075758548341443518
 MonoBehaviour:
   m_ObjectHideFlags: 0

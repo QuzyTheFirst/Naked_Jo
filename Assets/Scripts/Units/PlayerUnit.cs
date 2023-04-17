@@ -7,6 +7,8 @@ public class PlayerUnit
 {
     PlayerController _playerController;
 
+    public bool IsRolling { get { return _playerController.DoRoll; } }
+
     public PlayerUnit(PlayerController playerController)
     {
         _playerController = playerController;
@@ -35,5 +37,14 @@ public class PlayerUnit
     public void JumpCanceled()
     {
         _playerController.JumpCanceled();
+    }
+
+    public void Roll(float dir)
+    {
+        if (!_playerController.IsGrounded)
+            return;
+
+        _playerController.DoRoll = true;
+        _playerController.RollingDirection = dir;
     }
 }
