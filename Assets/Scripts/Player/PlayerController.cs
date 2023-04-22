@@ -65,7 +65,6 @@ public class PlayerController : PlayerComponentGetter
     private bool _isGrounded;
 
     private float _groundRemember;
-    private float _friction;
     private float _minGroundDotProduct;
 
     private float _stopLookingForGroundSteps;
@@ -111,7 +110,6 @@ public class PlayerController : PlayerComponentGetter
     public float DeccelInAir { get { return _deccelInAir; } }
     public bool DoConserveMomentum { get { return _doConserveMomentum; } }
     public Vector2 Velocity { get { return _velocity; } set { _velocity = value; } }
-    public float Friction { get { return _friction; } }
 
     // Ground
     public float GroundRemember { get { return _groundRemember; } set { _groundRemember = value; } }
@@ -181,12 +179,8 @@ public class PlayerController : PlayerComponentGetter
         _jumpPressedRemember -= Time.fixedDeltaTime;
 
         _isGrounded = GroundCheck();
-    }
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        _isGrounded = false;
-        _friction = 0;
+        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()} | Direction: {_direction.x}");
     }
 
     private bool GroundCheck()

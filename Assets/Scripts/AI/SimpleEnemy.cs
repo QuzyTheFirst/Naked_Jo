@@ -28,8 +28,6 @@ public class SimpleEnemy : MonoBehaviour
 
     private float _stunTime;
 
-    private int _stepsSincePossessed = 0;
-
     [Header("Weapon")]
     [SerializeField] private Transform _weaponToTake;
     [SerializeField] private LayerMask _attackMask;
@@ -172,8 +170,6 @@ public class SimpleEnemy : MonoBehaviour
         _currentState.UpdateStates(this);
 
         SearchForNewWeapon();
-
-        _stepsSincePossessed++;
     }
 
     private void SearchForNewWeapon()
@@ -204,15 +200,12 @@ public class SimpleEnemy : MonoBehaviour
 
         _unitController.enabled = true;
 
-        _currentState.UpdateStates(this);
         _stunAnimGO.SetActive(false);
 
         _isPossessed = true;
 
         _attackMask = attackMask;
         _weaponController.SetAttackMask(attackMask);
-
-        _stepsSincePossessed = 0;
     }
 
     public void UnPossess(LayerMask attackMask, Transform targetUnit)
@@ -224,7 +217,6 @@ public class SimpleEnemy : MonoBehaviour
         _unitController.enabled = false;
 
         _stunAnimGO.SetActive(true);
-        _currentState.UpdateStates(this);
 
         _isPossessed = false;
 
@@ -263,5 +255,11 @@ public class SimpleEnemy : MonoBehaviour
     public void Stun(float time)
     {
         _stunTime = time;
+
+        _currentState.UpdateStates(this);
+
+        /*_currentState = _states.Stun();
+
+        _currentState.OnEnter(this);*/
     }
 }

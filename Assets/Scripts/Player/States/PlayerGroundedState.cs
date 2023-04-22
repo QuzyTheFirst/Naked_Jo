@@ -24,6 +24,7 @@ public class PlayerGroundedState : PlayerBaseState
         if (!player.IsGrounded)
         {
             SwitchState(Factory.Jump());
+            return;
         }
 
         if(player.JumpPressedRemember > 0)
@@ -31,6 +32,7 @@ public class PlayerGroundedState : PlayerBaseState
             player.StopLookingForGroundSteps = 2;
             player.IsGrounded = false;
             SwitchState(Factory.Jump());
+            return;
         }
     }
 

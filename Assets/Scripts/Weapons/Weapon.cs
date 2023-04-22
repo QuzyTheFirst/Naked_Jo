@@ -5,6 +5,12 @@ using UnityEngine.InputSystem;
 
 public class Weapon : MonoBehaviour, IWeapon
 {
+    public enum WeaponType
+    {
+        Mellee,
+        Range,
+    }
+
     public enum WeaponState
     {
         Flying,
@@ -172,6 +178,18 @@ public class Weapon : MonoBehaviour, IWeapon
     public virtual bool IsFlying()
     {
         return _weaponState == WeaponState.Flying;
+    }
+
+    public virtual WeaponType GetWeaponType()
+    {
+        Debug.LogError("Not Implemented");
+        return WeaponType.Mellee;
+    }
+
+    public virtual int GetCurrentAmmo()
+    {
+        Debug.LogError("Not Implemented");
+        return 0;
     }
 
     public virtual void ResetAmmo() { }

@@ -26,7 +26,7 @@ public class MelleeWeapon : Weapon
         if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
             return false;
 
-        Debug.Log("Attack Transform");
+        //Debug.Log("Attack Transform");
 
         _anim.SetTrigger("Prepare");
 
@@ -147,7 +147,7 @@ public class MelleeWeapon : Weapon
         if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
             return false;
 
-        Debug.Log("AI Attack");
+        //Debug.Log("AI Attack");
 
         _anim.SetTrigger("Prepare");
 
@@ -170,11 +170,14 @@ public class MelleeWeapon : Weapon
 
         while (_attackTimer < _weaponParams.AttackTime)
         {
+            if (targetUnit == null)
+                break;
+
             if (targetUnit.Player.IsRolling)
                 hasStartedRolling = true;
 
-            Debug.Log("Has started Rolling: " + hasStartedRolling);
-            Debug.Log($"Started Pos: {startedPos}, TargetUnit: {targetUnit.transform.position}");
+            //Debug.Log("Has started Rolling: " + hasStartedRolling);
+            //Debug.Log($"Started Pos: {startedPos}, TargetUnit: {targetUnit.transform.position}");
 
             if(!hasStartedRolling)
                 dir = (targetUnit.transform.position - UnitController.transform.position).normalized;
@@ -211,6 +214,16 @@ public class MelleeWeapon : Weapon
             yield return new WaitForFixedUpdate();
         }
         _attackTimer = 0;
+    }
+
+    public override WeaponType GetWeaponType()
+    {
+        return WeaponType.Mellee;
+    }
+
+    public override int GetCurrentAmmo()
+    {
+        return -1;
     }
 
     public override void DropWeapon()

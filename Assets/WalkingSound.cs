@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class WalkingSound : PlayerComponentGetter
 {
-    [SerializeField] private float _stepEvery = .2f;
+    [SerializeField] private float _stepEverySeconds = .2f;
     private float _timer;
+
+    private Vector2 _lastStepPos;
     private void Update()
     {
         if (_player.IsWalking && _player.IsGrounded)
         {
             _timer += Time.deltaTime;
-            if (_timer >= _stepEvery)
+            if (_timer >= _stepEverySeconds)
             {
-                SoundManager.Instance.Play("Step");
-                _timer -= _stepEvery;
+                PlayStepSound();
             }
         }
+    }
+
+    private void PlayStepSound()
+    {
+        SoundManager.Instance.Play("Step");
+        _lastStepPos = transform.position;
+        _timer -= _stepEverySeconds;
     }
 }

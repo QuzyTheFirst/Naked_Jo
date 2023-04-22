@@ -20,7 +20,11 @@ public class EnemyPatrolState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        //Debug.Log($"Patrol State: {Time.time}");
+        if (context.StunTime > 0f)
+        {
+            CheckSwitchStates(context);
+            return;
+        }
 
         float movementDirection = context.MovementDirection;
 
@@ -65,6 +69,7 @@ public class EnemyPatrolState : EnemyBaseState
         if(context.StunTime > 0f)
         {
             SwitchState(Factory.Stun());
+            return;
         }
 
         if (context.TargetUnit == null)
@@ -74,11 +79,13 @@ public class EnemyPatrolState : EnemyBaseState
         if(context.CanISeeMyTarget() &&  distance < context.AttackRadius)
         {
             SwitchState(Factory.Attack());
+            return;
         }
 
         if (context.CanISeeMyTarget())
         {
             SwitchState(Factory.Chase());
+            return;
         }
     }
 

@@ -10730,7 +10730,7 @@ MonoBehaviour:
   _canPossessColor: {r: 0.8392157, g: 0.4, b: 0.7529412, a: 1}
   _canOnlyUnpossessColor: {r: 0.4, g: 0.4376519, b: 0.8392157, a: 1}
   _possessionRadius: 4
-  _cooldownTime: 5
+  _possessionCooldownTime: 5
   _possessionLineRenderer: {fileID: 251676011}
   _possessionMask:
     serializedVersion: 2
@@ -10738,7 +10738,6 @@ MonoBehaviour:
   _unpossessionMask:
     serializedVersion: 2
     m_Bits: 8328
-  _cooldownTimer: 0
   _enemyAttackMask:
     serializedVersion: 2
     m_Bits: 8448
@@ -10750,8 +10749,8 @@ MonoBehaviour:
   _explosionStunTime: 4
   _explosionParticles: {fileID: 1650481719}
   _explosionRadiusVisuals: {fileID: 6170221789838216315}
-  _rollingSpeed: 20
-  _rollingDistance: 2.5
+  _explosionCooldownTime: 7
+  _rollingCooldownTime: 0.5
 --- !u!114 &3075758548341443518
 MonoBehaviour:
   m_ObjectHideFlags: 0

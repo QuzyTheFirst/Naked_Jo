@@ -18,11 +18,11 @@ public class UnitsHandler : PlayerInputHandler
 
     [Header("Possession")]
     [SerializeField] private float _possessionRadius;
-    [SerializeField] private float _cooldownTime;
+    [SerializeField] private float _possessionCooldownTime;
     [SerializeField] private LineRenderer _possessionLineRenderer;
     [SerializeField] private LayerMask _possessionMask;
     [SerializeField] private LayerMask _unpossessionMask;
-    [SerializeField] private float _cooldownTimer = 0f;
+    private float _possessionCooldownTimer = 0f;
 
     [Header("Attack Masks")]
     [SerializeField] private LayerMask _enemyAttackMask;
@@ -34,8 +34,14 @@ public class UnitsHandler : PlayerInputHandler
     [SerializeField] private float _explosionStunTime;
     [SerializeField] private ParticleSystem _explosionParticles;
     [SerializeField] private Transform _explosionRadiusVisuals;
+    [SerializeField] private float _explosionCooldownTime;
+    private float _explosionCooldownTimer;
     private float _explosionTimer;
     private bool _isExplosionGoing;
+
+    [Header("Roll")]
+    [SerializeField] private float _rollingCooldownTime;
+    private float _rollingCooldownTimer;
 
     // Units
     private List<Unit> _units = null;
@@ -60,6 +66,8 @@ public class UnitsHandler : PlayerInputHandler
         // Events
         Unit.OnDeath += OnUnitDeath;
         Unit.OnCollisionEnter += Unit_OnCollisionEnter;
+
+        
     }
 
     protected override void OnDisable()
@@ -178,7 +186,7 @@ public class UnitsHandler : PlayerInputHandler
 
 
         _cursorController.SetCursorPosition(_mousePosInWorld);
-        if(_cooldownTimer <= 0)
+        if(_possessionCooldownTimer <= 0)
         {
             _cursorController.ChangePossessionIconColor(_canPossessColor);
         }
@@ -186,18 +194,41 @@ public class UnitsHandler : PlayerInputHandler
         {
             _cursorController.ChangePossessionIconColor(_canOnlyUnpossessColor);
         }
-        _cursorController.TogglePossessionIcon(_playerUnit != _currentUnit || _cooldownTimer <= 0);
+        _cursorController.TogglePossessionIcon(_playerUnit != _currentUnit || _possessionCooldownTimer <= 0);
 
 
-        if (_cooldownTimer >= 0)
+        if (_possessionCooldownTimer >= 0f)
         {
-            _cooldownTimer -= Time.deltaTime;
+            _possessionCooldownTimer -= Time.deltaTime;
         }
+        if(_rollingCooldownTimer >= 0f)
+        {
+            _rollingCooldownTimer -= Time.deltaTime;
+        }
+        if(_explosionCooldownTimer >= 0f)
+        {
+            _explosionCooldownTimer -= Time.deltaTime;
+        }
+
+        UpdateUIElements();
+    }
+
+    private void UpdateUIElements()
+    {
+        float possessionValue = Mathf.Clamp01(1 - _possessionCooldownTimer / _possessionCooldownTime);
+        
+        float rollingValue = Mathf.Clamp01(1 - _rollingCooldownTimer / _rollingCooldownTime);
+        
+        float explosionValue = Mathf.Clamp01(1 - _explosionCooldownTimer / _explosionCooldownTime);
+
+        GameUIController.Instance.SetPossessionValue(possessionValue);
+        GameUIController.Instance.SetRollingValue(rollingValue);
+        GameUIController.Instance.SetExplosionValue(explosionValue);
     }
 
     private void CheckForPlayerExplosion()
     {
-        if (_isExplosionButtonPressed && !_currentUnit.IsPlayer)
+        if (_isExplosionButtonPressed && !_currentUnit.IsPlayer && _explosionCooldownTimer < 0f)
         {
             _isExplosionGoing = true;
             _currentUnit.Player.SetMaxSpeedModifier(.1f);
@@ -247,8 +278,9 @@ public class UnitsHandler : PlayerInputHandler
                 _explosionParticles.Play();
 
                 _explosionTimer = 0;
+                _explosionCooldownTimer = _explosionCooldownTime;
                 //SoundManager.Instance.Stop("Explode");
-                _cooldownTimer = 0f;
+                _possessionCooldownTimer = 0f;
                 _isExplosionGoing = false;
 
                 _explosionRadiusVisuals.gameObject.SetActive(false);
@@ -291,11 +323,19 @@ public class UnitsHandler : PlayerInputHandler
     {
         PlayerUnit player = _currentUnit.Player;
         player.MoveCanceled();
-        player.JumpCanceled(); 
+        player.JumpCanceled();
+
+        if (!_currentUnit.IsPlayer)
+            _currentUnit.WeaponController.OnWeaponChange -= WeaponController_OnWeaponChange;
+
+        if (!newUnit.IsPlayer)
+            newUnit.WeaponController.OnWeaponChange += WeaponController_OnWeaponChange;
 
         _currentUnit = newUnit;
 
         _currentUnit.Player.MovePerformed(_movementDirection);
+
+        GameUIController.Instance.ToggleRolling(_currentUnit.Player.CanRoll);
 
         SetEnemiesTargetUnit();
 
@@ -375,9 +415,15 @@ public class UnitsHandler : PlayerInputHandler
 
         KillEnemy(unit);
 
+        TryToActivateLevelEndPointer();
+        CheckForNowKillYourselfActivation();
+    }
+
+    private void TryToActivateLevelEndPointer()
+    {
         if ((_units.Count - 1) == 0)
         {
-            if(_playerUnit != null && _nextLevelLoader != null)
+            if (_playerUnit != null && _nextLevelLoader != null)
                 GameUIController.Instance.ActivateLevelEndPointer(_playerUnit.transform, _nextLevelLoader.transform);
         }
     }
@@ -393,7 +439,8 @@ public class UnitsHandler : PlayerInputHandler
 
             _units.Remove(unit);
 
-            _cooldownTimer = 0f;
+            _possessionCooldownTimer = 0f;
+            _explosionCooldownTimer -= _explosionCooldownTime * .5f;
 
             Destroy(unit.transform.gameObject);
             return;
@@ -445,11 +492,11 @@ public class UnitsHandler : PlayerInputHandler
 
         //Debug.Log($"Possess Time: {Time.time}");
 
-        if(_cooldownTimer <= 0)
+        if(_possessionCooldownTimer <= 0)
         {
             if (PossessionRay(_mousePosInWorld))
             {
-                _cooldownTimer = _cooldownTime;
+                _possessionCooldownTimer = _possessionCooldownTime;
                 SoundManager.Instance.Play("Possess");
             }
             else if(UnpossessionRay(_mousePosInWorld))
@@ -460,6 +507,20 @@ public class UnitsHandler : PlayerInputHandler
         else if(UnpossessionRay(_mousePosInWorld))
         {
             SoundManager.Instance.Play("Unpossess");
+        }
+
+        CheckForNowKillYourselfActivation();
+    }
+
+    private void CheckForNowKillYourselfActivation()
+    {
+        if (_units.Count == 2 && _currentUnit != _playerUnit)
+        {
+            GameUIController.Instance.ToggleNowKillYourself(true);
+        }
+        else
+        {
+            GameUIController.Instance.ToggleNowKillYourself(false);
         }
     }
 
@@ -490,10 +551,13 @@ public class UnitsHandler : PlayerInputHandler
 
                 unit.Enemy.Possess(_playerAttackMask);
 
-                _currentUnit = unit;
+                if(unit.WeaponController.GetWeaponType() == Weapon.WeaponType.Range)
+                {
+                    GameUIController.Instance.SetAmmoAmount(unit.WeaponController.GetCurrentAmmo());
+                }
 
-                TakeAllKeys(_currentUnit);
-                SetUnit(_currentUnit);
+                TakeAllKeys(unit);
+                SetUnit(unit);
                 return true;
             }
         }
@@ -538,9 +602,25 @@ public class UnitsHandler : PlayerInputHandler
 
         SetUnit(_playerUnit);
 
+        GameUIController.Instance.DisableAmmoAmount();
+
         _playerUnit.gameObject.SetActive(true);
 
         return true;
+    }
+
+    private void WeaponController_OnWeaponChange(object sender, IWeapon weapon)
+    {
+        Debug.Log("Weapon Changed!");
+        if (weapon.GetWeaponType() == Weapon.WeaponType.Range)
+        {
+            GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
+        }
+        else
+        {
+            Debug.Log("Disabled Ammo");
+            GameUIController.Instance.DisableAmmoAmount();
+        }
     }
 
     private void TakeAllKeys(Unit unit)
@@ -583,8 +663,18 @@ public class UnitsHandler : PlayerInputHandler
         if (_isPossessionModeEnabled)
             return;
 
+        bool attacked = false;
+
         if (_currentUnit.WeaponController != null)
-            _currentUnit.WeaponController.Shoot(_cursorController.transform);
+            attacked = _currentUnit.WeaponController.Shoot(_cursorController.transform);
+
+        if (attacked)
+        {
+            if(_currentUnit.WeaponController.GetWeaponType() == Weapon.WeaponType.Range)
+            {
+                GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
+            }
+        }
     }
 
     public void UnitsHandler_SlowMotionPerformed(object sender, EventArgs e)
@@ -642,20 +732,23 @@ public class UnitsHandler : PlayerInputHandler
                 BoxCollider2D collider = hit.transform.GetComponent<BoxCollider2D>();
                 Physics2D.IgnoreCollision(collider, _currentUnit.Col, true);
                 StartCoroutine(EnableCollision(collider, _currentUnit.Col, .5f));
-                Debug.Log("Going Down Through");
+                //Debug.Log("Going Down Through");
                 return;
             }
         }
 
-        if(_movementDirection != 0 && _currentUnit == _playerUnit)
+        if(_movementDirection != 0 && _rollingCooldownTimer < 0f)
         {
-            StartRolling(_movementDirection);
+            if (StartRolling(_movementDirection))
+            {
+                _rollingCooldownTimer = _rollingCooldownTime;
+            }
         }
     }
 
-    private void StartRolling(float dir)
+    private bool StartRolling(float dir)
     {
-        _currentUnit.Player.Roll(dir);
+         return _currentUnit.Player.Roll(dir);
     }
 
     private IEnumerator EnableCollision(Collider2D col1, Collider2D col2, float time)

@@ -15,6 +15,12 @@ public class EnemyChaseState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
+        if (context.StunTime > 0f)
+        {
+            CheckSwitchStates(context);
+            return;
+        }
+
         //Debug.Log($"Chase State: {Time.time}");
         context.TimerBeforeAction -= Time.fixedDeltaTime;
         if (context.TimerBeforeAction > 0f)
@@ -48,17 +54,20 @@ public class EnemyChaseState : EnemyBaseState
         if (context.StunTime > 0f)
         {
             SwitchState(Factory.Stun());
+            return;
         }
 
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
         if(distance < context.AttackRadius)
         {
             SwitchState(Factory.Attack());
+            return;
         }
 
         if (!context.CanISeeMyTarget())
         {
             SwitchState(Factory.Patrol());
+            return;
         }
     }
 

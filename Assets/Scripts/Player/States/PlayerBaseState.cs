@@ -66,5 +66,11 @@ public abstract class PlayerBaseState
         _subState = state;
         state.SetSuperState(this);
     }
+
+    // Delete It Later!!!
+    public PlayerBaseState GetSubState()
+    {
+        return _subState;
+    }
 }
 

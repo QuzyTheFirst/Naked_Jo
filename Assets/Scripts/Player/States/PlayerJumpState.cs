@@ -87,6 +87,7 @@ public class PlayerJumpState : PlayerBaseState
         if (player.IsGrounded)
         {
             SwitchState(Factory.Grounded());
+            return;
         }
     }
 
@@ -95,10 +96,13 @@ public class PlayerJumpState : PlayerBaseState
         if (!player.IsWalking)
         {
             SetSubState(Factory.Idle());
+            return;
         }
-        else if (player.IsWalking)
+
+        if (player.IsWalking)
         {
             SetSubState(Factory.Walk());
+            return;
         }
     }
 

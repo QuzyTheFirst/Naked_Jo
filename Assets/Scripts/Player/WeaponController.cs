@@ -37,6 +37,8 @@ public class WeaponController : MonoBehaviour
     private void Start()
     {
         ActivateUnremovableWeapon();
+
+        OnWeaponChange?.Invoke(this, _currentWeapon);
     }
 
     private void Update()
@@ -164,6 +166,16 @@ public class WeaponController : MonoBehaviour
         return null;
     }
 
+    public Weapon.WeaponType GetWeaponType()
+    {
+        return _currentWeapon.GetWeaponType();
+    }
+
+    public int GetCurrentAmmo()
+    {
+        return _currentWeapon.GetCurrentAmmo();
+    }
+
     #region AI
 
     public void SetAttackMask(LayerMask mask)
@@ -189,15 +201,15 @@ public class WeaponController : MonoBehaviour
 
         DropWeapon();
 
-        if (iWeapon != null)
-        {
-            if (_unremovableWeapon != null)
-                _unremovableWeapon.SetActive(false);
+        if (iWeapon == null)
+            return;
 
-            weapon.gameObject.SetActive(true);
-            _currentWeapon = iWeapon;
-            _currentWeapon.Init(_unitController, transform);
-        }
+        if (_unremovableWeapon != null)
+            _unremovableWeapon.SetActive(false);
+
+        weapon.gameObject.SetActive(true);
+        _currentWeapon = iWeapon;
+        _currentWeapon.Init(_unitController, transform);
 
         OnWeaponChange?.Invoke(this, _currentWeapon);
     }
@@ -209,14 +221,15 @@ public class WeaponController : MonoBehaviour
 
         DropWeapon();
 
-        if (iWeapon != null)
-        {
-            if (_unremovableWeapon != null)
-                _unremovableWeapon.SetActive(false);
 
-            _currentWeapon = iWeapon;
-            _currentWeapon.Init(_unitController, transform);
-        }
+        if (iWeapon == null)
+            return;
+
+        if (_unremovableWeapon != null)
+            _unremovableWeapon.SetActive(false);
+
+        _currentWeapon = iWeapon;
+        _currentWeapon.Init(_unitController, transform);
 
         OnWeaponChange?.Invoke(this, _currentWeapon);
     }

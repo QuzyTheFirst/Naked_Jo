@@ -23,6 +23,12 @@ public class EnemyAttackState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
+        if(context.StunTime > 0f)
+        {
+            CheckSwitchStates(context);
+            return;
+        }
+
         if (_attackTime > 0)
         {
             _attackTime -= Time.fixedDeltaTime;
@@ -78,6 +84,7 @@ public class EnemyAttackState : EnemyBaseState
         if (context.StunTime > 0f)
         {
             SwitchState(Factory.Stun());
+            return;
         }
 
         if (_isAttacking)
@@ -87,11 +94,13 @@ public class EnemyAttackState : EnemyBaseState
         if (distance > context.AttackRadius)
         {
             SwitchState(Factory.Chase());
+            return;
         }
 
         if (!context.CanISeeMyTarget())
         {
             SwitchState(Factory.Patrol());
+            return;
         }
     }
 

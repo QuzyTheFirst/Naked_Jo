@@ -28,6 +28,8 @@ public interface IWeapon
 
     public void SetAttackMask(LayerMask attackMask);
 
+    public Weapon.WeaponType GetWeaponType();
+    public int GetCurrentAmmo();
     public void ResetAmmo();
 
     public void Init(PlayerController sender, Transform parent);

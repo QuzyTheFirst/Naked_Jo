@@ -52,7 +52,7 @@ public class RangeWeapon : Weapon
         return true;
     }
 
-    /*public override bool Shoot(Vector2 position)
+    public override bool AIShoot(Unit targetUnit)
     {
         if (Time.time < _lastAttackTime + _weaponParams.FireRate)
             return false;
@@ -64,7 +64,7 @@ public class RangeWeapon : Weapon
         }
 
         float distanceFromPlayer = 1.25f;
-        Vector2 dir = (position - (Vector2)UnitController.transform.position).normalized;
+        Vector2 dir = (targetUnit.transform.position - UnitController.transform.position).normalized;
         Vector2 spawnPos = (Vector2)UnitController.transform.position + (dir * distanceFromPlayer);
 
         float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -84,7 +84,7 @@ public class RangeWeapon : Weapon
         CurrentAmmo--;
         _lastAttackTime = Time.time;
         return true;
-    }*/
+    }
 
     protected Transform SpawnBullet(Vector2 spawnPos, Vector3 dir, float distanceFromPlayer, LayerMask mask, Quaternion rotation)
     {
@@ -110,6 +110,16 @@ public class RangeWeapon : Weapon
         }
 
         return null;
+    }
+
+    public override WeaponType GetWeaponType()
+    {
+        return WeaponType.Range;
+    }
+
+    public override int GetCurrentAmmo()
+    {
+        return _currentAmmo;
     }
 
     public override void ResetAmmo()

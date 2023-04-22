@@ -27,7 +27,7 @@ public class PlayerRollingState : PlayerBaseState
 
     public override void OnUpdate(PlayerController player)
     {
-        if(_time > 0f && !ObstaclesCheck(player))
+        if(_time > 0f && !ObstaclesCheck(player)&& player.DoRoll)
         {
             player.Velocity = Vector2.right * player.RollingDirection * player.RollingSpeed;
             _time -= Time.fixedDeltaTime;
@@ -42,12 +42,15 @@ public class PlayerRollingState : PlayerBaseState
 
     public override void CheckSwitchStates(PlayerController player)
     {
-        if (!player.DoRoll && player.IsWalking)
+        if (player.DoRoll)
+            return;
+
+        if (player.IsWalking)
         {
             SwitchState(Factory.Walk());
         }
 
-        if (!player.DoRoll && !player.IsWalking)
+        if (!player.IsWalking)
         {
             SwitchState(Factory.Idle());
         }

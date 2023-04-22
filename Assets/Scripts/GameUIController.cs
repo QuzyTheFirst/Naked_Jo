@@ -23,6 +23,39 @@ public class GameUIController : MonoBehaviour
 
     private float _currentKeyCount;
 
+    private bool _updatePossession = true;
+    private bool _updateRolling = true;
+    private bool _updateExplosion = true;
+
+    [Header("UI Elements")]
+    [SerializeField] private Color _readyToUseColor;
+    [SerializeField] private Color _turnedOffColor;
+
+    [Header("Ammo")]
+    [SerializeField] private GameObject _ammoGO;
+    [SerializeField] private TextMeshProUGUI _ammoAmount;
+
+    [Header("Possession")]
+    [SerializeField] private Color _possessionColor;
+    [SerializeField] private Color _possessionCooldownColor;
+    [SerializeField] private Image _possessionBG;
+    [SerializeField] private Image _possessionIcon;
+
+    [Header("Roll")]
+    [SerializeField] private Color _rollingColor;
+    [SerializeField] private Color _rollingCooldownColor;
+    [SerializeField] private Image _rollingBG;
+    [SerializeField] private Image _rollingIcon;
+
+    [Header("Explosion")]
+    [SerializeField] private Color _explosionColor;
+    [SerializeField] private Color _explosionCooldownColor;
+    [SerializeField] private Image _explosionBG;
+    [SerializeField] private Image _explosionIcon;
+
+    [Header("Now Kill Yourself")]
+    [SerializeField] private GameObject _nowKillYourselfGO;
+
     public static GameUIController Instance;
 
     private void Awake()
@@ -33,6 +66,8 @@ public class GameUIController : MonoBehaviour
 
         _pointerRectTransform.gameObject.SetActive(false);
         _isPointerActivated = false;
+
+        _ammoGO.SetActive(false);
     }
 
     private void Update()
@@ -127,5 +162,101 @@ public class GameUIController : MonoBehaviour
         _endTransform = endPoint;
         _pointerRectTransform.gameObject.SetActive(true);
         _isPointerActivated = true;
+    }
+
+    public void SetPossessionValue(float value)
+    {
+        if (!_updatePossession)
+            return;
+
+        _possessionBG.fillAmount = value;
+
+        _possessionBG.color = value == 1 ? _readyToUseColor : _possessionCooldownColor;
+    }
+
+    public void TogglePossession(bool value)
+    {
+        if(value == true)
+        {
+            _possessionIcon.color = _possessionColor;
+        }
+        else
+        {
+            _possessionBG.fillAmount = 1;
+            _possessionBG.color = _turnedOffColor;
+            _possessionIcon.color = _possessionColor * _turnedOffColor;
+        }
+
+        _updatePossession = value;
+    }
+
+    public void SetRollingValue(float value)
+    {
+        if (!_updateRolling)
+            return;
+
+        _rollingBG.fillAmount = value;
+
+        _rollingBG.color = value == 1 ? _readyToUseColor : _rollingCooldownColor;
+    }
+
+    public void ToggleRolling(bool value)
+    {
+        if (value == true)
+        {
+            _rollingIcon.color = _rollingColor;
+        }
+        else
+        {
+            _rollingBG.fillAmount = 1;
+            _rollingBG.color = _turnedOffColor;
+            _rollingIcon.color = _rollingColor * _turnedOffColor;
+        }
+
+        _updateRolling = value;
+    }
+
+    public void SetExplosionValue(float value)
+    {
+        if (!_updateExplosion)
+            return;
+
+        _explosionBG.fillAmount = value;
+
+        _explosionBG.color = value == 1 ? _readyToUseColor : _explosionCooldownColor;
+    }
+
+    public void ToggleExplosion(bool value)
+    {
+        if (value == true)
+        {
+            _explosionIcon.color = _rollingColor;
+        }
+        else
+        {
+            _explosionBG.fillAmount = 1;
+            _explosionBG.color = _turnedOffColor;
+            _explosionIcon.color = _explosionColor * _turnedOffColor;
+        }
+
+        _updateExplosion = value;
+    }
+
+    public void SetAmmoAmount(int value)
+    {
+        if (!_ammoGO.activeInHierarchy)
+            _ammoGO.SetActive(true);
+
+        _ammoAmount.text = $"{value}rnds";
+    }
+
+    public void ToggleNowKillYourself(bool value)
+    {
+        _nowKillYourselfGO.SetActive(value);
+    }
+
+    public void DisableAmmoAmount()
+    {
+        _ammoGO.SetActive(false);
     }
 }
