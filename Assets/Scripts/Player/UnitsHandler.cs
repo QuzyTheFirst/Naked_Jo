@@ -23,6 +23,7 @@ public class UnitsHandler : PlayerInputHandler
     [SerializeField] private LayerMask _possessionMask;
     [SerializeField] private LayerMask _unpossessionMask;
     private float _possessionCooldownTimer = 0f;
+    private bool _isPossessionKeyPressed = false;
 
     [Header("Attack Masks")]
     [SerializeField] private LayerMask _enemyAttackMask;
@@ -39,6 +40,11 @@ public class UnitsHandler : PlayerInputHandler
     private float _explosionTimer;
     private bool _isExplosionGoing;
 
+    [Header("SlowMotion")]
+    [SerializeField] private float _slowMotionTime;
+    private float _slowMotionTimer;
+    private bool _isSlowMotionKeyPressed = false;
+
     [Header("Roll")]
     [SerializeField] private float _rollingCooldownTime;
     private float _rollingCooldownTimer;
@@ -54,7 +60,6 @@ public class UnitsHandler : PlayerInputHandler
     private KeyHolder _keyHolder;
 
     // Inputs
-    private bool _isPossessionModeEnabled = false;
     private bool _isExplosionButtonPressed = false;
 
     private float _movementDirection = 0f;
@@ -66,8 +71,6 @@ public class UnitsHandler : PlayerInputHandler
         // Events
         Unit.OnDeath += OnUnitDeath;
         Unit.OnCollisionEnter += Unit_OnCollisionEnter;
-
-        
     }
 
     protected override void OnDisable()
@@ -96,6 +99,7 @@ public class UnitsHandler : PlayerInputHandler
         SlowMotionCanceled += UnitsHandler_SlowMotionCanceled;
 
         PossessPerformed += UnitsHandler_PossessPerformed;
+        PossessCanceled += UnitsHandler_PossessCanceled;
 
         RestartPerformed += UnitsHandler_RestartPerformed;
 
@@ -164,6 +168,8 @@ public class UnitsHandler : PlayerInputHandler
             if (_playerUnit != null && _nextLevelLoader != null)
                 GameUIController.Instance.ActivateLevelEndPointer(_playerUnit.transform, _nextLevelLoader.transform);
         }
+
+        _slowMotionTimer = _slowMotionTime;
     }
 
     private void Update()
@@ -179,8 +185,11 @@ public class UnitsHandler : PlayerInputHandler
 
         CheckForNextLevelLoaderSpawn();
 
-        if (_isPossessionModeEnabled)
+        if (_isPossessionKeyPressed)
             ShowPossessionLine();
+
+        if (_isSlowMotionKeyPressed)
+            ChangeSlowMotionTimer(Time.unscaledDeltaTime, false);
 
         CheckForPlayerExplosion();
 
@@ -221,9 +230,27 @@ public class UnitsHandler : PlayerInputHandler
         
         float explosionValue = Mathf.Clamp01(1 - _explosionCooldownTimer / _explosionCooldownTime);
 
+        float slowMotionValue = Mathf.Clamp01(_slowMotionTimer / _slowMotionTime);
+
         GameUIController.Instance.SetPossessionValue(possessionValue);
         GameUIController.Instance.SetRollingValue(rollingValue);
         GameUIController.Instance.SetExplosionValue(explosionValue);
+        GameUIController.Instance.SetSlowMotionValue(slowMotionValue);
+    }
+
+    private void ChangeSlowMotionTimer(float value, bool upOrDown)
+    {
+        if(upOrDown)
+            _slowMotionTimer += value;
+        else
+            _slowMotionTimer -= value;
+
+        _slowMotionTimer = Mathf.Clamp(_slowMotionTimer, 0, _slowMotionTime);
+
+        if(_slowMotionTimer == 0)
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     private void CheckForPlayerExplosion()
@@ -281,6 +308,7 @@ public class UnitsHandler : PlayerInputHandler
                 _explosionCooldownTimer = _explosionCooldownTime;
                 //SoundManager.Instance.Stop("Explode");
                 _possessionCooldownTimer = 0f;
+                ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
                 _isExplosionGoing = false;
 
                 _explosionRadiusVisuals.gameObject.SetActive(false);
@@ -441,6 +469,7 @@ public class UnitsHandler : PlayerInputHandler
 
             _possessionCooldownTimer = 0f;
             _explosionCooldownTimer -= _explosionCooldownTime * .5f;
+            ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
 
             Destroy(unit.transform.gameObject);
             return;
@@ -487,24 +516,34 @@ public class UnitsHandler : PlayerInputHandler
     #region Inputs
     private void UnitsHandler_PossessPerformed(object sender, System.EventArgs e)
     {
-        if (!_isPossessionModeEnabled || _isExplosionButtonPressed)
+        if (!_isSlowMotionKeyPressed || _isExplosionButtonPressed)
             return;
 
-        //Debug.Log($"Possess Time: {Time.time}");
+        _isPossessionKeyPressed = true;
+    }
 
-        if(_possessionCooldownTimer <= 0)
+    private void UnitsHandler_PossessCanceled(object sender, EventArgs e)
+    {
+        if (!_isSlowMotionKeyPressed || _isExplosionButtonPressed)
+            return;
+
+        _isPossessionKeyPressed = false;
+
+        HidePossessionLine();
+
+        if (_possessionCooldownTimer <= 0)
         {
             if (PossessionRay(_mousePosInWorld))
             {
                 _possessionCooldownTimer = _possessionCooldownTime;
                 SoundManager.Instance.Play("Possess");
             }
-            else if(UnpossessionRay(_mousePosInWorld))
+            else if (UnpossessionRay(_mousePosInWorld))
             {
                 SoundManager.Instance.Play("Unpossess");
             }
         }
-        else if(UnpossessionRay(_mousePosInWorld))
+        else if (UnpossessionRay(_mousePosInWorld))
         {
             SoundManager.Instance.Play("Unpossess");
         }
@@ -660,9 +699,6 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_AttackPerformed(object sender, EventArgs e)
     {
-        if (_isPossessionModeEnabled)
-            return;
-
         bool attacked = false;
 
         if (_currentUnit.WeaponController != null)
@@ -679,15 +715,18 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_SlowMotionPerformed(object sender, EventArgs e)
     {
-        _isPossessionModeEnabled = true;
-        Time.timeScale = .25f;
+        _isSlowMotionKeyPressed = true;
+
+        if(_slowMotionTimer > 0f)
+            Time.timeScale = .25f;
     }
 
     public void UnitsHandler_SlowMotionCanceled(object sender, EventArgs e)
     {
-        _isPossessionModeEnabled = false;
+        _isSlowMotionKeyPressed = false;
         Time.timeScale = 1f;
 
+        _isPossessionKeyPressed = false;
         HidePossessionLine();
     }
 
@@ -715,7 +754,7 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_PickUpThrowPerformed(object sender, EventArgs e)
     {
-        if (_isPossessionModeEnabled)
+        if (_isSlowMotionKeyPressed)
             return;
 
         if(_currentUnit.WeaponController != null)

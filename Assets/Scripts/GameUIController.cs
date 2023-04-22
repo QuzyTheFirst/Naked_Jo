@@ -32,8 +32,10 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private Color _turnedOffColor;
 
     [Header("Ammo")]
-    [SerializeField] private GameObject _ammoGO;
+    [SerializeField] private RectTransform _ammoRectTransform;
     [SerializeField] private TextMeshProUGUI _ammoAmount;
+    [SerializeField] private Vector2 _ammoShowPos;
+    [SerializeField] private Vector2 _ammoHidePos;
 
     [Header("Possession")]
     [SerializeField] private Color _possessionColor;
@@ -53,8 +55,13 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private Image _explosionBG;
     [SerializeField] private Image _explosionIcon;
 
+    [Header("SlowMo")]
+    [SerializeField] private Transform _slowMoSlider;
+
     [Header("Now Kill Yourself")]
-    [SerializeField] private GameObject _nowKillYourselfGO;
+    [SerializeField] private RectTransform _nkyRectTransform;
+    [SerializeField] private Vector2 _nkyShowPos;
+    [SerializeField] private Vector2 _nkyHidePos;
 
     public static GameUIController Instance;
 
@@ -66,8 +73,6 @@ public class GameUIController : MonoBehaviour
 
         _pointerRectTransform.gameObject.SetActive(false);
         _isPointerActivated = false;
-
-        _ammoGO.SetActive(false);
     }
 
     private void Update()
@@ -244,19 +249,32 @@ public class GameUIController : MonoBehaviour
 
     public void SetAmmoAmount(int value)
     {
-        if (!_ammoGO.activeInHierarchy)
-            _ammoGO.SetActive(true);
+        LeanTween.move(_ammoRectTransform, _ammoShowPos, .2f).setEase(LeanTweenType.easeOutQuad);
 
         _ammoAmount.text = $"{value}rnds";
     }
 
-    public void ToggleNowKillYourself(bool value)
-    {
-        _nowKillYourselfGO.SetActive(value);
-    }
-
     public void DisableAmmoAmount()
     {
-        _ammoGO.SetActive(false);
+        LeanTween.move(_ammoRectTransform, _ammoHidePos, .2f).setEase(LeanTweenType.easeOutQuad);
+    }
+
+    public void SetSlowMotionValue(float value)
+    {
+        _slowMoSlider.localScale = new Vector2(value, 1f);
+    }
+
+    public void ToggleNowKillYourself(bool value)
+    {
+        if (value)
+        {
+            LeanTween.move(_nkyRectTransform, _nkyShowPos, 1f).setEase(LeanTweenType.easeOutQuad).setDelay(15f);
+            
+        }
+        else
+        {
+            LeanTween.cancel(_nkyRectTransform.gameObject);
+            LeanTween.move(_nkyRectTransform, _nkyHidePos, 1f).setEase(LeanTweenType.easeOutQuad).setDelay(.5f);
+        }
     }
 }
