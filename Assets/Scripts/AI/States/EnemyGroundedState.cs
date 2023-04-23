@@ -16,7 +16,7 @@ public class EnemyGroundedState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        float currentSpeed = context.Rig.velocity.x;
+        float currentSpeed = context.RigidBody.velocity.x;
 
         float targetSpeed = context.MovementDirection * context.MovementSpeed;
         targetSpeed = Mathf.Lerp(currentSpeed, targetSpeed, context.LerpAmount);
@@ -25,7 +25,7 @@ public class EnemyGroundedState : EnemyBaseState
 
         float accelRate = targetSpeed == 0 ? context.Deceleration : context.Acceleration;
 
-        context.Rig.velocity = new Vector2(context.Rig.velocity.x + (Time.fixedDeltaTime * speedDif * accelRate) / context.Rig.mass, context.Rig.velocity.y);
+        context.RigidBody.velocity = new Vector2(context.RigidBody.velocity.x + (Time.fixedDeltaTime * speedDif * accelRate) / context.RigidBody.mass, context.RigidBody.velocity.y);
 
 
         CheckSwitchStates(context);
@@ -33,9 +33,15 @@ public class EnemyGroundedState : EnemyBaseState
 
     public override void CheckSwitchStates(SimpleEnemy context)
     {
+        if (context.DoJump)
+        {
+            SwitchState(Factory.Jumping());
+            return;
+        }
+
         if (!context.IsGrounded)
         {
-            SwitchState(Factory.NotGrounded());
+            SwitchState(Factory.Falling());
         }
     }
 
@@ -43,12 +49,27 @@ public class EnemyGroundedState : EnemyBaseState
     {
         if (context.StunTime > 0f)
         {
-            SwitchState(Factory.Stun());
+            SetSubState(Factory.Stun());
+            return;
         }
-        else 
-        { 
-            SetSubState(Factory.Patrol());
+
+        if (context.TargetUnit == null)
+            return;
+
+        float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
+        if (context.CanISeeMyTarget() && distance < context.AttackRadius)
+        {
+            SetSubState(Factory.Attack());
+            return;
         }
+
+        if (context.CanISeeMyTarget() || context.ChasePlayerAfterDissapearanceTimer > 0f)
+        {
+            SetSubState(Factory.Chase());
+            return;
+        }
+
+        SetSubState(Factory.Patrol());
     }
 
     public override void OnExit(SimpleEnemy context)

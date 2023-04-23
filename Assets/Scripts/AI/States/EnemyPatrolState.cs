@@ -82,7 +82,7 @@ public class EnemyPatrolState : EnemyBaseState
             return;
         }
 
-        if (context.CanISeeMyTarget())
+        if (context.CanISeeMyTarget() || context.ChasePlayerAfterDissapearanceTimer > 0f)
         {
             SwitchState(Factory.Chase());
             return;

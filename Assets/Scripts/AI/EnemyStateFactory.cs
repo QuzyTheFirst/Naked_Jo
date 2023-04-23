@@ -12,7 +12,8 @@ public class EnemyStateFactory : MonoBehaviour
         Attack,
         Stun,
         Grounded,
-        NotGrounded,
+        Falling,
+        Jumping,
     }
 
     private SimpleEnemy _context;
@@ -29,40 +30,44 @@ public class EnemyStateFactory : MonoBehaviour
         _states.Add(EnemyStates.Attack, new EnemyAttackState(_context, this));
         _states.Add(EnemyStates.Stun, new EnemyStunState(_context, this));
         _states.Add(EnemyStates.Grounded, new EnemyGroundedState(_context, this));
-        _states.Add(EnemyStates.NotGrounded, new EnemyNotGroundedState(_context, this));
+        _states.Add(EnemyStates.Falling, new EnemyFallingState(_context, this));
+        _states.Add(EnemyStates.Jumping, new EnemyJumpingState(_context, this));
     }
 
+    //States
     public EnemyBaseState Idle()
     {
         return _states[EnemyStates.Idle];
     }
-
     public EnemyBaseState Stun()
     {
         return _states[EnemyStates.Stun];
     }
-
     public EnemyBaseState Patrol()
     {
         return _states[EnemyStates.Patrol];
     }
-
     public EnemyBaseState Chase()
     {
         return _states[EnemyStates.Chase];
     }
-
     public EnemyBaseState Attack()
     {
         return _states[EnemyStates.Attack];
     }
 
+    //Root States
     public EnemyBaseState Grounded()
     {
         return _states[EnemyStates.Grounded];
     }
-    public EnemyBaseState NotGrounded()
+    public EnemyBaseState Falling()
     {
-        return _states[EnemyStates.NotGrounded];
+        return _states[EnemyStates.Falling];
+    }
+
+    public EnemyBaseState Jumping()
+    {
+        return _states[EnemyStates.Jumping];
     }
 }

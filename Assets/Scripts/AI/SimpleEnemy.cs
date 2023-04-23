@@ -63,6 +63,19 @@ public class SimpleEnemy : MonoBehaviour
     [SerializeField] private float _unpossessFlyPower;
     private float _attackRadius;
 
+    [Header("Chase State")]
+    [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
+    private float _chasePlayerAfterDissapearanceTimer;
+    private Vector2 _lastPointWhereTargetWereSeen;
+
+    [Header("Jump State")]
+    private bool _doJump = false;
+    private bool _jumpedOnHisOwn = false;
+
+    [Header("Fall State")]
+    private bool _fallenOnHisOwn;
+
+
     // Enemy States
     private EnemyBaseState _currentState;
     private EnemyStateFactory _states;
@@ -74,7 +87,7 @@ public class SimpleEnemy : MonoBehaviour
     public MovementState Movement { get { return _movement; } set { _movement = value; } }
     //------------
     public SpriteRenderer SpriteRenderer { get { return _spriteRenderer; } }
-    public Rigidbody2D Rig { get { return _rig; } }
+    public Rigidbody2D RigidBody { get { return _rig; } }
     public Flip Flip { get { return _flip; } }
     public Transform TargetUnitTf { get { return _targetUnit.transform; } }
     public Unit TargetUnit { get { return _targetUnit; } set { _targetUnit = value; } }
@@ -102,6 +115,17 @@ public class SimpleEnemy : MonoBehaviour
     public PlayerController UnitController { get { return _unitController; } }
     public WeaponController WeaponController { get { return _weaponController; } }
 
+    //Chase State
+    public float ChasePlayerAfterDissapearanceTime { get { return _chasePlayerAfterDissapearanceTime; } }
+    public float ChasePlayerAfterDissapearanceTimer { get { return _chasePlayerAfterDissapearanceTimer; } set { _chasePlayerAfterDissapearanceTimer = value; } }
+    public Vector2 LastPointWhereTargetWereSeen { get { return _lastPointWhereTargetWereSeen; } set { _lastPointWhereTargetWereSeen = value; } }
+
+    //Jump State
+    public bool DoJump { get { return _doJump; } set { _doJump = value; } }
+    public bool JumpedOnHisOwn { get { return _jumpedOnHisOwn; } set { _jumpedOnHisOwn = value; } }
+
+    //Falling State
+    public bool FallenOnHisOwn { get { return _fallenOnHisOwn; } set { _fallenOnHisOwn = value; } }
 
     private void Awake()
     {
@@ -118,6 +142,30 @@ public class SimpleEnemy : MonoBehaviour
 
         _headTrigger.OnPlayerJumpedOnHead += _headTrigger_OnPlayerJumpedOnHead;
         _headTrigger.OnPlayerJumpedOffHead += _headTrigger_OnPlayerJumpedOffHead;
+    }
+    private void Start()
+    {
+        TimeToNextShoot = Time.time + _shootEvery;
+
+        if(_weaponToTake != null)
+            _weaponController.TakeWeapon(_weaponToTake);
+
+        _states = new EnemyStateFactory(this);
+        _currentState = _states.Grounded();
+        
+        _currentState.OnEnter(this);
+    }
+
+    private void FixedUpdate()
+    {
+        if (_isPossessed)
+            return;
+
+        _isGrounded = GroundCheck();
+
+        _currentState.UpdateStates(this);
+
+        SearchForNewWeapon();
     }
 
     private void _headTrigger_OnPlayerJumpedOffHead(object sender, Collider2D collision)
@@ -145,31 +193,6 @@ public class SimpleEnemy : MonoBehaviour
 
         _attackRadius = iWeapon.GetAttackDistance();
         iWeapon.SetAttackMask(_attackMask);
-    }
-
-    private void Start()
-    {
-        TimeToNextShoot = Time.time + _shootEvery;
-
-        if(_weaponToTake != null)
-            _weaponController.TakeWeapon(_weaponToTake);
-
-        _states = new EnemyStateFactory(this);
-        _currentState = _states.Grounded();
-        
-        _currentState.OnEnter(this);
-    }
-
-    private void FixedUpdate()
-    {
-        if (_isPossessed)
-            return;
-
-        _isGrounded = GroundCheck();
-
-        _currentState.UpdateStates(this);
-
-        SearchForNewWeapon();
     }
 
     private void SearchForNewWeapon()
@@ -206,6 +229,10 @@ public class SimpleEnemy : MonoBehaviour
 
         _attackMask = attackMask;
         _weaponController.SetAttackMask(attackMask);
+
+        _chasePlayerAfterDissapearanceTimer = 0f;
+        _jumpedOnHisOwn = false;
+        _fallenOnHisOwn = false;
     }
 
     public void UnPossess(LayerMask attackMask, Transform targetUnit)
@@ -261,5 +288,12 @@ public class SimpleEnemy : MonoBehaviour
         /*_currentState = _states.Stun();
 
         _currentState.OnEnter(this);*/
+    }
+
+    public IEnumerator SetTargetUnit(Unit newUnit, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        _targetUnit = newUnit;
     }
 }

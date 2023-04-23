@@ -19,7 +19,10 @@ public class UnitsHandler : PlayerInputHandler
     [Header("Possession")]
     [SerializeField] private float _possessionRadius;
     [SerializeField] private float _possessionCooldownTime;
+    [SerializeField] private Transform _nakedJOUnpossession;
     [SerializeField] private LineRenderer _possessionLineRenderer;
+    [SerializeField] private Gradient _emptyPossessionGradient;
+    [SerializeField] private Gradient _targetPossessionGradient;
     [SerializeField] private LayerMask _possessionMask;
     [SerializeField] private LayerMask _unpossessionMask;
     private float _possessionCooldownTimer = 0f;
@@ -137,16 +140,6 @@ public class UnitsHandler : PlayerInputHandler
         CheckForNextLevelLoaderSpawn();
     }
 
-    private void UnitsHandler_ExplodeCanceled(object sender, EventArgs e)
-    {
-        _isExplosionButtonPressed = false;
-    }
-
-    private void UnitsHandler_ExplodePerformed(object sender, EventArgs e)
-    {
-        _isExplosionButtonPressed = true;
-    }
-
     private void Start()
     {
         // Set Attack Mask
@@ -170,6 +163,8 @@ public class UnitsHandler : PlayerInputHandler
         }
 
         _slowMotionTimer = _slowMotionTime;
+
+        _nakedJOUnpossession.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -191,8 +186,10 @@ public class UnitsHandler : PlayerInputHandler
         if (_isSlowMotionKeyPressed)
             ChangeSlowMotionTimer(Time.unscaledDeltaTime, false);
 
-        CheckForPlayerExplosion();
-
+        if (_isExplosionGoing)
+        {
+            _explosionRadiusVisuals.transform.position = _currentUnit.transform.position;
+        }
 
         _cursorController.SetCursorPosition(_mousePosInWorld);
         if(_possessionCooldownTimer <= 0)
@@ -253,81 +250,71 @@ public class UnitsHandler : PlayerInputHandler
         }
     }
 
-    private void CheckForPlayerExplosion()
+
+    private void UnitsHandler_ExplodePerformed(object sender, EventArgs e)
     {
+        _isExplosionButtonPressed = true;
+
         if (_isExplosionButtonPressed && !_currentUnit.IsPlayer && _explosionCooldownTimer < 0f)
         {
             _isExplosionGoing = true;
             _currentUnit.Player.SetMaxSpeedModifier(.1f);
-            _explosionTimer += Time.deltaTime;
-            float explosionProcentage = _explosionTimer / _timeToExplode;
-            //Debug.Log("Exp proc: " + explosionProcentage);
 
             SpriteRenderer enemyGraphics = _currentUnit.Enemy.GetGraphics();
-            Color newColor = Color.white - Color.white * explosionProcentage;
-            enemyGraphics.color = new Color(newColor.r, newColor.g, newColor.b, 255);
 
-            _explosionRadiusVisuals.transform.position = _currentUnit.transform.position;
-            //Debug.Log($"Current unit: {_currentUnit.transform.position} | {_currentUnit.transform.name}");
+            Color newColor = new Color(Color.white.r * .2f, Color.white.g * .2f, Color.white.b * .2f, 255);
+
+            LeanTween.color(enemyGraphics.gameObject, Color.black, 3f);
+
             _explosionRadiusVisuals.gameObject.SetActive(true);
 
             SoundManager.Instance.FadeInVolume("Explode", 1f, .2f);
-
-            if (_explosionTimer >= _timeToExplode)
-            {
-                EnemyUnit enemy = _currentUnit.Enemy;
-
-                _playerUnit.transform.position = _currentUnit.transform.position;
-
-                enemy.UnPossess(_enemyAttackMask, _playerUnit.transform);
-
-                _units.Remove(_currentUnit);
-                _currentUnit.Damage(0);
-
-                SetUnit(_playerUnit);
-
-                _playerUnit.gameObject.SetActive(true);
-
-                Collider2D[] colls = Physics2D.OverlapCircleAll(_currentUnit.transform.position, _explosionRadius, _playerAttackMask);
-                foreach (Collider2D col in colls)
-                {
-                    Unit unit = col.GetComponent<Unit>();
-                    if (unit != null)
-                    {
-                        if (unit.IsPlayer)
-                            continue;
-
-                        unit.Enemy.Stun(_explosionStunTime);
-                    }
-                }
-
-                _explosionParticles.transform.position = _playerUnit.transform.position;
-                _explosionParticles.Play();
-
-                _explosionTimer = 0;
-                _explosionCooldownTimer = _explosionCooldownTime;
-                //SoundManager.Instance.Stop("Explode");
-                _possessionCooldownTimer = 0f;
-                ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
-                _isExplosionGoing = false;
-
-                _explosionRadiusVisuals.gameObject.SetActive(false);
-            }
         }
-        else
+    }
+
+    private void UnitsHandler_ExplodeCanceled(object sender, EventArgs e)
+    {
+        _isExplosionButtonPressed = false;
+
+        if (_isExplosionGoing)
         {
-            if (_isExplosionGoing)
+            EnemyUnit enemy = _currentUnit.Enemy;
+
+            _playerUnit.transform.position = _currentUnit.transform.position;
+
+            enemy.UnPossess(_enemyAttackMask, _playerUnit.transform);
+
+            _units.Remove(_currentUnit);
+            _currentUnit.Damage(0);
+
+            SetUnit(_playerUnit);
+
+            _playerUnit.gameObject.SetActive(true);
+
+            Collider2D[] colls = Physics2D.OverlapCircleAll(_currentUnit.transform.position, _explosionRadius, _playerAttackMask);
+            foreach (Collider2D col in colls)
             {
-                _explosionTimer = 0;
-                SoundManager.Instance.FadeAwayVolume("Explode", .2f);
+                Unit unit = col.GetComponent<Unit>();
+                if (unit != null)
+                {
+                    if (unit.IsPlayer)
+                        continue;
 
-                SpriteRenderer enemyGraphics = _currentUnit.Enemy.GetGraphics();
-                enemyGraphics.color = Color.white;
-                _currentUnit.Player.SetMaxSpeedModifier(1f);
-                _isExplosionGoing = false;
-
-                _explosionRadiusVisuals.gameObject.SetActive(false);
+                    unit.Enemy.Stun(_explosionStunTime);
+                }
             }
+
+            _explosionParticles.transform.position = _playerUnit.transform.position;
+            _explosionParticles.Play();
+
+            _explosionTimer = 0;
+            _explosionCooldownTimer = _explosionCooldownTime;
+            //SoundManager.Instance.Stop("Explode");
+            _possessionCooldownTimer = 0f;
+            ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
+            _isExplosionGoing = false;
+
+            _explosionRadiusVisuals.gameObject.SetActive(false);
         }
     }
 
@@ -740,11 +727,47 @@ public class UnitsHandler : PlayerInputHandler
         _possessionLineRenderer.positionCount = 2;
         _possessionLineRenderer.SetPosition(0, playerPos);
         _possessionLineRenderer.SetPosition(1, playerPos + possessionVector);
+
+        RaycastHit2D hit = Physics2D.Raycast(playerPos, possessionDir, _possessionRadius, _possessionMask);
+
+        if (hit.transform != null)
+        {
+            if (hit.transform.CompareTag("Enemy") && _possessionCooldownTimer >= 0f)
+            {
+                _possessionLineRenderer.colorGradient = _targetPossessionGradient;
+
+                _nakedJOUnpossession.gameObject.SetActive(false);
+            }
+            else
+            {
+                _possessionLineRenderer.colorGradient = _emptyPossessionGradient;
+
+                if (_currentUnit != _playerUnit)
+                {
+                    _nakedJOUnpossession.gameObject.SetActive(true);
+                    _nakedJOUnpossession.position = playerPos + possessionDir * (hit.distance - .5f);
+                }
+            }
+        }
+        else
+        {
+            _possessionLineRenderer.colorGradient = _emptyPossessionGradient;
+
+            if (_currentUnit != _playerUnit)
+            {
+                _nakedJOUnpossession.gameObject.SetActive(true);
+                Vector2 unpossessionVector = _mousePosInWorld - (Vector2)_currentUnit.transform.position;
+                float unpossessionDistance = Mathf.Min(_possessionRadius, unpossessionVector.magnitude);
+                _nakedJOUnpossession.position = playerPos + possessionDir * unpossessionDistance;
+            }
+        }
     }
 
     private void HidePossessionLine()
     {
         _possessionLineRenderer.positionCount = 0;
+
+        _nakedJOUnpossession.gameObject.SetActive(false);
     }
 
     public void UnitsHandler_RestartPerformed(object sender, EventArgs e)

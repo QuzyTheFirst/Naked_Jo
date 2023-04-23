@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 1612245843282452895}
   m_Layer: 7
   m_Name: Rodent
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d40e2b5103cbcc54780b4c177ded46cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stepEvery: 0.2
+  _stepEverySeconds: 0.2
 --- !u!1 &7812161363954640508
 GameObject:
   m_ObjectHideFlags: 0

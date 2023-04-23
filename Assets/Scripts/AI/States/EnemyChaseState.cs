@@ -11,6 +11,8 @@ public class EnemyChaseState : EnemyBaseState
         context.Flip.TryToFlip(context.MovementDirection);
 
         context.MovementSpeed = context.RunSpeed;
+
+        context.Movement = SimpleEnemy.MovementState.Stop;
     }
 
     public override void OnUpdate(SimpleEnemy context)
@@ -21,28 +23,22 @@ public class EnemyChaseState : EnemyBaseState
             return;
         }
 
+        if (context.CanISeeMyTarget())
+        {
+            context.ChasePlayerAfterDissapearanceTimer = context.ChasePlayerAfterDissapearanceTime;
+            context.LastPointWhereTargetWereSeen = context.TargetUnitTf.position;
+        }
+        else
+        {
+            context.ChasePlayerAfterDissapearanceTimer -= Time.fixedDeltaTime;
+        }
+
         //Debug.Log($"Chase State: {Time.time}");
         context.TimerBeforeAction -= Time.fixedDeltaTime;
         if (context.TimerBeforeAction > 0f)
             return;
 
-        Vector2 dir = context.TargetUnitTf.position - context.transform.position;
-        float movementDir = Mathf.Sign(dir.x);
-
-        if(movementDir == 1)
-            context.Movement = SimpleEnemy.MovementState.Right;
-        else if (movementDir == -1)
-            context.Movement = SimpleEnemy.MovementState.Left;
-
-        context.Flip.TryToFlip(movementDir);
-
-
-        RaycastHit2D floorHit = Physics2D.Raycast(context.transform.position, Vector2.down + Vector2.right * movementDir, 1f, context.GroundMask);
-
-        if (floorHit.collider == false)
-        {
-            context.Rig.velocity *= Vector2.up;
-        }
+        KeepGoingOrStop(context);
 
         UpdateWeaponTargetPos(context);
 
@@ -64,13 +60,22 @@ public class EnemyChaseState : EnemyBaseState
             return;
         }
 
-        if (!context.CanISeeMyTarget())
+        if (context.ChasePlayerAfterDissapearanceTimer <= 0f)
         {
             SwitchState(Factory.Patrol());
             return;
         }
     }
+    public override void InitializeSubState(SimpleEnemy context)
+    {
+        
+    }
+    public override void OnExit(SimpleEnemy context)
+    {
+        
+    }
 
+    //My Methods
     private void UpdateWeaponTargetPos(SimpleEnemy context)
     {
         if (context.TargetUnit == null)
@@ -79,16 +84,91 @@ public class EnemyChaseState : EnemyBaseState
             return;
         }
 
-        context.WeaponController.TargetPos = context.TargetUnitTf.position;
+        context.WeaponController.TargetPos = context.LastPointWhereTargetWereSeen;
     }
 
-    public override void OnExit(SimpleEnemy context)
+    private void KeepGoingOrStop(SimpleEnemy context)
     {
-        
+        Vector2 dir = context.LastPointWhereTargetWereSeen - (Vector2)context.transform.position;
+        float movementDir = Mathf.Sign(dir.x);
+
+        context.Flip.TryToFlip(movementDir);
+
+        bool floorCheck = FloorCheck(context, movementDir);
+
+        bool wallCheck = WallCheck(context, movementDir);
+
+        if (!floorCheck && !wallCheck)
+        {
+            if (movementDir == 1)
+            {
+                context.Movement = SimpleEnemy.MovementState.Right;
+            }
+            else if (movementDir == -1)
+            {
+                context.Movement = SimpleEnemy.MovementState.Left;
+            }
+        }
     }
 
-    public override void InitializeSubState(SimpleEnemy context)
+    private bool WallCheck(SimpleEnemy context, float movementDir)
     {
-        
+        //Wall
+        RaycastHit2D wallHit = Physics2D.Raycast(context.transform.position, Vector2.right * movementDir, 1f, context.GroundMask);
+        RaycastHit2D upperGroundHit = Physics2D.Raycast(context.transform.position, Vector2.up + Vector2.right * movementDir, 1f, context.GroundMask);
+        Debug.DrawLine(context.transform.position, context.transform.position + Vector3.up + Vector3.right * movementDir, Color.red);
+
+        if (wallHit.collider == true && upperGroundHit.collider == true)
+        {
+            context.Movement = SimpleEnemy.MovementState.Stop;
+            return true;
+        }
+        else if (wallHit.collider == true && upperGroundHit.collider == false)
+        {
+            if (movementDir == 1)
+            {
+                context.Movement = SimpleEnemy.MovementState.Right;
+            }
+            else if (movementDir == -1)
+            {
+                context.Movement = SimpleEnemy.MovementState.Left;
+            }
+
+            context.DoJump = true;
+            context.JumpedOnHisOwn = true;
+            context.FallenOnHisOwn = true;
+            return true;
+        }
+        return false;
+    }
+
+    private static bool FloorCheck(SimpleEnemy context, float movementDir)
+    {
+        //Floor
+        RaycastHit2D floorHit = Physics2D.Raycast(context.transform.position, Vector2.down + Vector2.right * movementDir, 1f, context.GroundMask);
+        RaycastHit2D lowerGroundHit = Physics2D.Raycast(context.transform.position + Vector3.right * movementDir, Vector2.down, 1.51f, context.GroundMask);
+        Debug.DrawLine(context.transform.position + Vector3.right * movementDir, context.transform.position + Vector3.right * movementDir + Vector3.down * 1.51f, Color.red);
+
+        if (floorHit.collider == false && lowerGroundHit.collider == false)
+        {
+            context.RigidBody.velocity *= Vector2.up;
+            context.Movement = SimpleEnemy.MovementState.Stop;
+            return true;
+        }
+        else if (floorHit.collider == false && lowerGroundHit.collider == true)
+        {
+            if (movementDir == 1)
+            {
+                context.Movement = SimpleEnemy.MovementState.Right;
+            }
+            else if (movementDir == -1)
+            {
+                context.Movement = SimpleEnemy.MovementState.Left;
+            }
+
+            context.FallenOnHisOwn = true;
+            return true;
+        }
+        return false;
     }
 }
