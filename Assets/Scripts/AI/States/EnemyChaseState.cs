@@ -17,13 +17,13 @@ public class EnemyChaseState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        if (context.StunTime > 0f)
+        if (context.StunTime > 0f || context.TargetUnit == null)
         {
             CheckSwitchStates(context);
             return;
         }
 
-        if (context.CanISeeMyTarget())
+        if (context.CanISeeMyTarget)
         {
             context.ChasePlayerAfterDissapearanceTimer = context.ChasePlayerAfterDissapearanceTime;
             context.LastPointWhereTargetWereSeen = context.TargetUnitTf.position;
@@ -53,16 +53,16 @@ public class EnemyChaseState : EnemyBaseState
             return;
         }
 
+        if (context.ChasePlayerAfterDissapearanceTimer <= 0f || context.TargetUnit == null)
+        {
+            SwitchState(Factory.Patrol());
+            return;
+        }
+
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
         if(distance < context.AttackRadius)
         {
             SwitchState(Factory.Attack());
-            return;
-        }
-
-        if (context.ChasePlayerAfterDissapearanceTimer <= 0f)
-        {
-            SwitchState(Factory.Patrol());
             return;
         }
     }
@@ -146,8 +146,8 @@ public class EnemyChaseState : EnemyBaseState
     {
         //Floor
         RaycastHit2D floorHit = Physics2D.Raycast(context.transform.position, Vector2.down + Vector2.right * movementDir, 1f, context.GroundMask);
-        RaycastHit2D lowerGroundHit = Physics2D.Raycast(context.transform.position + Vector3.right * movementDir, Vector2.down, 1.51f, context.GroundMask);
-        Debug.DrawLine(context.transform.position + Vector3.right * movementDir, context.transform.position + Vector3.right * movementDir + Vector3.down * 1.51f, Color.red);
+        RaycastHit2D lowerGroundHit = Physics2D.Raycast(context.transform.position + Vector3.right * .6f * movementDir, Vector2.down, 2f, context.GroundMask);
+        Debug.DrawLine(context.transform.position + Vector3.right * .6f * movementDir, context.transform.position + Vector3.right * .6f * movementDir + Vector3.down * 2f, Color.red);
 
         if (floorHit.collider == false && lowerGroundHit.collider == false)
         {

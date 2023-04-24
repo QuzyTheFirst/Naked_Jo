@@ -264,7 +264,7 @@ public class UnitsHandler : PlayerInputHandler
 
             Color newColor = new Color(Color.white.r * .2f, Color.white.g * .2f, Color.white.b * .2f, 255);
 
-            LeanTween.color(enemyGraphics.gameObject, Color.black, 3f);
+            LeanTween.color(enemyGraphics.gameObject, Color.black, .25f);
 
             _explosionRadiusVisuals.gameObject.SetActive(true);
 
@@ -609,9 +609,10 @@ public class UnitsHandler : PlayerInputHandler
 
             Debug.Log(hit.transform.name);
 
-            if(rayDistance > 1f)
+            if(rayDistance > 1.5f)
             {
-                _playerUnit.transform.position = (Vector2)unit.transform.position + unpossessionVector.normalized * (rayDistance - playerRadius);
+                //_playerUnit.transform.position = (Vector2)unit.transform.position + unpossessionVector.normalized * (rayDistance - playerRadius);
+                _playerUnit.transform.position = (Vector2)unit.transform.position + unpossessionVector.normalized * hit.distance + hit.normal * playerRadius;
             }
             else
             {
@@ -732,7 +733,7 @@ public class UnitsHandler : PlayerInputHandler
 
         if (hit.transform != null)
         {
-            if (hit.transform.CompareTag("Enemy") && _possessionCooldownTimer >= 0f)
+            if (hit.transform.CompareTag("Enemy"))
             {
                 _possessionLineRenderer.colorGradient = _targetPossessionGradient;
 
@@ -742,11 +743,14 @@ public class UnitsHandler : PlayerInputHandler
             {
                 _possessionLineRenderer.colorGradient = _emptyPossessionGradient;
 
-                if (_currentUnit != _playerUnit)
+                if (_currentUnit != _playerUnit && hit.distance > 1.5f)
                 {
                     _nakedJOUnpossession.gameObject.SetActive(true);
-                    _nakedJOUnpossession.position = playerPos + possessionDir * (hit.distance - .5f);
+                    //_nakedJOUnpossession.position = playerPos + possessionDir * (hit.distance - .5f);
+                    _nakedJOUnpossession.position = playerPos + possessionDir * hit.distance + hit.normal * .5f;
                 }
+                else
+                    _nakedJOUnpossession.gameObject.SetActive(false);
             }
         }
         else

@@ -54,16 +54,19 @@ public class EnemyGroundedState : EnemyBaseState
         }
 
         if (context.TargetUnit == null)
+        {
+            SetSubState(Factory.Patrol());
             return;
+        }
 
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
-        if (context.CanISeeMyTarget() && distance < context.AttackRadius)
+        if (context.CanISeeMyTarget && distance < context.AttackRadius)
         {
             SetSubState(Factory.Attack());
             return;
         }
 
-        if (context.CanISeeMyTarget() || context.ChasePlayerAfterDissapearanceTimer > 0f)
+        if (context.CanISeeMyTarget || context.ChasePlayerAfterDissapearanceTimer > 0f)
         {
             SetSubState(Factory.Chase());
             return;

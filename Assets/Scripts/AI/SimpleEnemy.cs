@@ -58,10 +58,17 @@ public class SimpleEnemy : MonoBehaviour
     [Header("AI")]
     [SerializeField] private Sprite _possesedStateSprite;
     [SerializeField] private Sprite _normalStateSprite;
-    [SerializeField] private GameObject _stunAnimGO;
     [SerializeField] private LayerMask _playerMask;
     [SerializeField] private float _unpossessFlyPower;
+    private bool _canISeeMyTarget;
+    private bool _canISeeMyTargetLastFrame;
     private float _attackRadius;
+
+    [Header("Stun")]
+    [SerializeField] private GameObject _stunAnimGO;
+
+    [Header("Found You")]
+    [SerializeField] private GameObject _foundYouGO;
 
     [Header("Chase State")]
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
@@ -90,7 +97,7 @@ public class SimpleEnemy : MonoBehaviour
     public Rigidbody2D RigidBody { get { return _rig; } }
     public Flip Flip { get { return _flip; } }
     public Transform TargetUnitTf { get { return _targetUnit.transform; } }
-    public Unit TargetUnit { get { return _targetUnit; } set { _targetUnit = value; } }
+    public Unit TargetUnit { get { return _targetUnit; } }
     public float VisionRadius { get { return _visionRadius; } }
     public LayerMask WeaponMask { get { return _weaponMask; } }
     public LayerMask GroundMask { get { return _groundMask; } }
@@ -110,7 +117,13 @@ public class SimpleEnemy : MonoBehaviour
     public float Deceleration { get { return _deceleration; } }
     public bool IsGrounded { get { return _isGrounded; } }
 
+    public bool CanISeeMyTarget { get { return _canISeeMyTarget; } }
+
+    //Stun
     public GameObject StunAnimGO { get { return _stunAnimGO; } }
+
+    //Found You
+    public GameObject FoundYouGO { get { return _foundYouGO; } }
 
     public PlayerController UnitController { get { return _unitController; } }
     public WeaponController WeaponController { get { return _weaponController; } }
@@ -142,6 +155,10 @@ public class SimpleEnemy : MonoBehaviour
 
         _headTrigger.OnPlayerJumpedOnHead += _headTrigger_OnPlayerJumpedOnHead;
         _headTrigger.OnPlayerJumpedOffHead += _headTrigger_OnPlayerJumpedOffHead;
+
+        _foundYouGO.SetActive(false);
+
+        _isPossessed = false;
     }
     private void Start()
     {
@@ -161,11 +178,20 @@ public class SimpleEnemy : MonoBehaviour
         if (_isPossessed)
             return;
 
+        _canISeeMyTargetLastFrame = _canISeeMyTarget;
+        _canISeeMyTarget = CanISeeMyTargetMethod();
+        if(_canISeeMyTargetLastFrame == false && _canISeeMyTarget == true && _stunTime <= 0f)
+        {
+            PlayFoundYouAnim();
+        }
+
         _isGrounded = GroundCheck();
 
         _currentState.UpdateStates(this);
 
         SearchForNewWeapon();
+
+        Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     }
 
     private void _headTrigger_OnPlayerJumpedOffHead(object sender, Collider2D collision)
@@ -258,7 +284,7 @@ public class SimpleEnemy : MonoBehaviour
         }
     }
 
-    public bool CanISeeMyTarget()
+    private bool CanISeeMyTargetMethod()
     {
         Vector2 dir = (_targetUnit.transform.position - transform.position).normalized;
 
@@ -290,10 +316,41 @@ public class SimpleEnemy : MonoBehaviour
         _currentState.OnEnter(this);*/
     }
 
-    public IEnumerator SetTargetUnit(Unit newUnit, float time)
+    public void SetTargetUnit(Unit newUnit, float time)
     {
-        yield return new WaitForSeconds(time);
+        //Debug.Log("New Unit: " + newUnit.transform.name);
+        StartCoroutine(SetTargetUnitCoroutine(newUnit, time));
+    }
 
-        _targetUnit = newUnit;
+    public IEnumerator SetTargetUnitCoroutine(Unit newUnit, float time)
+    {
+        float timer = 0f;
+
+        while (true)
+        {
+            if (_targetUnit == null)
+            {
+                _targetUnit = newUnit;
+                break;
+            }
+
+            yield return new WaitForEndOfFrame();
+
+            timer += Time.deltaTime;
+            if(timer >= time)
+            {
+                _targetUnit = newUnit;
+                break;
+            }
+        }
+
+        //Debug.Log("Current Unit: " + _targetUnit.transform.name);
+    }
+
+    public void PlayFoundYouAnim()
+    {
+        _foundYouGO.transform.localPosition = Vector2.up * .5f;
+        _foundYouGO.SetActive(true);
+        LeanTween.moveLocal(_foundYouGO, Vector2.up * .9f, .25f).setEase(LeanTweenType.easeInQuad).setOnComplete(() => { _foundYouGO.SetActive(false); });
     }
 }

@@ -19,7 +19,7 @@ public class EnemyUnit
 
     public void SetTargetUnit(Unit target)
     {
-        _enemy.TargetUnit = target;
+        _enemy.SetTargetUnit(target, .5f);
     }
 
     public void Possess(LayerMask attackMask)

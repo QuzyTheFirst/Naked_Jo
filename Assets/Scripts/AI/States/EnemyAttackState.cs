@@ -23,7 +23,7 @@ public class EnemyAttackState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        if(context.StunTime > 0f)
+        if(context.StunTime > 0f || context.TargetUnit == null)
         {
             CheckSwitchStates(context);
             return;
@@ -39,7 +39,7 @@ public class EnemyAttackState : EnemyBaseState
             _aimAtPlayer = true;
         }
 
-        if (_isAttacking && _aimAtPlayer)
+        if (_isAttacking && _aimAtPlayer && context.TargetUnit != null)
         {
             if (context.TargetUnit.Player.IsRolling)
             {
@@ -47,7 +47,7 @@ public class EnemyAttackState : EnemyBaseState
             }
         }
 
-        if (!_isAttacking)
+        if (!_isAttacking && context.TargetUnit != null)
         {
             Vector2 dir = context.TargetUnitTf.position - context.transform.position;
             context.Flip.TryToFlip(Mathf.Sign(dir.x));
@@ -57,7 +57,7 @@ public class EnemyAttackState : EnemyBaseState
         if (context.TimerBeforeAction > 0f)
             return;
 
-        if (Time.time > context.TimeToNextShoot)
+        if (Time.time > context.TimeToNextShoot && context.TargetUnit != null)
         {
             // Here is my text bitch
             _isAttacking = context.WeaponController.AIShoot(context.TargetUnit);
@@ -90,6 +90,12 @@ public class EnemyAttackState : EnemyBaseState
         if (_isAttacking)
             return;
 
+        if (context.TargetUnit == null)
+        {
+            SwitchState(Factory.Patrol());
+            return;
+        }
+
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
         if (distance > context.AttackRadius)
         {
@@ -97,11 +103,6 @@ public class EnemyAttackState : EnemyBaseState
             return;
         }
 
-        if (!context.CanISeeMyTarget())
-        {
-            SwitchState(Factory.Patrol());
-            return;
-        }
     }
 
     private void UpdateWeaponTargetPos(SimpleEnemy context)
@@ -112,7 +113,7 @@ public class EnemyAttackState : EnemyBaseState
             return;
         }
 
-        if (_aimAtPlayer)
+        if (_aimAtPlayer && !_isAttacking)
             context.WeaponController.TargetPos = context.TargetUnitTf.position;
         else
             context.WeaponController.TargetPos = _attackPos;

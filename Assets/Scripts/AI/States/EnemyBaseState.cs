@@ -69,4 +69,10 @@ public abstract class EnemyBaseState
         _subState.OnEnter(Context);
         state.SetSuperState(this);
     }
+
+    // Delete It Later!!!
+    public EnemyBaseState GetSubState()
+    {
+        return _subState;
+    }
 }

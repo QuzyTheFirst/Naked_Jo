@@ -76,13 +76,13 @@ public class EnemyPatrolState : EnemyBaseState
             return;
 
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
-        if(context.CanISeeMyTarget() &&  distance < context.AttackRadius)
+        if(context.CanISeeMyTarget &&  distance < context.AttackRadius)
         {
             SwitchState(Factory.Attack());
             return;
         }
 
-        if (context.CanISeeMyTarget() || context.ChasePlayerAfterDissapearanceTimer > 0f)
+        if (context.CanISeeMyTarget)
         {
             SwitchState(Factory.Chase());
             return;
@@ -91,12 +91,6 @@ public class EnemyPatrolState : EnemyBaseState
 
     private void UpdateWeaponTargetPos(SimpleEnemy context)
     {
-        if (context.TargetUnit == null)
-        {
-            Debug.LogWarning("Target Unit hasn't been setted up!");
-            return;
-        }
-
         context.WeaponController.TargetPos = (Vector2)context.transform.position + Vector2.right * context.MovementDirection;
     }
 
