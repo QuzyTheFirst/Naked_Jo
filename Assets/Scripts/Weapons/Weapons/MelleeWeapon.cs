@@ -21,6 +21,19 @@ public class MelleeWeapon : Weapon
         _anim = GetComponent<Animator>();
     }
 
+    public override void OnUpdate(Vector2 targetPos)
+    {
+        Vector2 dir = (targetPos - (Vector2)UnitController.transform.position).normalized;
+
+        //Weapon Rotation
+        float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        MainTf.rotation = Quaternion.Euler(0, 0, rotZ);
+
+        //Weapon Position
+        float distanceFromPlayer = _weaponParams.DistanceFromPlayer;
+        MainTf.localPosition = dir * distanceFromPlayer;
+    }
+
     public override bool Shoot(Transform target)
     {
         if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
@@ -35,21 +48,6 @@ public class MelleeWeapon : Weapon
         _lastAttackTime = Time.time;
         return true;
     }
-
-    /*public override bool Shoot(Vector2 position)
-    {
-        if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
-            return false;
-
-        Debug.Log("Attack Position");
-
-        _anim.SetTrigger("Prepare");
-
-        StartCoroutine(Attack(position, _weaponParams.PrepareTime));
-
-        _lastAttackTime = Time.time;
-        return true;
-    }*/
 
     private IEnumerator Attack(Transform target, float timeToWait)
     {
@@ -66,50 +64,6 @@ public class MelleeWeapon : Weapon
         {
             dir = (target.position - UnitController.transform.position).normalized;
 
-            _attackTimer += Time.fixedDeltaTime;
-            Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
-
-            foreach (Collider2D obj in hitObjs)
-            {
-                if (obj.transform == UnitController.transform)
-                    continue;
-
-                RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir);
-                if (hit.transform != obj.transform)
-                    continue;
-
-                IDamagable iDamagable = obj.GetComponent<IDamagable>();
-
-                if (iDamagable != null)
-                {
-                    _hitted = true;
-                    iDamagable.Damage(60f);
-                }
-            }
-
-            if (_hitted)
-            {
-                SoundManager.Instance.Play("Hit");
-                _hitted = false;
-            }
-
-            yield return new WaitForFixedUpdate();
-        }
-        _attackTimer = 0;
-    }
-
-    private IEnumerator Attack(Vector2 position, float timeToWait)
-    {
-        yield return new WaitForSeconds(timeToWait);
-
-        _anim.SetTrigger("Attack");
-
-        SoundManager.Instance.Play(_weaponParams.AttackSoundName);
-
-        dir = (position - (Vector2)UnitController.transform.position).normalized;
-
-        while (_attackTimer < _weaponParams.AttackTime)
-        {
             _attackTimer += Time.fixedDeltaTime;
             Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
 

@@ -14,6 +14,8 @@ public class RangeWeaponParams : ScriptableObject
 
     public LayerMask BulletFlyingMask;
 
+    public float DistanceFromPlayer = .5f;
+
     [Header("AI")]
     public float DistanceBeforeAttack;
 }

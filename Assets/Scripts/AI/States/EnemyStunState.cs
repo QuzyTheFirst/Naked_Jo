@@ -24,6 +24,9 @@ public class EnemyStunState : EnemyBaseState
     {
         if (context.StunTime <= 0f)
         {
+            if (context.CanISeeMyTarget)
+                SwitchState(Factory.Chase());
+
             SwitchState(Factory.Patrol());
         }
     }

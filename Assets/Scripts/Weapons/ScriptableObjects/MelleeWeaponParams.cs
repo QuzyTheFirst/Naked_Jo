@@ -18,6 +18,8 @@ public class MelleeWeaponParams : ScriptableObject
 
     public string AttackSoundName;
 
+    public float DistanceFromPlayer = .5f;
+
     [Header("AI")]
     public float DistanceBeforeAttack;
 }

@@ -18,6 +18,19 @@ public class RangeWeapon : Weapon
         _currentAmmo = _weaponParams.Ammo;
     }
 
+    public override void OnUpdate(Vector2 targetPos)
+    {
+        Vector2 dir = (targetPos - (Vector2)UnitController.transform.position).normalized;
+
+        //Weapon Rotation
+        float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        MainTf.rotation = Quaternion.Euler(0, 0, rotZ);
+
+        //Weapon Position
+        float distanceFromPlayer = _weaponParams.DistanceFromPlayer;
+        MainTf.localPosition = dir * distanceFromPlayer;
+    }
+
     public override bool Shoot(Transform target)
     {
         if (Time.time < _lastAttackTime + _weaponParams.FireRate)

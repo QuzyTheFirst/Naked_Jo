@@ -21,8 +21,8 @@ TagManager:
   - NonCollidable
   - UnpossesedStunnedEnemy
   - Triggers
-  - 
-  - 
+  - Post Processing
+  - Post Processing2
   - 
   - 
   - 

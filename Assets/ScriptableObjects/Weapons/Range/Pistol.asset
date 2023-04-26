@@ -18,4 +18,5 @@ MonoBehaviour:
   BulletFlyingMask:
     serializedVersion: 2
     m_Bits: 8584
+  DistanceFromPlayer: 0.8
   DistanceBeforeAttack: 100

@@ -37,8 +37,6 @@ public class WeaponController : MonoBehaviour
     private void Start()
     {
         ActivateUnremovableWeapon();
-
-        OnWeaponChange?.Invoke(this, _currentWeapon);
     }
 
     private void Update()

@@ -23,16 +23,6 @@ public class EnemyChaseState : EnemyBaseState
             return;
         }
 
-        if (context.CanISeeMyTarget)
-        {
-            context.ChasePlayerAfterDissapearanceTimer = context.ChasePlayerAfterDissapearanceTime;
-            context.LastPointWhereTargetWereSeen = context.TargetUnitTf.position;
-        }
-        else
-        {
-            context.ChasePlayerAfterDissapearanceTimer -= Time.fixedDeltaTime;
-        }
-
         //Debug.Log($"Chase State: {Time.time}");
         context.TimerBeforeAction -= Time.fixedDeltaTime;
         if (context.TimerBeforeAction > 0f)
@@ -60,7 +50,7 @@ public class EnemyChaseState : EnemyBaseState
         }
 
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
-        if(distance < context.AttackRadius)
+        if(distance < context.AttackRadius && context.CanISeeMyTarget)
         {
             SwitchState(Factory.Attack());
             return;

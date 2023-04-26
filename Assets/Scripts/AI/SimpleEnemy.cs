@@ -87,6 +87,10 @@ public class SimpleEnemy : MonoBehaviour
     private EnemyBaseState _currentState;
     private EnemyStateFactory _states;
 
+    // Corutines
+    private Coroutine _stopIgnoringCollisionAfterCoroutine;
+    private Coroutine _setTargetUnitCoroutine;
+
     public EnemyBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
     public EnemyStateFactory States { get { return _states; } }
     public float MovementDirection { get { return (int)_movement; } }
@@ -180,6 +184,17 @@ public class SimpleEnemy : MonoBehaviour
 
         _canISeeMyTargetLastFrame = _canISeeMyTarget;
         _canISeeMyTarget = CanISeeMyTargetMethod();
+
+        if (_canISeeMyTarget)
+        {
+            _chasePlayerAfterDissapearanceTimer = _chasePlayerAfterDissapearanceTime;
+            _lastPointWhereTargetWereSeen = _targetUnit.transform.position;
+        }
+        else
+        {
+            _chasePlayerAfterDissapearanceTimer -= Time.fixedDeltaTime;
+        }
+
         if(_canISeeMyTargetLastFrame == false && _canISeeMyTarget == true && _stunTime <= 0f)
         {
             PlayFoundYouAnim();
@@ -191,24 +206,30 @@ public class SimpleEnemy : MonoBehaviour
 
         SearchForNewWeapon();
 
-        Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
+        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
+        //Debug.Log($"{transform.name} current target:{_targetUnit.name} | Current Sub State: {_currentState.GetSubState()}");
     }
 
     private void _headTrigger_OnPlayerJumpedOffHead(object sender, Collider2D collision)
     {
-        StartCoroutine(StopIgnoringCollisionAfter(_col, collision, .2f));
+        _stopIgnoringCollisionAfterCoroutine = StartCoroutine(StopIgnoringCollisionAfter(_col, collision, .2f));
     }
 
     private IEnumerator StopIgnoringCollisionAfter(Collider2D col1, Collider2D col2, float time)
     {
         yield return new WaitForSeconds(time);
 
+        if (col1 == null || col2 == null)
+            yield return null;
+
         Physics2D.IgnoreCollision(col1, col2, false);
     }
 
     private void _headTrigger_OnPlayerJumpedOnHead(object sender, Collider2D collision)
     {
-        StopAllCoroutines();
+        if(_stopIgnoringCollisionAfterCoroutine != null)
+            StopCoroutine(_stopIgnoringCollisionAfterCoroutine);
+
         Physics2D.IgnoreCollision(_col, collision, true);
     }
 
@@ -319,7 +340,7 @@ public class SimpleEnemy : MonoBehaviour
     public void SetTargetUnit(Unit newUnit, float time)
     {
         //Debug.Log("New Unit: " + newUnit.transform.name);
-        StartCoroutine(SetTargetUnitCoroutine(newUnit, time));
+        _setTargetUnitCoroutine =  StartCoroutine(SetTargetUnitCoroutine(newUnit, time));
     }
 
     public IEnumerator SetTargetUnitCoroutine(Unit newUnit, float time)

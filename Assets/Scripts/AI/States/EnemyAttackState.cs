@@ -23,7 +23,7 @@ public class EnemyAttackState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        if(context.StunTime > 0f || context.TargetUnit == null)
+        if(context.StunTime > 0f || context.TargetUnit == null || !context.CanISeeMyTarget)
         {
             CheckSwitchStates(context);
             return;
@@ -97,12 +97,11 @@ public class EnemyAttackState : EnemyBaseState
         }
 
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
-        if (distance > context.AttackRadius)
+        if (distance > context.AttackRadius || !context.CanISeeMyTarget)
         {
             SwitchState(Factory.Chase());
             return;
         }
-
     }
 
     private void UpdateWeaponTargetPos(SimpleEnemy context)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.PostProcessing;
 
 public class UnitsHandler : PlayerInputHandler
 {
@@ -51,6 +52,14 @@ public class UnitsHandler : PlayerInputHandler
     [Header("Roll")]
     [SerializeField] private float _rollingCooldownTime;
     private float _rollingCooldownTimer;
+
+    [Header("Crouch")]
+    [SerializeField] private LayerMask _platformMask;
+
+    [Header("Post Processing")]
+    [SerializeField] private PostProcessVolume _slowMoPPVolume;
+    [SerializeField] private PostProcessVolume _killPPVolume;
+    private PostProcessingController _postProcessingController;
 
     // Units
     private List<Unit> _units = null;
@@ -138,6 +147,9 @@ public class UnitsHandler : PlayerInputHandler
         }
 
         CheckForNextLevelLoaderSpawn();
+
+        _postProcessingController = GetComponent<PostProcessingController>();
+        _postProcessingController.SetUpPostProcessingController(_slowMoPPVolume, _killPPVolume);
     }
 
     private void Start()
@@ -247,6 +259,7 @@ public class UnitsHandler : PlayerInputHandler
         if(_slowMotionTimer == 0)
         {
             Time.timeScale = 1f;
+            _postProcessingController.ToggleSlowMoPostProcessing(false);
         }
     }
 
@@ -262,8 +275,6 @@ public class UnitsHandler : PlayerInputHandler
 
             SpriteRenderer enemyGraphics = _currentUnit.Enemy.GetGraphics();
 
-            Color newColor = new Color(Color.white.r * .2f, Color.white.g * .2f, Color.white.b * .2f, 255);
-
             LeanTween.color(enemyGraphics.gameObject, Color.black, .25f);
 
             _explosionRadiusVisuals.gameObject.SetActive(true);
@@ -276,20 +287,20 @@ public class UnitsHandler : PlayerInputHandler
     {
         _isExplosionButtonPressed = false;
 
-        if (_isExplosionGoing)
+        if (_isExplosionGoing && _currentUnit != null)
         {
+            Unit oldUnit = _currentUnit;
             EnemyUnit enemy = _currentUnit.Enemy;
 
             _playerUnit.transform.position = _currentUnit.transform.position;
 
             enemy.UnPossess(_enemyAttackMask, _playerUnit.transform);
 
-            _units.Remove(_currentUnit);
-            _currentUnit.Damage(0);
-
+            //_units.Remove(_currentUnit);
             SetUnit(_playerUnit);
-
             _playerUnit.gameObject.SetActive(true);
+
+            oldUnit.Damage(0);
 
             Collider2D[] colls = Physics2D.OverlapCircleAll(_currentUnit.transform.position, _explosionRadius, _playerAttackMask);
             foreach (Collider2D col in colls)
@@ -316,6 +327,8 @@ public class UnitsHandler : PlayerInputHandler
 
             _explosionRadiusVisuals.gameObject.SetActive(false);
         }
+
+        _isExplosionGoing = false;
     }
 
     private void UpdateWeaponTargetPos()
@@ -422,10 +435,10 @@ public class UnitsHandler : PlayerInputHandler
 
         if (unit.IsPlayer || _currentUnit == unit)
         {
-            if (!_isExplosionGoing) { 
+            //if (!_isExplosionGoing) { 
                 KillPlayer(unit);
                 return;
-            }
+            //}
         }
 
         KillEnemy(unit);
@@ -457,6 +470,7 @@ public class UnitsHandler : PlayerInputHandler
             _possessionCooldownTimer = 0f;
             _explosionCooldownTimer -= _explosionCooldownTime * .5f;
             ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
+            _postProcessingController.PlayKillPostProcessAnim();
 
             Destroy(unit.transform.gameObject);
             return;
@@ -705,8 +719,11 @@ public class UnitsHandler : PlayerInputHandler
     {
         _isSlowMotionKeyPressed = true;
 
-        if(_slowMotionTimer > 0f)
+        if (_slowMotionTimer > 0f)
+        {
             Time.timeScale = .25f;
+            _postProcessingController.ToggleSlowMoPostProcessing(true);
+        }
     }
 
     public void UnitsHandler_SlowMotionCanceled(object sender, EventArgs e)
@@ -716,6 +733,8 @@ public class UnitsHandler : PlayerInputHandler
 
         _isPossessionKeyPressed = false;
         HidePossessionLine();
+
+        _postProcessingController.ToggleSlowMoPostProcessing(false);
     }
 
     private void ShowPossessionLine()
@@ -789,7 +808,7 @@ public class UnitsHandler : PlayerInputHandler
     }
     public void UnitsHandler_CrouchPerformed(object sender, EventArgs e)
     {
-        RaycastHit2D hit = Physics2D.Raycast(_currentUnit.transform.position, Vector2.down, 1f);
+        RaycastHit2D hit = Physics2D.Raycast(_currentUnit.transform.position, Vector2.down, 1f, _platformMask);
         if (hit.transform != null)
         {
             PlatformEffector2D plEf = hit.transform.GetComponent<PlatformEffector2D>();
