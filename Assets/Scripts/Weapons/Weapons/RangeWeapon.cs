@@ -10,12 +10,29 @@ public class RangeWeapon : Weapon
 
     private float _lastAttackTime = 0;
 
-    protected int CurrentAmmo { get { return _currentAmmo; } set { _currentAmmo = value; } }
+    public int CurrentAmmo { get { return _currentAmmo; } set { _currentAmmo = value; } }
+
+    public float LastAttackTime { get { return _lastAttackTime; } set { _lastAttackTime = value; } }
+
+    public RangeWeaponParams WeaponParams { get { return _weaponParams; } }
+
+    private delegate bool ShootMethod(Transform targetTf, Transform unitTf, ref float lastAttackTime, ref int currentAmmo, RangeWeaponParams weaponParams);
+
+    private delegate bool ShootMethodAI(Unit targetUnit, Transform unitTf, ref float lastAttackTime, ref int currentAmmo, RangeWeaponParams weaponParams);
+
+    ShootMethod _shootMethod;
+    ShootMethodAI _shootMethodAI;
 
     private new void Awake()
     {
         base.Awake();
         _currentAmmo = _weaponParams.Ammo;
+
+        if(_weaponParams.WeaponClass == RangeWeaponParams.WeaponType.Pistol)
+        {
+            _shootMethod = PistolShoot.Shoot;
+            _shootMethodAI = PistolShoot.AIShoot;
+        }
     }
 
     public override void OnUpdate(Vector2 targetPos)
@@ -33,96 +50,12 @@ public class RangeWeapon : Weapon
 
     public override bool Shoot(Transform target)
     {
-        if (Time.time < _lastAttackTime + _weaponParams.FireRate)
-            return false;
-
-        if (CurrentAmmo <= 0)
-        {
-            Debug.Log("No Ammo");
-            return false;
-        }
-
-        float distanceFromPlayer = 1.25f;
-        Vector2 dir = (target.position - UnitController.transform.position).normalized;
-        Vector2 spawnPos = (Vector2)UnitController.transform.position + (dir * distanceFromPlayer);
-
-        float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Transform bulletTf = SpawnBullet(spawnPos, dir, distanceFromPlayer, _weaponParams.BulletFlyingMask, Quaternion.Euler(0, 0, rotZ));
-
-        if (bulletTf != null)
-        {
-            Bullet bullet = bulletTf.GetComponent<Bullet>();
-
-            float bulletPower = 20f;
-            bullet.Rig.velocity = dir * bulletPower;
-            bullet.ShootPos = transform.position;
-        }
-
-        SoundManager.Instance.Play("PistolShoot"); 
-
-        CurrentAmmo--;
-        _lastAttackTime = Time.time;
-        return true;
+        return _shootMethod(target, UnitController.transform, ref _lastAttackTime, ref _currentAmmo, _weaponParams);
     }
 
     public override bool AIShoot(Unit targetUnit)
     {
-        if (Time.time < _lastAttackTime + _weaponParams.FireRate)
-            return false;
-
-        if (CurrentAmmo <= 0)
-        {
-            Debug.Log("No Ammo");
-            return false;
-        }
-
-        float distanceFromPlayer = 1.25f;
-        Vector2 dir = (targetUnit.transform.position - UnitController.transform.position).normalized;
-        Vector2 spawnPos = (Vector2)UnitController.transform.position + (dir * distanceFromPlayer);
-
-        float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Transform bulletTf = SpawnBullet(spawnPos, dir, distanceFromPlayer, _weaponParams.BulletFlyingMask, Quaternion.Euler(0, 0, rotZ));
-
-        if (bulletTf != null)
-        {
-            Bullet bullet = bulletTf.GetComponent<Bullet>();
-
-            float bulletPower = 20f;
-            bullet.Rig.velocity = dir * bulletPower;
-            bullet.ShootPos = transform.position;
-        }
-
-        SoundManager.Instance.Play("PistolShoot");
-
-        CurrentAmmo--;
-        _lastAttackTime = Time.time;
-        return true;
-    }
-
-    protected Transform SpawnBullet(Vector2 spawnPos, Vector3 dir, float distanceFromPlayer, LayerMask mask, Quaternion rotation)
-    {
-        RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir, distanceFromPlayer, mask);
-        if(hit.transform != null)
-        {
-            IDamagable iDamagable = hit.transform.GetComponent<IDamagable>();
-            if (iDamagable != null)
-            {
-                iDamagable.Damage(0f);
-            }
-
-            Rigidbody2D rig = hit.transform.GetComponent<Rigidbody2D>();
-            if (rig != null)
-            {
-                Vector2 flyDir = (hit.transform.position - UnitController.transform.position).normalized;
-                rig.velocity = flyDir * 6;
-            }
-        }
-        else
-        {
-            return Instantiate(_weaponParams.BulletPf, spawnPos, rotation);
-        }
-
-        return null;
+        return _shootMethodAI(targetUnit, UnitController.transform, ref _lastAttackTime, ref _currentAmmo, _weaponParams);
     }
 
     public override WeaponType GetWeaponType()

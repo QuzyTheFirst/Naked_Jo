@@ -3,23 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Weapon Parameters", menuName = "Weapons/Mellee Weapon Params")]
-public class MelleeWeaponParams : ScriptableObject
+public class MelleeWeaponParams : WeaponParams
 {
-    [Header("Main")]
+    [Header("Mellee Weapon")]
     public float AttackRange;
 
     public float AttackDistance;
-
-    public float AttackRate;
 
     public float AttackTime;
 
     public float PrepareTime;
 
     public string AttackSoundName;
-
-    public float DistanceFromPlayer = .5f;
-
-    [Header("AI")]
-    public float DistanceBeforeAttack;
 }

@@ -108,17 +108,38 @@ public class Weapon : MonoBehaviour, IWeapon
         _weaponState = WeaponState.Flying;
         _mainTf.gameObject.layer = 9;
 
+        LayerMask ground = 3;
+        LayerMask platform = 10;
+        LayerMask player = 8;
+        LayerMask enemy = 7;
+
+        Vector2 theTargetPos = targetPos;
+
+        bool value = false;
+
+        Collider2D[] enemyHitsOnTargetPos = Physics2D.OverlapCircleAll(theTargetPos, 1f, LayerMask.GetMask("Enemy"));
+        foreach(Collider2D col in enemyHitsOnTargetPos)
+        {
+            if(col.gameObject.layer == enemy && col.gameObject != _unitController.gameObject)
+            {
+                theTargetPos = col.transform.position;
+                value = true;
+                break;
+            }
+        }
+        Debug.Log($"Has target changed: {value} | Target Pos: {theTargetPos}");
+
         float distanceFromPlayer = 1.25f;
-        Vector2 dir = (targetPos - (Vector2)_mainTf.position).normalized;
+        //Vector2 dir = (theTargetPos - (Vector2)_mainTf.position).normalized;
 
-        Vector2 newDir = (targetPos - (Vector2)_unitController.transform.position).normalized;
+        Vector2 dir = (theTargetPos - (Vector2)_unitController.transform.position).normalized;
 
-        RaycastHit2D hit = Physics2D.Raycast(_unitController.transform.position, newDir, distanceFromPlayer);
+        RaycastHit2D hit = Physics2D.Raycast(_unitController.transform.position, dir, distanceFromPlayer, ground + platform);
         if (hit.transform != null)
-            distanceFromPlayer = 0f;     
+            distanceFromPlayer = 0f;
 
         //Vector2 spawnPos = (Vector2)_mainTf.position + (dir * distanceFromPlayer);
-        Vector2 spawnPos = (Vector2)_unitController.transform.position + (newDir * distanceFromPlayer);
+        Vector2 spawnPos = (Vector2)_unitController.transform.position + (dir * distanceFromPlayer);
         float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         _mainTf.position = spawnPos;

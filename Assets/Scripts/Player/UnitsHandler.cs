@@ -652,14 +652,14 @@ public class UnitsHandler : PlayerInputHandler
 
     private void WeaponController_OnWeaponChange(object sender, IWeapon weapon)
     {
-        Debug.Log("Weapon Changed!");
+        //Debug.Log("Weapon Changed!");
         if (weapon.GetWeaponType() == Weapon.WeaponType.Range)
         {
             GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
         }
         else
         {
-            Debug.Log("Disabled Ammo");
+            //Debug.Log("Disabled Ammo");
             GameUIController.Instance.DisableAmmoAmount();
         }
     }

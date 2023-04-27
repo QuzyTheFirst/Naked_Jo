@@ -309,7 +309,7 @@ public class SimpleEnemy : MonoBehaviour
     {
         Vector2 dir = (_targetUnit.transform.position - transform.position).normalized;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, float.PositiveInfinity, _groundMask + _playerMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 100f, _groundMask + _playerMask);
         if (hit.transform == _targetUnit.transform)
         {
             return true;

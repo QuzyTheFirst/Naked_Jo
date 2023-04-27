@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0056c1217db6a04ca3c9fc17d2c4911, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
+  DistanceFromPlayer: 0.8
+  AttackRate: 0.1
+  DistanceBeforeAttack: 100
   Ammo: 12
   FireRate: 0.1
   BulletPf: {fileID: 7248175095755955575, guid: 1b56769e54a49bc49a2738038f348a35, type: 3}
   BulletFlyingMask:
     serializedVersion: 2
     m_Bits: 8584
-  DistanceFromPlayer: 0.8
-  DistanceBeforeAttack: 100
