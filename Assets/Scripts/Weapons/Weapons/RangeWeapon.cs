@@ -35,13 +35,13 @@ public class RangeWeapon : Weapon
         MainTf.rotation = Quaternion.Euler(0, 0, rotZ);
 
         //Weapon Position
-        float distanceFromPlayer = _weaponParams.DistanceFromPlayer;
+        float distanceFromPlayer = _weaponParams.WeaponDistanceFromUnit;
         MainTf.localPosition = dir * distanceFromPlayer;
     }
 
     public override bool Shoot(Transform target)
     {
-        if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
+        if (Time.time < _lastAttackTime + _weaponParams.PlayerAttackRate)
             return false;
 
         if (_currentAmmo <= 0)
@@ -87,7 +87,7 @@ public class RangeWeapon : Weapon
 
     public override bool AIShoot(Unit targetUnit)
     {
-        if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
+        if (Time.time < _lastAttackTime + _weaponParams.PlayerAttackRate)
             return false;
 
         if (_currentAmmo <= 0)

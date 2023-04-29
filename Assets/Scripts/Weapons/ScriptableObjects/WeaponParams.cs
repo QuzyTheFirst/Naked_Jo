@@ -5,10 +5,10 @@ using UnityEngine;
 public class WeaponParams : ScriptableObject
 {
     [Header("Main")]
-    public float AttackRate;
-    public float DistanceFromPlayer = .5f;
+    public float PlayerAttackRate;
+    public float WeaponDistanceFromUnit = .5f;
 
     [Header("AI")]
-    public float DistanceBeforeAttack;
-    public float TimeIntervalBetweenAttacks = 1f;
+    public float EnemyAttackRate = 1f;
+    public float DistanceBeforeInitiatingAttack;
 }

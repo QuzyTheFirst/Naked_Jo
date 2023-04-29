@@ -110,7 +110,7 @@ public class SimpleEnemy : MonoBehaviour
     public float TimeToNextShoot { get { return _timeToNextShoot; } set { _timeToNextShoot = value; } }
     public float TimeBeforeAction { get { return _timeBeforeAction; } }
     public float TimerBeforeAction { get { return _timerBeforeAction; } set { _timerBeforeAction = value; } }
-    public float ShootEvery { get { return WeaponController.GetWeaponParams().TimeIntervalBetweenAttacks; } }
+    public float ShootEvery { get { return WeaponController.GetWeaponParams().EnemyAttackRate; } }
     public float StunTime { get { return _stunTime; } set { _stunTime = value; } }
     public float RunSpeed { get { return _runSpeed; } }
     public float WalkSpeed { get { return _walkSpeed; } }
@@ -235,7 +235,7 @@ public class SimpleEnemy : MonoBehaviour
         if (iWeapon == null)
             return;
 
-        _attackRadius = iWeapon.GetWeaponParams().DistanceBeforeAttack;
+        _attackRadius = iWeapon.GetWeaponParams().DistanceBeforeInitiatingAttack;
         iWeapon.SetAttackMask(_attackMask);
     }
 

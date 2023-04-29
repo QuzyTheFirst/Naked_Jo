@@ -15,4 +15,7 @@ public class MelleeWeaponParams : WeaponParams
     public float PrepareTime;
 
     public string AttackSoundName;
+
+    [Header("Abilities")]
+    public bool CanDeflectBullets = false;
 }

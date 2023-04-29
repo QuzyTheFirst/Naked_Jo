@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0056c1217db6a04ca3c9fc17d2c4911, type: 3}
   m_Name: Machine Gun
   m_EditorClassIdentifier: 
-  AttackRate: 0.1
-  DistanceFromPlayer: 1
-  DistanceBeforeAttack: 20
-  TimeIntervalBetweenAttacks: 0.1
+  PlayerAttackRate: 0.1
+  WeaponDistanceFromUnit: 0.5
+  EnemyAttackRate: 0.5
+  DistanceBeforeInitiatingAttack: 20
   Ammo: 30
   AmountOfBulletsToSpawn: 1
   BulletSpreadAmount: 0.25

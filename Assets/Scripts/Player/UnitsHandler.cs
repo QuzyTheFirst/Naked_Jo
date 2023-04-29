@@ -758,7 +758,7 @@ public class UnitsHandler : PlayerInputHandler
                 GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
             }
 
-            yield return new WaitForSeconds(_currentUnit.WeaponController.GetWeaponParams().AttackRate);
+            yield return new WaitForSeconds(_currentUnit.WeaponController.GetWeaponParams().PlayerAttackRate);
         }
     }
 

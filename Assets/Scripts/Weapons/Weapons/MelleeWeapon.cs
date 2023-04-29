@@ -30,13 +30,13 @@ public class MelleeWeapon : Weapon
         MainTf.rotation = Quaternion.Euler(0, 0, rotZ);
 
         //Weapon Position
-        float distanceFromPlayer = _weaponParams.DistanceFromPlayer;
+        float distanceFromPlayer = _weaponParams.WeaponDistanceFromUnit;
         MainTf.localPosition = dir * distanceFromPlayer;
     }
 
     public override bool Shoot(Transform target)
     {
-        if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
+        if (Time.time < _lastAttackTime + _weaponParams.PlayerAttackRate)
             return false;
 
         //Debug.Log("Attack Transform");
@@ -63,6 +63,8 @@ public class MelleeWeapon : Weapon
         while (_attackTimer < _weaponParams.AttackTime)
         {
             dir = (target.position - UnitController.transform.position).normalized;
+
+            CanDeflectBulletsAbility(target.transform.position);
 
             _attackTimer += Time.fixedDeltaTime;
             Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
@@ -98,7 +100,7 @@ public class MelleeWeapon : Weapon
 
     public override bool AIShoot(Unit targetUnit)
     {
-        if (Time.time < _lastAttackTime + _weaponParams.AttackRate)
+        if (Time.time < _lastAttackTime + _weaponParams.PlayerAttackRate)
             return false;
 
         //Debug.Log("AI Attack");
@@ -138,6 +140,8 @@ public class MelleeWeapon : Weapon
             else
                 dir = (startedPos - (Vector2)UnitController.transform.position).normalized;
 
+            CanDeflectBulletsAbility(targetUnit.transform.position);
+
             _attackTimer += Time.fixedDeltaTime;
             Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
 
@@ -168,6 +172,26 @@ public class MelleeWeapon : Weapon
             yield return new WaitForFixedUpdate();
         }
         _attackTimer = 0;
+    }
+
+    private void CanDeflectBulletsAbility(Vector2 target)
+    {
+        if (_weaponParams.CanDeflectBullets)
+        {
+            Collider2D[] bullets = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, LayerMask.GetMask("Bullet"));
+            DeflectBullets(bullets, target);
+        }
+    }
+
+    private void DeflectBullets(Collider2D[] bullets, Vector2 target)
+    {
+        foreach(Collider2D bullet in bullets)
+        {
+            Rigidbody2D rig = bullet.GetComponent<Rigidbody2D>();
+            float speed = rig.velocity.magnitude;
+            Vector2 newVector = target - (Vector2)UnitController.transform.position;
+            bullet.GetComponent<Rigidbody2D>().velocity = newVector.normalized * speed;
+        }
     }
 
     public override WeaponType GetWeaponType()
