@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0056c1217db6a04ca3c9fc17d2c4911, type: 3}
-  m_Name: Pistol
+  m_Name: Shotgun
   m_EditorClassIdentifier: 
-  AttackRate: 0.1
+  AttackRate: 0.5
   DistanceFromPlayer: 0.8
-  DistanceBeforeAttack: 30
-  TimeIntervalBetweenAttacks: 0.5
-  Ammo: 12
-  AmountOfBulletsToSpawn: 1
-  BulletSpreadAmount: 0
+  DistanceBeforeAttack: 10
+  WeaponClass: 1
+  Ammo: 6
+  AmountOfBulletsToSpawn: 5
+  BulletSpreadAmount: 0.5
   IsAutomatic: 0
   BulletPf: {fileID: 7248175095755955575, guid: 1b56769e54a49bc49a2738038f348a35, type: 3}
   BulletFlyingMask:

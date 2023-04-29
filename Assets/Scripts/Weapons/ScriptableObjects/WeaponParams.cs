@@ -10,4 +10,5 @@ public class WeaponParams : ScriptableObject
 
     [Header("AI")]
     public float DistanceBeforeAttack;
+    public float TimeIntervalBetweenAttacks = 1f;
 }

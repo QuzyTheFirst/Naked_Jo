@@ -187,14 +187,9 @@ public class MelleeWeapon : Weapon
         _anim.SetTrigger("Idle");
     }
 
-    public override float GetAttackDistance()
+    public override WeaponParams GetWeaponParams()
     {
-        return _weaponParams.DistanceBeforeAttack;
-    }
-
-    public override float GetFullAttackTime()
-    {
-        return _weaponParams.PrepareTime + _weaponParams.AttackTime;
+        return _weaponParams;
     }
 
     private void OnDrawGizmos()

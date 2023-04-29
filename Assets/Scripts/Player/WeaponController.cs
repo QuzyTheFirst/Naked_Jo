@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class WeaponController : MonoBehaviour
 {
+    [Header("Main")]
     [SerializeField] private bool _canPickUpWeapons = true;
     [SerializeField] private float _searchRange = .8f;
     [SerializeField] private LayerMask _weaponLayerMask = 11;
@@ -21,9 +22,21 @@ public class WeaponController : MonoBehaviour
 
     public event EventHandler<IWeapon> OnWeaponChange;
 
+    private bool _keepAttacking = false;
+    private Transform _temporaryTarget;
+
     public Vector2 TargetPos { get { return _targetPos; } set { _targetPos = value; } }
     public bool IsWeaponTaken { get { return _currentWeapon != _unremovableIWeapon; } }
-    public float FullAttackTime { get { return _currentWeapon.GetFullAttackTime(); } }
+    public float FullAttackTime 
+    { 
+        get 
+        {
+            if(_currentWeapon.GetWeaponType() == Weapon.WeaponType.Mellee)
+                return GetMelleeWeaponParams().AttackTime + GetMelleeWeaponParams().PrepareTime;
+
+            return 0;
+        } 
+    }
 
 
     private void Awake()
@@ -45,6 +58,9 @@ public class WeaponController : MonoBehaviour
             return;
 
         _currentWeapon.OnUpdate(_targetPos);
+
+        if (_keepAttacking && _temporaryTarget != null)
+            Shoot(_temporaryTarget);
 
         UpdateWeaponFlipY();
     }
@@ -68,14 +84,6 @@ public class WeaponController : MonoBehaviour
 
         return _currentWeapon.Shoot(target);
     }
-
-    /*public bool Shoot(Vector2 position)
-    {
-        if (_currentWeapon == null)
-            return false;
-
-        return _currentWeapon.Shoot(position);
-    }*/
 
     public bool AIShoot(Unit targetUnit)
     {
@@ -172,6 +180,21 @@ public class WeaponController : MonoBehaviour
     public int GetCurrentAmmo()
     {
         return _currentWeapon.GetCurrentAmmo();
+    }
+
+    public WeaponParams GetWeaponParams()
+    {
+        return _currentWeapon.GetWeaponParams();
+    }
+
+    public MelleeWeaponParams GetMelleeWeaponParams()
+    {
+        return (MelleeWeaponParams)GetWeaponParams();
+    }
+
+    public RangeWeaponParams GetRangeWeaponParams()
+    {
+        return (RangeWeaponParams)GetWeaponParams();
     }
 
     #region AI

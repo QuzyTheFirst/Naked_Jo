@@ -8,6 +8,9 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class UnitsHandler : PlayerInputHandler
 {
+    [Header("Cheat")]
+    [SerializeField] private bool _enemiesCantSeeYou;
+
     [Header("Level")]
     [SerializeField] private GameObject _nextLevelLoader;
 
@@ -76,6 +79,8 @@ public class UnitsHandler : PlayerInputHandler
 
     private float _movementDirection = 0f;
 
+    private Coroutine _keepAttackingCoroutine;
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -106,6 +111,7 @@ public class UnitsHandler : PlayerInputHandler
         JumpCanceled += UnitsHandler_JumpCanceled;
 
         AttackPerformed += UnitsHandler_AttackPerformed;
+        AttackCanceled += UnitsHandler_AttackCanceled;
 
         SlowMotionPerformed += UnitsHandler_SlowMotionPerformed;
         SlowMotionCanceled += UnitsHandler_SlowMotionCanceled;
@@ -354,7 +360,10 @@ public class UnitsHandler : PlayerInputHandler
         player.JumpCanceled();
 
         if (!_currentUnit.IsPlayer)
+        {
+            CancelAutomaticWeaponAttack();
             _currentUnit.WeaponController.OnWeaponChange -= WeaponController_OnWeaponChange;
+        }
 
         if (!newUnit.IsPlayer)
             newUnit.WeaponController.OnWeaponChange += WeaponController_OnWeaponChange;
@@ -372,6 +381,9 @@ public class UnitsHandler : PlayerInputHandler
 
     private void SetEnemiesTargetUnit()
     {
+        if (_enemiesCantSeeYou)
+            return;
+
         for (int i = 0; i < _units.Count; i++)
         {
             if (_units[i] == _playerUnit)
@@ -652,7 +664,8 @@ public class UnitsHandler : PlayerInputHandler
 
     private void WeaponController_OnWeaponChange(object sender, IWeapon weapon)
     {
-        //Debug.Log("Weapon Changed!");
+        CancelAutomaticWeaponAttack();
+
         if (weapon.GetWeaponType() == Weapon.WeaponType.Range)
         {
             GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
@@ -701,10 +714,22 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_AttackPerformed(object sender, EventArgs e)
     {
-        bool attacked = false;
+        if (_currentUnit.WeaponController == null)
+            return;
 
-        if (_currentUnit.WeaponController != null)
-            attacked = _currentUnit.WeaponController.Shoot(_cursorController.transform);
+        //Debug.Log(_currentUnit.WeaponController.IsAutomatic());
+        if (_currentUnit.WeaponController.GetWeaponType() == Weapon.WeaponType.Range)
+        {
+            if (_currentUnit.WeaponController.GetRangeWeaponParams().IsAutomatic)
+            {
+                _keepAttackingCoroutine = StartCoroutine(StartAutomaticAttack());
+                return;
+            }
+        }
+
+        bool attacked;
+
+        attacked = _currentUnit.WeaponController.Shoot(_cursorController.transform);
 
         if (attacked)
         {
@@ -713,6 +738,34 @@ public class UnitsHandler : PlayerInputHandler
                 GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
             }
         }
+    }
+
+    private void UnitsHandler_AttackCanceled(object sender, EventArgs e)
+    {
+        CancelAutomaticWeaponAttack();
+    }
+
+    private IEnumerator StartAutomaticAttack()
+    {
+        bool attacked;
+
+        while (true)
+        {
+            attacked = _currentUnit.WeaponController.Shoot(_cursorController.transform);
+
+            if (attacked)
+            {
+                GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
+            }
+
+            yield return new WaitForSeconds(_currentUnit.WeaponController.GetWeaponParams().AttackRate);
+        }
+    }
+
+    private void CancelAutomaticWeaponAttack()
+    {
+        if (_keepAttackingCoroutine != null)
+            StopCoroutine(_keepAttackingCoroutine);
     }
 
     public void UnitsHandler_SlowMotionPerformed(object sender, EventArgs e)

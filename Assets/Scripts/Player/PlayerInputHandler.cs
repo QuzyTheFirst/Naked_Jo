@@ -13,6 +13,7 @@ public class PlayerInputHandler : PlayerComponentGetter
     protected event EventHandler JumpCanceled;
 
     protected event EventHandler AttackPerformed;
+    protected event EventHandler AttackCanceled;
 
     protected event EventHandler SlowMotionPerformed;
     protected event EventHandler SlowMotionCanceled;
@@ -44,6 +45,7 @@ public class PlayerInputHandler : PlayerComponentGetter
         playerControls.Player.Jump.canceled += Jump_canceled;
 
         playerControls.Player.Attack.performed += Attack_performed;
+        playerControls.Player.Attack.canceled += Attack_canceled;
 
         playerControls.Player.SlowMotion.performed += SlowoMotion_performed;
         playerControls.Player.SlowMotion.canceled += SlowMotion_canceled;
@@ -99,6 +101,11 @@ public class PlayerInputHandler : PlayerComponentGetter
     private void Attack_performed(InputAction.CallbackContext obj)
     {
         AttackPerformed?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Attack_canceled(InputAction.CallbackContext obj)
+    {
+        AttackCanceled?.Invoke(this, EventArgs.Empty);
     }
 
     private void SlowoMotion_performed(InputAction.CallbackContext obj)

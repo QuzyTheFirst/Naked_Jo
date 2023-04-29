@@ -213,6 +213,12 @@ public class Weapon : MonoBehaviour, IWeapon
         return 0;
     }
 
+    public virtual WeaponParams GetWeaponParams()
+    {
+        Debug.LogError("Not Implemented");
+        return null;
+    }
+
     public virtual void ResetAmmo() { }
 
     public void Init(PlayerController unitController, Transform parent)
@@ -241,15 +247,7 @@ public class Weapon : MonoBehaviour, IWeapon
         return _spriteRenderer;
     }
 
-    public virtual float GetAttackDistance()
-    {
-        return 0;
-    }
-
-    public virtual float GetFullAttackTime()
-    {
-        return 0;
-    }
+    
 
     public void SetAttackMask(LayerMask attackMask)
     {

@@ -33,7 +33,6 @@ public class SimpleEnemy : MonoBehaviour
     [SerializeField] private LayerMask _attackMask;
 
     [Header("Shoot")]
-    [SerializeField] private float _shootEvery = 1f;
     [SerializeField] private float _visionRadius;
     [SerializeField] private LayerMask _weaponMask;
     private float _timeToNextShoot;
@@ -111,7 +110,7 @@ public class SimpleEnemy : MonoBehaviour
     public float TimeToNextShoot { get { return _timeToNextShoot; } set { _timeToNextShoot = value; } }
     public float TimeBeforeAction { get { return _timeBeforeAction; } }
     public float TimerBeforeAction { get { return _timerBeforeAction; } set { _timerBeforeAction = value; } }
-    public float ShootEvery { get { return _shootEvery; } }
+    public float ShootEvery { get { return WeaponController.GetWeaponParams().TimeIntervalBetweenAttacks; } }
     public float StunTime { get { return _stunTime; } set { _stunTime = value; } }
     public float RunSpeed { get { return _runSpeed; } }
     public float WalkSpeed { get { return _walkSpeed; } }
@@ -166,8 +165,6 @@ public class SimpleEnemy : MonoBehaviour
     }
     private void Start()
     {
-        TimeToNextShoot = Time.time + _shootEvery;
-
         if(_weaponToTake != null)
             _weaponController.TakeWeapon(_weaponToTake);
 
@@ -238,7 +235,7 @@ public class SimpleEnemy : MonoBehaviour
         if (iWeapon == null)
             return;
 
-        _attackRadius = iWeapon.GetAttackDistance();
+        _attackRadius = iWeapon.GetWeaponParams().DistanceBeforeAttack;
         iWeapon.SetAttackMask(_attackMask);
     }
 
@@ -307,6 +304,9 @@ public class SimpleEnemy : MonoBehaviour
 
     private bool CanISeeMyTargetMethod()
     {
+        if (_targetUnit == null)
+            return false;
+
         Vector2 dir = (_targetUnit.transform.position - transform.position).normalized;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 100f, _groundMask + _playerMask);

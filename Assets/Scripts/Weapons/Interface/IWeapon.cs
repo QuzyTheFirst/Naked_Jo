@@ -23,8 +23,7 @@ public interface IWeapon
 
     public bool IsFlying();
 
-    public float GetAttackDistance();
-    public float GetFullAttackTime();
+    public WeaponParams GetWeaponParams();
 
     public void SetAttackMask(LayerMask attackMask);
 
