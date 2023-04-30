@@ -5,21 +5,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : PlayerComponentGetter
+public class PlayerController : ComponentsGetter
 {
     // Movement
     [Header("Movement")]
     [SerializeField] private float _maxSpeed = 10;
-    private float _maxSpeedModifier = 1;
     [SerializeField] private float _acceleration = 8;
     [SerializeField] private float _decceleration = 10;
     [SerializeField] private float _lerpAmount = 8;
-    [SerializeField] private float _accelInAir = 7;
-    [SerializeField] private float _deccelInAir = 7;
 
-    [SerializeField] private bool _doConserveMomentum;
-
-    private bool _isLookingRight = true;
+    private float _maxSpeedModifier = 1;
 
     private Vector2 _direction;
     private Vector2 _velocity;
@@ -33,21 +28,15 @@ public class PlayerController : PlayerComponentGetter
     private float _jumpPressedRemember;
 
     [SerializeField, Range(0, 5)] private int _maxAirJumps = 0;
+    private int _jumpPhase;
+
+
     [SerializeField, Range(0f, 5f)] private float _downwardMovementMultiplier = 3f;
     [SerializeField, Range(0f, 5f)] private float _upwardMovementMultiplier = 1.7f;
-
-    [SerializeField] private int _jumpPhase;
     private float _defaultGravityScale = 1f;
-
-    // Attack
-    private int _attacksSinceLastGrounded;
 
     // Ground Check
     [Header("Ground Check")]
-
-    [SerializeField] private Transform _groundCheck;
-
-    [SerializeField] private float _groundCheckDistance = .2f;
     [SerializeField] private float _groundRememberTime = .2f;
 
     [SerializeField, Range(0, 90)] private float _maxGroundAngle = 50f;
@@ -57,24 +46,12 @@ public class PlayerController : PlayerComponentGetter
     [SerializeField] private PhysicsMaterial2D _frictionLessMat;
     [SerializeField] private PhysicsMaterial2D _fullFrictionMat;
 
-    private Vector2 _groundCheckOffset;
-
     private int _stepsSinceLastGrounded;
     private int _stepsSinceLastJump;
 
-    private bool _isGrounded;
-
     private float _groundRemember;
-    private float _minGroundDotProduct;
 
-    private float _stopLookingForGroundSteps;
-
-    // Input
-    private bool _isSlowMotionButtonPressed = false;
-    private float _possessionRadius = 4f;
-
-    // Snap to Ground
-    private float _maxSnapSpeed;
+    private int _stopLookingForGroundSteps;
 
     // Player States
     private PlayerBaseState _currentState;
@@ -87,9 +64,6 @@ public class PlayerController : PlayerComponentGetter
     [SerializeField] private LayerMask _rollingObstacles;
     private bool _doRoll = false;
     private float _rollingDirection;
-
-    // Look For Ground
-    public float StopLookingForGroundSteps { get { return _stopLookingForGroundSteps; } set { _stopLookingForGroundSteps = value; } }
 
     // Main Components
     public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
@@ -106,14 +80,10 @@ public class PlayerController : PlayerComponentGetter
     public float LerpAmount { get { return _lerpAmount; } }
     public float Acceleration { get { return _acceleration; } }
     public float Deceleration { get { return _decceleration; } }
-    public float AccelInAir { get { return _accelInAir; } }
-    public float DeccelInAir { get { return _deccelInAir; } }
-    public bool DoConserveMomentum { get { return _doConserveMomentum; } }
     public Vector2 Velocity { get { return _velocity; } set { _velocity = value; } }
 
     // Ground
     public float GroundRemember { get { return _groundRemember; } set { _groundRemember = value; } }
-    public Transform GroundCheckTf { get { return _groundCheck; } }
     public PhysicsMaterial2D FullFrictionMat { get { return _fullFrictionMat; } }
     public PhysicsMaterial2D FrictionLessMat { get { return _frictionLessMat; } }
 
@@ -125,7 +95,12 @@ public class PlayerController : PlayerComponentGetter
     public float DefaultGravityScale { get { return _defaultGravityScale; } }
     public int StepsSinceLastJump { get { return _stepsSinceLastJump; } set { _stepsSinceLastJump = value; } }
     public bool IsJumpButtonPressed { get { return _isJumpButtonPressed; } }
-    public bool IsGrounded { get { return _isGrounded; } set { _isGrounded = value; } }
+    public bool IsGrounded {
+        get 
+        {
+            return _groundChecker.IsGrounded; 
+        }
+    }
 
     public int MaxAirJumps { get { return _maxAirJumps; } }
     public int JumpPhase { get { return _jumpPhase; } set { _jumpPhase = value; } }
@@ -140,14 +115,9 @@ public class PlayerController : PlayerComponentGetter
     public float RollingSpeed { get { return _rollingSpeed; } }
     public LayerMask RollingObstacles { get { return _rollingObstacles; } }
 
-    private void OnValidate()
+    private void Awake()
     {
-        _minGroundDotProduct = Mathf.Cos(_maxGroundAngle * Mathf.Deg2Rad);
-    }
-
-    private new void Awake()
-    {
-        base.Awake();
+        base.GetAllComponents(false);
 
         //States
         _states = new PlayerStateFactory(this);
@@ -158,7 +128,7 @@ public class PlayerController : PlayerComponentGetter
 
     private void FixedUpdate()
     {
-        if (_isGrounded)
+        if (_groundChecker.IsGrounded)
         {
             _groundRemember = _groundRememberTime;
             _stepsSinceLastGrounded = 0;
@@ -178,14 +148,7 @@ public class PlayerController : PlayerComponentGetter
 
         _jumpPressedRemember -= Time.fixedDeltaTime;
 
-        _isGrounded = GroundCheck();
-
-        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()} | Direction: {_direction.x}");
-    }
-
-    private bool GroundCheck()
-    {
-        return Physics2D.CircleCast(transform.position, _col.radius, Vector2.down, _groundCheckDistance, _groundMask);
+        Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()} | Direction: {_direction.x}");
     }
 
     // Inputs Yes

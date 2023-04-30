@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class WeaponController : MonoBehaviour
+public class WeaponController : ComponentsGetter
 {
     [Header("Main")]
     [SerializeField] private bool _canPickUpWeapons = true;
@@ -15,7 +15,6 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private GameObject _unremovableWeapon;
     private IWeapon _unremovableIWeapon;
 
-    private PlayerController _unitController;
     private IWeapon _currentWeapon;
 
     private Vector2 _targetPos = default;
@@ -41,7 +40,7 @@ public class WeaponController : MonoBehaviour
 
     private void Awake()
     {
-        _unitController = GetComponent<PlayerController>();
+        base.GetAllComponents(false);
 
         if(_unremovableWeapon != null)
             _unremovableIWeapon = _unremovableWeapon.transform.GetComponentInChildren<IWeapon>();
@@ -131,7 +130,7 @@ public class WeaponController : MonoBehaviour
         {
             _unremovableWeapon.SetActive(true);
             _currentWeapon = _unremovableIWeapon;
-            _currentWeapon.Init(_unitController, transform);
+            _currentWeapon.Init(_playerController, transform);
         }
         else
         {
@@ -230,7 +229,7 @@ public class WeaponController : MonoBehaviour
 
         weapon.gameObject.SetActive(true);
         _currentWeapon = iWeapon;
-        _currentWeapon.Init(_unitController, transform);
+        _currentWeapon.Init(_playerController, transform);
 
         OnWeaponChange?.Invoke(this, _currentWeapon);
     }
@@ -250,7 +249,7 @@ public class WeaponController : MonoBehaviour
             _unremovableWeapon.SetActive(false);
 
         _currentWeapon = iWeapon;
-        _currentWeapon.Init(_unitController, transform);
+        _currentWeapon.Init(_playerController, transform);
 
         OnWeaponChange?.Invoke(this, _currentWeapon);
     }

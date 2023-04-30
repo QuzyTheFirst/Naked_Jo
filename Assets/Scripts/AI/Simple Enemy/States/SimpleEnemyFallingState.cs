@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFallingState : EnemyBaseState
+public class SimpleEnemyFallingState : EnemyBaseState
 {
-    public EnemyFallingState(SimpleEnemy context, EnemyStateFactory factory) : base(context, factory)
+    public SimpleEnemyFallingState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory)
     {
         IsRootState = true;
     }
@@ -32,11 +32,11 @@ public class EnemyFallingState : EnemyBaseState
 
         if (context.RigidBody.velocity.y < 0)
         {
-            context.RigidBody.gravityScale = context.UnitController.DownwardMovementMultiplier;
+            context.RigidBody.gravityScale = context.PlayerController.DownwardMovementMultiplier;
         }
         else if (context.RigidBody.velocity.y == 0)
         {
-            context.RigidBody.gravityScale = context.UnitController.DefaultGravityScale;
+            context.RigidBody.gravityScale = context.PlayerController.DefaultGravityScale;
         }
 
         CheckSwitchStates(context);
@@ -76,7 +76,7 @@ public class EnemyFallingState : EnemyBaseState
 
     public override void OnExit(SimpleEnemy context)
     {
-        context.RigidBody.gravityScale = context.UnitController.DefaultGravityScale;
+        context.RigidBody.gravityScale = context.PlayerController.DefaultGravityScale;
 
         context.FallenOnHisOwn = false;
     }

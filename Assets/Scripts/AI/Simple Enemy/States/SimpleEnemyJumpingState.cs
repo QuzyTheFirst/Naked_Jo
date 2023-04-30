@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyJumpingState : EnemyBaseState
+public class SimpleEnemyJumpingState : EnemyBaseState
 {
     private float _jumpPower;
 
-    public EnemyJumpingState(SimpleEnemy context, EnemyStateFactory factory) : base(context, factory)
+    public SimpleEnemyJumpingState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory)
     {
         IsRootState = true;
     }
@@ -39,11 +39,11 @@ public class EnemyJumpingState : EnemyBaseState
 
         if (context.RigidBody.velocity.y > 0)
         {
-            context.RigidBody.gravityScale = context.UnitController.UpwardMovementMultiplier;
+            context.RigidBody.gravityScale = context.PlayerController.UpwardMovementMultiplier;
         }
         else if (context.RigidBody.velocity.y == 0)
         {
-            context.RigidBody.gravityScale = context.UnitController.DefaultGravityScale;
+            context.RigidBody.gravityScale = context.PlayerController.DefaultGravityScale;
         }
 
         CheckSwitchStates(context);
@@ -83,7 +83,7 @@ public class EnemyJumpingState : EnemyBaseState
 
     public override void OnExit(SimpleEnemy context)
     {
-        context.RigidBody.gravityScale = context.UnitController.DefaultGravityScale;
+        context.RigidBody.gravityScale = context.PlayerController.DefaultGravityScale;
 
         context.JumpedOnHisOwn = false;
     }
@@ -91,7 +91,7 @@ public class EnemyJumpingState : EnemyBaseState
     // Methods
     private void JumpAction(SimpleEnemy context)
     {
-        _jumpPower = Mathf.Sqrt(-2f * Physics.gravity.y * context.UnitController.JumpHeight);
+        _jumpPower = Mathf.Sqrt(-2f * Physics.gravity.y * context.PlayerController.JumpHeight);
 
         //player.GroundRemember = 0f;
         //player.JumpPressedRemember = 0f;

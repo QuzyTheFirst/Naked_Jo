@@ -29,8 +29,6 @@ public class PlayerGroundedState : PlayerBaseState
 
         if(player.JumpPressedRemember > 0)
         {
-            player.StopLookingForGroundSteps = 2;
-            player.IsGrounded = false;
             SwitchState(Factory.Jump());
             return;
         }

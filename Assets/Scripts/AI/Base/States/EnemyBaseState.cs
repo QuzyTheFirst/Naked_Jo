@@ -7,19 +7,19 @@ public abstract class EnemyBaseState
     private bool _isRootState = false;
 
     private SimpleEnemy _context;
-    private EnemyStateFactory _factory;
+    private SimpleEnemyStateFactory _factory;
 
     private EnemyBaseState _superState;
     private EnemyBaseState _subState;
 
     protected bool IsRootState { set { _isRootState = value; } }
     protected SimpleEnemy Context { get { return _context; } }
-    protected EnemyStateFactory Factory { get { return _factory; } }
+    protected SimpleEnemyStateFactory Factory { get { return _factory; } }
 
     public EnemyBaseState SuperState { get { return _superState; } }
     public EnemyBaseState SubState { get { return _subState; } }
 
-    public EnemyBaseState(SimpleEnemy context, EnemyStateFactory factory)
+    public EnemyBaseState(SimpleEnemy context, SimpleEnemyStateFactory factory)
     {
         _context = context;
         _factory = factory;

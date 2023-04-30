@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WalkingSound : PlayerComponentGetter
+public class WalkingSound : MonoBehaviour
 {
     [SerializeField] private float _stepEverySeconds = .2f;
     private float _timer;
 
     private Vector2 _lastStepPos;
+    private PlayerController _player;
+
+    private void Awake()
+    {
+        _player = transform.GetComponentInChildren<PlayerController>();
+    }
+
     private void Update()
     {
         if (_player.IsWalking && _player.IsGrounded)

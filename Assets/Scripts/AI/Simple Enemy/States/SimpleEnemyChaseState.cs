@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyChaseState : EnemyBaseState
+public class SimpleEnemyChaseState : EnemyBaseState
 {
-    public EnemyChaseState (SimpleEnemy context, EnemyStateFactory factory) : base(context, factory) { }
+    public SimpleEnemyChaseState (SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
 
     public override void OnEnter(SimpleEnemy context)
     {

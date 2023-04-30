@@ -30,26 +30,6 @@ public class PlayerWalkingState : PlayerBaseState
         CheckSwitchStates(player);
     }
 
-    private Vector2 AdjustDirectionToSlope()
-    {
-        Vector2 walkDirection = new Vector2(Player.WalkDirection, 0f);
-
-        RaycastHit2D hit = Physics2D.Raycast(Player.GroundCheckTf.position, Vector2.down, .5f);
-
-        if (hit)
-        {
-            Quaternion slopeRotation = Quaternion.FromToRotation(Vector2.up, hit.normal);
-            Vector3 adjustedVelocity = slopeRotation * walkDirection;
-
-            if(adjustedVelocity.y < 0)
-            {
-                return adjustedVelocity;
-            }
-        }
-
-        return walkDirection;
-    }
-
     public override void CheckSwitchStates(PlayerController player)
     {
         if (!player.IsWalking)

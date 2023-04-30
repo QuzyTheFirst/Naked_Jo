@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour, IDamagable
+public class Unit : ComponentsGetter, IDamagable
 {
     [SerializeField] protected bool _isPlayer = false;
 
@@ -13,26 +13,17 @@ public class Unit : MonoBehaviour, IDamagable
     public static event EventHandler OnDeath;
     public static event EventHandler<Collision2D> OnCollisionEnter;
 
-    protected PlayerController PlayerController;
-    protected SimpleEnemy SimpleEnemy;
-    protected SpriteRenderer SpriteRenderer;
-    protected Flip Flip;
+    protected PlayerController PlayerController { get { return _playerController; }}
+    protected SimpleEnemy SimpleEnemy { get { return _enemyController; } }
 
-    private Collider2D _col;
-    private WeaponController _weaponController;
-    private KeyHolder _keyHolder;
+    protected SpriteRenderer SpriteRenderer { get { return _spriteRenderer; } }
+
+    protected Flip Flip { get { return _flip; } }
+
 
     private void Awake()
     {
-        _col = GetComponent<Collider2D>();
-        _weaponController = GetComponent<WeaponController>();
-        _keyHolder = GetComponent<KeyHolder>();
-
-        SpriteRenderer = GetComponent<SpriteRenderer>();
-        Flip = GetComponent<Flip>();
-
-        PlayerController = GetComponent<PlayerController>();
-        SimpleEnemy = GetComponent<SimpleEnemy>();
+        base.GetAllComponents(true);
 
         Player = new PlayerUnit(PlayerController);
         Enemy = new EnemyUnit(SimpleEnemy);

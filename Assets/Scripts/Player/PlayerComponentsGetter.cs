@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerComponentGetter : MonoBehaviour
+public class PlayerComponentsGetter : MonoBehaviour
 {
     protected CircleCollider2D _col;
     protected Rigidbody2D _rig;

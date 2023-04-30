@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStunState : EnemyBaseState
+public class SimpleEnemyStunState : EnemyBaseState
 {
-    public EnemyStunState(SimpleEnemy context, EnemyStateFactory factory) : base(context, factory) { }
+    public SimpleEnemyStunState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
 
     public override void OnEnter(SimpleEnemy context)
     {

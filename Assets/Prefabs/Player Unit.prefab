@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1765557809038070680}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &164284236
 SpriteRenderer:
@@ -93,6 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 777939675628069232}
+  - component: {fileID: 334400478178080021}
   m_Layer: 8
   m_Name: GroundCheck
   m_TagString: Untagged
@@ -108,13 +109,29 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 70697952752167936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1765557809038070680}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &334400478178080021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70697952752167936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0866b348142bc3d4e8a604fa1d11aa2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _checkDistance: 0.2
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 1032
 --- !u!1 &1765557809038070686
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,12 +141,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1765557809038070680}
-  - component: {fileID: 1230257127410709246}
+  - component: {fileID: 5041547266077888808}
   - component: {fileID: 2101170257}
+  - component: {fileID: 2318506528178050482}
   - component: {fileID: 1765557809038070683}
   - component: {fileID: 7605842598217312959}
-  - component: {fileID: 5041547266077888808}
-  - component: {fileID: 2318506528178050482}
   m_Layer: 8
   m_Name: Player Unit
   m_TagString: Untagged
@@ -149,12 +165,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 777629068054960534}
   - {fileID: 777939675628069232}
   - {fileID: 164284235}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1230257127410709246
+--- !u!114 &5041547266077888808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,36 +180,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1765557809038070686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5975b52f8f3a774ba0610d52d1e8e20, type: 3}
+  m_Script: {fileID: 11500000, guid: d49629b146ba8464986c06c3aac6583b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxSpeed: 10
-  _acceleration: 8
-  _decceleration: 10
-  _lerpAmount: 8
-  _accelInAir: 7
-  _deccelInAir: 7
-  _doConserveMomentum: 1
-  _jumpHeight: 2.5
-  _jumpPressedRememberTime: 0.2
-  _maxAirJumps: 2
-  _downwardMovementMultiplier: 3
-  _upwardMovementMultiplier: 1.7
-  _jumpPhase: 0
-  _groundCheck: {fileID: 777939675628069232}
-  _groundCheckDistance: 0.2
-  _groundRememberTime: 0.2
-  _maxGroundAngle: 50
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 1032
-  _frictionLessMat: {fileID: 6200000, guid: 671994ccf2d39e9449e4a0fb45b590c6, type: 2}
-  _fullFrictionMat: {fileID: 6200000, guid: a5b45bee8e58ef34aa10b66d61d26ddc, type: 2}
-  _rollingDistance: 2.5
-  _rollingSpeed: 20
-  _rollingObstacles:
-    serializedVersion: 2
-    m_Bits: 1032
+  _isPlayer: 1
 --- !u!114 &2101170257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,6 +196,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3fe07f31bae12044ac219c1d333bce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2318506528178050482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765557809038070686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40e2b5103cbcc54780b4c177ded46cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stepEverySeconds: 0.2
 --- !u!50 &1765557809038070683
 Rigidbody2D:
   serializedVersion: 4
@@ -242,29 +246,68 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.1}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &5041547266077888808
+--- !u!1 &3258970152526351290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 777629068054960534}
+  - component: {fileID: 429098713341198652}
+  m_Layer: 8
+  m_Name: PlayerController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &777629068054960534
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3258970152526351290}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1765557809038070680}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &429098713341198652
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1765557809038070686}
+  m_GameObject: {fileID: 3258970152526351290}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d49629b146ba8464986c06c3aac6583b, type: 3}
+  m_Script: {fileID: 11500000, guid: f5975b52f8f3a774ba0610d52d1e8e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlayer: 1
---- !u!114 &2318506528178050482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1765557809038070686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d40e2b5103cbcc54780b4c177ded46cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stepEvery: 0.2
+  _maxSpeed: 10
+  _acceleration: 8
+  _decceleration: 10
+  _lerpAmount: 8
+  _jumpHeight: 2.5
+  _jumpPressedRememberTime: 0.2
+  _maxAirJumps: 2
+  _downwardMovementMultiplier: 3
+  _upwardMovementMultiplier: 1.7
+  _groundRememberTime: 0.2
+  _maxGroundAngle: 50
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 1032
+  _frictionLessMat: {fileID: 6200000, guid: 671994ccf2d39e9449e4a0fb45b590c6, type: 2}
+  _fullFrictionMat: {fileID: 6200000, guid: a5b45bee8e58ef34aa10b66d61d26ddc, type: 2}
+  _rollingDistance: 2.5
+  _rollingSpeed: 20
+  _rollingObstacles:
+    serializedVersion: 2
+    m_Bits: 1032

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttackState : EnemyBaseState
+public class SimpleEnemyAttackState : EnemyBaseState
 {
     private float _timer = 0;
 
@@ -14,7 +14,7 @@ public class EnemyAttackState : EnemyBaseState
 
     private bool _aimAtPlayer;
 
-    public EnemyAttackState(SimpleEnemy context, EnemyStateFactory factory) : base(context, factory) { }
+    public SimpleEnemyAttackState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
 
     public override void OnEnter(SimpleEnemy context)
     {

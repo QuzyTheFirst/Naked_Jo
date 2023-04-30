@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStateFactory : MonoBehaviour
+public class SimpleEnemyStateFactory : MonoBehaviour
 {
     enum EnemyStates
     {
-        Idle,
         Patrol,
         Chase,
         Attack,
@@ -19,26 +18,21 @@ public class EnemyStateFactory : MonoBehaviour
     private SimpleEnemy _context;
     private Dictionary<EnemyStates, EnemyBaseState> _states;
 
-    public EnemyStateFactory(SimpleEnemy currentContext)
+    public SimpleEnemyStateFactory(SimpleEnemy currentContext)
     {
         _context = currentContext;
         _states = new Dictionary<EnemyStates, EnemyBaseState>();
 
-        _states.Add(EnemyStates.Idle, new EnemyIdleState(_context, this));
-        _states.Add(EnemyStates.Patrol, new EnemyPatrolState(_context, this));
-        _states.Add(EnemyStates.Chase, new EnemyChaseState(_context, this));
-        _states.Add(EnemyStates.Attack, new EnemyAttackState(_context, this));
-        _states.Add(EnemyStates.Stun, new EnemyStunState(_context, this));
-        _states.Add(EnemyStates.Grounded, new EnemyGroundedState(_context, this));
-        _states.Add(EnemyStates.Falling, new EnemyFallingState(_context, this));
-        _states.Add(EnemyStates.Jumping, new EnemyJumpingState(_context, this));
+        _states.Add(EnemyStates.Patrol, new SimpleEnemyPatrolState(_context, this));
+        _states.Add(EnemyStates.Chase, new SimpleEnemyChaseState(_context, this));
+        _states.Add(EnemyStates.Attack, new SimpleEnemyAttackState(_context, this));
+        _states.Add(EnemyStates.Stun, new SimpleEnemyStunState(_context, this));
+        _states.Add(EnemyStates.Grounded, new SimpleEnemyGroundedState(_context, this));
+        _states.Add(EnemyStates.Falling, new SimpleEnemyFallingState(_context, this));
+        _states.Add(EnemyStates.Jumping, new SimpleEnemyJumpingState(_context, this));
     }
 
     //States
-    public EnemyBaseState Idle()
-    {
-        return _states[EnemyStates.Idle];
-    }
     public EnemyBaseState Stun()
     {
         return _states[EnemyStates.Stun];

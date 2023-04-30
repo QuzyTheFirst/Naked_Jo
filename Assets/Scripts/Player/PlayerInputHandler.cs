@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputHandler : PlayerComponentGetter
+public class PlayerInputHandler : PlayerComponentsGetter
 {
     protected event EventHandler<float> MovementPerformed;
     protected event EventHandler MovementCanceled;

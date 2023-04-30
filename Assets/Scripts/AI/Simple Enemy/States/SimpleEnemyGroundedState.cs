@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyGroundedState : EnemyBaseState
+public class SimpleEnemyGroundedState : EnemyBaseState
 {
-    public EnemyGroundedState(SimpleEnemy context, EnemyStateFactory factory) : base(context, factory)
+    public SimpleEnemyGroundedState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory)
     {
         IsRootState = true;
     }
