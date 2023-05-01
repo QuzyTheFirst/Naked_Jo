@@ -31,7 +31,7 @@ public interface IWeapon
     public int GetCurrentAmmo();
     public void ResetAmmo();
 
-    public void Init(PlayerController sender, Transform parent);
+    public void Init(Unit sender, Transform parent);
 
     public void SetParent(Transform parent);
 

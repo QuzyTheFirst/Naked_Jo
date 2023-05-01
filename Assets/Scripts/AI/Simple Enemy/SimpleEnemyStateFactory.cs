@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyStateFactory : MonoBehaviour
+public class SimpleEnemyStateFactory
 {
     enum EnemyStates
     {
@@ -16,12 +16,12 @@ public class SimpleEnemyStateFactory : MonoBehaviour
     }
 
     private SimpleEnemy _context;
-    private Dictionary<EnemyStates, EnemyBaseState> _states;
+    private Dictionary<EnemyStates, SimpleEnemyBaseState> _states;
 
     public SimpleEnemyStateFactory(SimpleEnemy currentContext)
     {
         _context = currentContext;
-        _states = new Dictionary<EnemyStates, EnemyBaseState>();
+        _states = new Dictionary<EnemyStates, SimpleEnemyBaseState>();
 
         _states.Add(EnemyStates.Patrol, new SimpleEnemyPatrolState(_context, this));
         _states.Add(EnemyStates.Chase, new SimpleEnemyChaseState(_context, this));
@@ -33,34 +33,34 @@ public class SimpleEnemyStateFactory : MonoBehaviour
     }
 
     //States
-    public EnemyBaseState Stun()
+    public SimpleEnemyBaseState Stun()
     {
         return _states[EnemyStates.Stun];
     }
-    public EnemyBaseState Patrol()
+    public SimpleEnemyBaseState Patrol()
     {
         return _states[EnemyStates.Patrol];
     }
-    public EnemyBaseState Chase()
+    public SimpleEnemyBaseState Chase()
     {
         return _states[EnemyStates.Chase];
     }
-    public EnemyBaseState Attack()
+    public SimpleEnemyBaseState Attack()
     {
         return _states[EnemyStates.Attack];
     }
 
     //Root States
-    public EnemyBaseState Grounded()
+    public SimpleEnemyBaseState Grounded()
     {
         return _states[EnemyStates.Grounded];
     }
-    public EnemyBaseState Falling()
+    public SimpleEnemyBaseState Falling()
     {
         return _states[EnemyStates.Falling];
     }
 
-    public EnemyBaseState Jumping()
+    public SimpleEnemyBaseState Jumping()
     {
         return _states[EnemyStates.Jumping];
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyAttackState : EnemyBaseState
+public class SimpleEnemyAttackState : SimpleEnemyBaseState
 {
     private float _timer = 0;
 
@@ -50,7 +50,7 @@ public class SimpleEnemyAttackState : EnemyBaseState
         if (!_isAttacking && context.TargetUnit != null)
         {
             Vector2 dir = context.TargetUnitTf.position - context.transform.position;
-            context.Flip.TryToFlip(Mathf.Sign(dir.x));
+            context.MyFlip.TryToFlip(Mathf.Sign(dir.x));
         }
 
         context.TimerBeforeAction -= Time.fixedDeltaTime;
@@ -60,16 +60,16 @@ public class SimpleEnemyAttackState : EnemyBaseState
         if (Time.time > context.TimeToNextShoot && context.TargetUnit != null)
         {
             // Here is my text bitch
-            _isAttacking = context.WeaponController.AIShoot(context.TargetUnit);
+            _isAttacking = context.MyWeaponController.AIShoot(context.TargetUnit);
 
             if (_isAttacking)
             {
-                _attackTime = context.WeaponController.FullAttackTime;
+                _attackTime = context.MyWeaponController.FullAttackTime;
                 _attackPos = context.TargetUnitTf.position;
                 _attackTf = context.TargetUnitTf;
             }
 
-            context.WeaponController.ResetAmmo();
+            context.MyWeaponController.ResetAmmo();
 
             context.TimeToNextShoot = Time.time + context.ShootEvery;
         }
@@ -113,9 +113,9 @@ public class SimpleEnemyAttackState : EnemyBaseState
         }
 
         if (_aimAtPlayer && !_isAttacking)
-            context.WeaponController.TargetPos = context.TargetUnitTf.position;
+            context.MyWeaponController.TargetPos = context.TargetUnitTf.position;
         else
-            context.WeaponController.TargetPos = _attackPos;
+            context.MyWeaponController.TargetPos = _attackPos;
     }
 
     public override void OnExit(SimpleEnemy context)

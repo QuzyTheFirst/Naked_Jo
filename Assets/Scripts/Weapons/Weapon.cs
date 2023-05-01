@@ -28,11 +28,11 @@ public class Weapon : MonoBehaviour, IWeapon
 
     private SpriteRenderer _spriteRenderer;
 
-    private PlayerController _unitController;
+    private Unit _unit;
 
     protected Transform MainTf { get { return _mainTf; } }
     protected Rigidbody2D Rig { get { return _rig; } }
-    protected PlayerController UnitController { get { return _unitController; } }
+    protected Unit UnitController { get { return _unit; } }
     protected LayerMask AttackMask { get { return _attackMask; } }
 
     protected void Awake()
@@ -79,7 +79,7 @@ public class Weapon : MonoBehaviour, IWeapon
         Unparent();
         StopAllCoroutines();
 
-        _unitController = null;
+        _unit = null;
 
         _rig.bodyType = RigidbodyType2D.Dynamic;
         _rig.simulated = true;
@@ -120,7 +120,7 @@ public class Weapon : MonoBehaviour, IWeapon
         Collider2D[] enemyHitsOnTargetPos = Physics2D.OverlapCircleAll(theTargetPos, 1f, LayerMask.GetMask("Enemy"));
         foreach(Collider2D col in enemyHitsOnTargetPos)
         {
-            if(col.gameObject.layer == enemy && col.gameObject != _unitController.gameObject)
+            if(col.gameObject.layer == enemy && col.gameObject != _unit.gameObject)
             {
                 theTargetPos = col.transform.position;
                 value = true;
@@ -132,14 +132,14 @@ public class Weapon : MonoBehaviour, IWeapon
         float distanceFromPlayer = 1.25f;
         //Vector2 dir = (theTargetPos - (Vector2)_mainTf.position).normalized;
 
-        Vector2 dir = (theTargetPos - (Vector2)_unitController.transform.position).normalized;
+        Vector2 dir = (theTargetPos - (Vector2)_unit.transform.position).normalized;
 
-        RaycastHit2D hit = Physics2D.Raycast(_unitController.transform.position, dir, distanceFromPlayer, ground + platform);
+        RaycastHit2D hit = Physics2D.Raycast(_unit.transform.position, dir, distanceFromPlayer, ground + platform);
         if (hit.transform != null)
             distanceFromPlayer = 0f;
 
         //Vector2 spawnPos = (Vector2)_mainTf.position + (dir * distanceFromPlayer);
-        Vector2 spawnPos = (Vector2)_unitController.transform.position + (dir * distanceFromPlayer);
+        Vector2 spawnPos = (Vector2)_unit.transform.position + (dir * distanceFromPlayer);
         float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         _mainTf.position = spawnPos;
@@ -151,7 +151,7 @@ public class Weapon : MonoBehaviour, IWeapon
         _rig.velocity = dir * speed;
         _rig.angularVelocity = 1440f;
 
-        _unitController = null;
+        _unit = null;
     }
 
     private void _weaponWrapper_OnCollisionTouch(object sender, Collision2D collision)
@@ -176,12 +176,12 @@ public class Weapon : MonoBehaviour, IWeapon
             rig.velocity = dirToCollision * 3f;
         }
 
-        SimpleEnemy enemy = collision.transform.GetComponent<SimpleEnemy>();
-        if (enemy != null)
+        Unit unit = collision.transform.GetComponent<Unit>();
+        if (unit != null && !unit.IsPlayer)
         {
-            enemy.Stun(2f);
+            unit.Enemy.Stun(2f);
 
-            enemy.WeaponController.DropWeapon(new Vector2(sign, 0f));
+            unit.MyWeaponController.DropWeapon(new Vector2(sign, 0f));
 
             SoundManager.Instance.Play("HitInFlight");
         }
@@ -221,9 +221,9 @@ public class Weapon : MonoBehaviour, IWeapon
 
     public virtual void ResetAmmo() { }
 
-    public void Init(PlayerController unitController, Transform parent)
+    public void Init(Unit unit, Transform parent)
     {
-        _unitController = unitController;
+        _unit = unit;
 
         _rig.bodyType = RigidbodyType2D.Kinematic;
         _rig.simulated = false;

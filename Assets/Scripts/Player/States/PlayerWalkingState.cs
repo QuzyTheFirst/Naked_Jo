@@ -25,7 +25,7 @@ public class PlayerWalkingState : PlayerBaseState
 
         float accelRate = targetSpeed == 0 ? player.Deceleration : player.Acceleration;
 
-        player.Velocity = new Vector2(player.Velocity.x + (Time.fixedDeltaTime * speedDif * accelRate) / player.RigidBody.mass, player.Velocity.y);
+        player.Velocity = new Vector2(player.Velocity.x + (Time.fixedDeltaTime * speedDif * accelRate) / player.MyRigidbody.mass, player.Velocity.y);
 
         CheckSwitchStates(player);
     }

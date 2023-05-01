@@ -269,6 +269,105 @@ public class UnitsHandler : PlayerInputHandler
         }
     }
 
+    private void UpdateWeaponTargetPos()
+    {
+        if (_currentUnit == _playerUnit)
+            return;
+
+        _currentUnit.MyWeaponController.TargetPos = _mousePosInWorld;
+    }
+
+    private void CheckForNextLevelLoaderSpawn()
+    {
+        if (_units.Count == 1 && _nextLevelLoader != null)
+        {
+            _nextLevelLoader.SetActive(true);
+        }
+    }
+
+    private void SetUnit(Unit newUnit)
+    {
+        PlayerUnit player = _currentUnit.Player;
+        player.MoveCanceled();
+        player.JumpCanceled();
+
+        if (!_currentUnit.IsPlayer)
+        {
+            CancelAutomaticWeaponAttack();
+            _currentUnit.MyWeaponController.OnWeaponChange -= WeaponController_OnWeaponChange;
+        }
+
+        if (!newUnit.IsPlayer)
+            newUnit.MyWeaponController.OnWeaponChange += WeaponController_OnWeaponChange;
+
+        _currentUnit = newUnit;
+
+        _currentUnit.Player.MovePerformed(_movementDirection);
+
+        GameUIController.Instance.ToggleRolling(_currentUnit.Player.CanRoll);
+
+        SetUIAmmoAmount(newUnit);
+
+        SetEnemiesTargetUnit();
+    }
+
+    private void SetEnemiesTargetUnit()
+    {
+        if (_enemiesCantSeeYou)
+            return;
+
+        for (int i = 0; i < _units.Count; i++)
+        {
+            if (_units[i] == _playerUnit)
+                continue;
+
+            _units[i].Enemy.SetTargetUnit(_currentUnit);
+        }
+    }
+
+    private void DropWeapon()
+    {
+        if (_currentUnit == _playerUnit)
+            return;
+
+        _currentUnit.MyWeaponController.DropWeapon();
+    }
+
+    #region Events
+    private void Unit_OnCollisionEnter(object sender, Collision2D collision)
+    {
+        Unit unit = (Unit)sender;
+
+        if(unit == _currentUnit)
+        {
+            FindAndAddKey(collision);
+
+            FindAndOpenKeyDoor(collision);
+        }
+    }
+    private void FindAndAddKey(Collision2D collision)
+    {
+        Key key = collision.transform.GetComponent<Key>();
+        if (key != null)
+        {
+            _keyHolder.AddKey(key.GetKeyType());
+            GameUIController.Instance.SetKeys(_keyHolder.KeyList);
+            Destroy(key.gameObject);
+        }
+    }
+    private void FindAndOpenKeyDoor(Collision2D collision)
+    {
+        DoorWithKey keyDoor = collision.transform.GetComponent<DoorWithKey>();
+        if (keyDoor != null)
+        {
+            if (_keyHolder.ContainsKey(keyDoor.KeyType))
+            {
+                _keyHolder.RemoveKey(keyDoor.KeyType);
+                GameUIController.Instance.SetKeys(_keyHolder.KeyList);
+                keyDoor.OpenDoor(1);
+            }
+        }
+    }
 
     private void UnitsHandler_ExplodePerformed(object sender, EventArgs e)
     {
@@ -337,107 +436,6 @@ public class UnitsHandler : PlayerInputHandler
         _isExplosionGoing = false;
     }
 
-    private void UpdateWeaponTargetPos()
-    {
-        if (_currentUnit == _playerUnit)
-            return;
-
-        _currentUnit.WeaponController.TargetPos = _mousePosInWorld;
-    }
-
-    private void CheckForNextLevelLoaderSpawn()
-    {
-        if (_units.Count == 1 && _nextLevelLoader != null)
-        {
-            _nextLevelLoader.SetActive(true);
-        }
-    }
-
-    private void SetUnit(Unit newUnit)
-    {
-        PlayerUnit player = _currentUnit.Player;
-        player.MoveCanceled();
-        player.JumpCanceled();
-
-        if (!_currentUnit.IsPlayer)
-        {
-            CancelAutomaticWeaponAttack();
-            _currentUnit.WeaponController.OnWeaponChange -= WeaponController_OnWeaponChange;
-        }
-
-        if (!newUnit.IsPlayer)
-            newUnit.WeaponController.OnWeaponChange += WeaponController_OnWeaponChange;
-
-        _currentUnit = newUnit;
-
-        _currentUnit.Player.MovePerformed(_movementDirection);
-
-        GameUIController.Instance.ToggleRolling(_currentUnit.Player.CanRoll);
-
-        SetEnemiesTargetUnit();
-
-        //Debug.Log("Unit setted");
-    }
-
-    private void SetEnemiesTargetUnit()
-    {
-        if (_enemiesCantSeeYou)
-            return;
-
-        for (int i = 0; i < _units.Count; i++)
-        {
-            if (_units[i] == _playerUnit)
-                continue;
-
-            _units[i].Enemy.SetTargetUnit(_currentUnit);
-        }
-    }
-
-    private void DropWeapon()
-    {
-        if (_currentUnit == _playerUnit)
-            return;
-
-        _currentUnit.WeaponController.DropWeapon();
-    }
-
-    #region Events
-    private void Unit_OnCollisionEnter(object sender, Collision2D collision)
-    {
-        Unit unit = (Unit)sender;
-
-        if(unit == _currentUnit)
-        {
-            FindAndAddKey(collision);
-
-            FindAndOpenKeyDoor(collision);
-        }
-    }
-    private void FindAndAddKey(Collision2D collision)
-    {
-        Key key = collision.transform.GetComponent<Key>();
-        if (key != null)
-        {
-            _keyHolder.AddKey(key.GetKeyType());
-            GameUIController.Instance.SetKeys(_keyHolder.KeyList);
-            Destroy(key.gameObject);
-        }
-    }
-    private void FindAndOpenKeyDoor(Collision2D collision)
-    {
-        DoorWithKey keyDoor = collision.transform.GetComponent<DoorWithKey>();
-        if (keyDoor != null)
-        {
-            if (_keyHolder.ContainsKey(keyDoor.KeyType))
-            {
-                _keyHolder.RemoveKey(keyDoor.KeyType);
-                GameUIController.Instance.SetKeys(_keyHolder.KeyList);
-                keyDoor.OpenDoor(1);
-            }
-        }
-    }
-
-
     #region OnDeath
     private void OnUnitDeath(object sender, EventArgs e)
     {
@@ -470,12 +468,13 @@ public class UnitsHandler : PlayerInputHandler
 
     private void KillEnemy(Unit unit)
     {
-        unit.WeaponController.DropWeapon();
+        Debug.Log(unit.name);
+        unit.MyWeaponController.DropWeapon();
 
         if (_currentUnit != unit)
         {
-            if(unit.KeyHolder != null)
-                unit.KeyHolder.DropAllKeys();
+            if(unit.MyKeyHolder != null)
+                unit.MyKeyHolder.DropAllKeys();
 
             _units.Remove(unit);
 
@@ -495,8 +494,8 @@ public class UnitsHandler : PlayerInputHandler
 
         _playerUnit.gameObject.SetActive(true);
 
-        if(unit.KeyHolder != null)
-            unit.KeyHolder.DropAllKeys();
+        if(unit.MyKeyHolder != null)
+            unit.MyKeyHolder.DropAllKeys();
 
         _units.Remove(unit);
 
@@ -603,10 +602,7 @@ public class UnitsHandler : PlayerInputHandler
 
                 unit.Enemy.Possess(_playerAttackMask);
 
-                if(unit.WeaponController.GetWeaponType() == Weapon.WeaponType.Range)
-                {
-                    GameUIController.Instance.SetAmmoAmount(unit.WeaponController.GetCurrentAmmo());
-                }
+                SetUIAmmoAmount(unit);
 
                 TakeAllKeys(unit);
                 SetUnit(unit);
@@ -614,6 +610,19 @@ public class UnitsHandler : PlayerInputHandler
             }
         }
         return false;
+    }
+
+    private void SetUIAmmoAmount(Unit unit)
+    {
+        if (unit.MyWeaponController != null)
+        {
+            if (unit.MyWeaponController.GetWeaponType() == Weapon.WeaponType.Range)
+                GameUIController.Instance.SetAmmoAmount(unit.MyWeaponController.GetCurrentAmmo());
+            else
+                GameUIController.Instance.DisableAmmoAmount();
+        }
+        else
+            GameUIController.Instance.DisableAmmoAmount();
     }
 
     private bool UnpossessionRay(Vector2 mousePosInWorld)
@@ -668,7 +677,7 @@ public class UnitsHandler : PlayerInputHandler
 
         if (weapon.GetWeaponType() == Weapon.WeaponType.Range)
         {
-            GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
+            GameUIController.Instance.SetAmmoAmount(_currentUnit.MyWeaponController.GetCurrentAmmo());
         }
         else
         {
@@ -679,16 +688,16 @@ public class UnitsHandler : PlayerInputHandler
 
     private void TakeAllKeys(Unit unit)
     {
-        if (unit.KeyHolder == null)
+        if (unit.MyKeyHolder == null)
             return;
 
-        foreach(Key.KeyType keyType in unit.KeyHolder.KeyList)
+        foreach(Key.KeyType keyType in unit.MyKeyHolder.KeyList)
         {
             _keyHolder.AddKey(keyType);
         }
 
         GameUIController.Instance.SetKeys(_keyHolder.KeyList);
-        unit.KeyHolder.ClearKeyList();
+        unit.MyKeyHolder.ClearKeyList();
     }
 
     public void UnitsHandler_MovementPerformed(object sender, float value)
@@ -714,13 +723,13 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_AttackPerformed(object sender, EventArgs e)
     {
-        if (_currentUnit.WeaponController == null)
+        if (_currentUnit.MyWeaponController == null)
             return;
 
         //Debug.Log(_currentUnit.WeaponController.IsAutomatic());
-        if (_currentUnit.WeaponController.GetWeaponType() == Weapon.WeaponType.Range)
+        if (_currentUnit.MyWeaponController.GetWeaponType() == Weapon.WeaponType.Range)
         {
-            if (_currentUnit.WeaponController.GetRangeWeaponParams().IsAutomatic)
+            if (_currentUnit.MyWeaponController.GetRangeWeaponParams().IsAutomatic)
             {
                 _keepAttackingCoroutine = StartCoroutine(StartAutomaticAttack());
                 return;
@@ -729,13 +738,13 @@ public class UnitsHandler : PlayerInputHandler
 
         bool attacked;
 
-        attacked = _currentUnit.WeaponController.Shoot(_cursorController.transform);
+        attacked = _currentUnit.MyWeaponController.Shoot(_cursorController.transform);
 
         if (attacked)
         {
-            if(_currentUnit.WeaponController.GetWeaponType() == Weapon.WeaponType.Range)
+            if(_currentUnit.MyWeaponController.GetWeaponType() == Weapon.WeaponType.Range)
             {
-                GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
+                GameUIController.Instance.SetAmmoAmount(_currentUnit.MyWeaponController.GetCurrentAmmo());
             }
         }
     }
@@ -751,14 +760,14 @@ public class UnitsHandler : PlayerInputHandler
 
         while (true)
         {
-            attacked = _currentUnit.WeaponController.Shoot(_cursorController.transform);
+            attacked = _currentUnit.MyWeaponController.Shoot(_cursorController.transform);
 
             if (attacked)
             {
-                GameUIController.Instance.SetAmmoAmount(_currentUnit.WeaponController.GetCurrentAmmo());
+                GameUIController.Instance.SetAmmoAmount(_currentUnit.MyWeaponController.GetCurrentAmmo());
             }
 
-            yield return new WaitForSeconds(_currentUnit.WeaponController.GetWeaponParams().PlayerAttackRate);
+            yield return new WaitForSeconds(_currentUnit.MyWeaponController.GetWeaponParams().PlayerAttackRate);
         }
     }
 
@@ -856,8 +865,8 @@ public class UnitsHandler : PlayerInputHandler
         if (_isSlowMotionKeyPressed)
             return;
 
-        if(_currentUnit.WeaponController != null)
-            _currentUnit.WeaponController.TryPickUpWeapon();
+        if(_currentUnit.MyWeaponController != null)
+            _currentUnit.MyWeaponController.TryPickUpWeapon();
     }
     public void UnitsHandler_CrouchPerformed(object sender, EventArgs e)
     {
@@ -868,8 +877,8 @@ public class UnitsHandler : PlayerInputHandler
             if (plEf != null)
             {
                 BoxCollider2D collider = hit.transform.GetComponent<BoxCollider2D>();
-                Physics2D.IgnoreCollision(collider, _currentUnit.Col, true);
-                StartCoroutine(EnableCollision(collider, _currentUnit.Col, .5f));
+                Physics2D.IgnoreCollision(collider, _currentUnit.MyCircleCollider, true);
+                StartCoroutine(EnableCollision(collider, _currentUnit.MyCircleCollider, .5f));
                 //Debug.Log("Going Down Through");
                 return;
             }

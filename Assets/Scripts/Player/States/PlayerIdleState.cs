@@ -9,8 +9,8 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void OnEnter(PlayerController player)
     {
-        player.RigidBody.sharedMaterial = player.FullFrictionMat;
-        player.Col.sharedMaterial = player.FullFrictionMat;
+        player.MyRigidbody.sharedMaterial = player.FullFrictionMat;
+        player.MyCircleCollider.sharedMaterial = player.FullFrictionMat;
 
         InitializeSubState(player);
     }
@@ -27,7 +27,7 @@ public class PlayerIdleState : PlayerBaseState
 
         float accelRate = targetSpeed == 0 ? player.Deceleration : player.Acceleration;
 
-        player.Velocity = new Vector2(player.Velocity.x + (Time.fixedDeltaTime * speedDif * accelRate) / player.RigidBody.mass, player.Velocity.y);
+        player.Velocity = new Vector2(player.Velocity.x + (Time.fixedDeltaTime * speedDif * accelRate) / player.MyRigidbody.mass, player.Velocity.y);
 
         CheckSwitchStates(player);
     }
@@ -52,8 +52,8 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void OnExit(PlayerController player)
     {
-        player.RigidBody.sharedMaterial = player.FrictionLessMat;
-        player.Col.sharedMaterial = player.FrictionLessMat;
+        player.MyRigidbody.sharedMaterial = player.FrictionLessMat;
+        player.MyCircleCollider.sharedMaterial = player.FrictionLessMat;
         //Debug.Log("Exit Idle State");
     }
 }

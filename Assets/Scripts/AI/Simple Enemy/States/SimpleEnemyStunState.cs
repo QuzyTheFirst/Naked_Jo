@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyStunState : EnemyBaseState
+public class SimpleEnemyStunState : SimpleEnemyBaseState
 {
     public SimpleEnemyStunState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
 
     public override void OnEnter(SimpleEnemy context)
     {
         context.StunAnimGO.SetActive(true);
-        context.Movement = SimpleEnemy.MovementState.Stop;
+        context.Movement = AIBase.MovementState.Stop;
         SoundManager.Instance.Play("Confused");
     }
 
@@ -33,7 +33,7 @@ public class SimpleEnemyStunState : EnemyBaseState
 
     public override void OnExit(SimpleEnemy context)
     {
-        context.gameObject.layer = 7;
+        context.MyUnit.gameObject.layer = 7;
         context.StunAnimGO.SetActive(false);
         //Debug.Log("Exit Stun");
     }

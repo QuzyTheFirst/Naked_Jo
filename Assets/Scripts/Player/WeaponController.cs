@@ -37,7 +37,6 @@ public class WeaponController : ComponentsGetter
         } 
     }
 
-
     private void Awake()
     {
         base.GetAllComponents(false);
@@ -130,7 +129,7 @@ public class WeaponController : ComponentsGetter
         {
             _unremovableWeapon.SetActive(true);
             _currentWeapon = _unremovableIWeapon;
-            _currentWeapon.Init(_playerController, transform);
+            _currentWeapon.Init(MyUnit, transform);
         }
         else
         {
@@ -173,16 +172,25 @@ public class WeaponController : ComponentsGetter
 
     public Weapon.WeaponType GetWeaponType()
     {
+        if (_currentWeapon == null)
+            return Weapon.WeaponType.Mellee;
+
         return _currentWeapon.GetWeaponType();
     }
 
     public int GetCurrentAmmo()
     {
+        if (_currentWeapon == null)
+            return 0;
+
         return _currentWeapon.GetCurrentAmmo();
     }
 
     public WeaponParams GetWeaponParams()
     {
+        if (_currentWeapon == null)
+            return null;
+
         return _currentWeapon.GetWeaponParams();
     }
 
@@ -229,7 +237,7 @@ public class WeaponController : ComponentsGetter
 
         weapon.gameObject.SetActive(true);
         _currentWeapon = iWeapon;
-        _currentWeapon.Init(_playerController, transform);
+        _currentWeapon.Init(MyUnit, transform);
 
         OnWeaponChange?.Invoke(this, _currentWeapon);
     }
@@ -249,7 +257,7 @@ public class WeaponController : ComponentsGetter
             _unremovableWeapon.SetActive(false);
 
         _currentWeapon = iWeapon;
-        _currentWeapon.Init(_playerController, transform);
+        _currentWeapon.Init(MyUnit, transform);
 
         OnWeaponChange?.Invoke(this, _currentWeapon);
     }

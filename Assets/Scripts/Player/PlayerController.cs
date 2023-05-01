@@ -68,9 +68,6 @@ public class PlayerController : ComponentsGetter
     // Main Components
     public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
     public PlayerStateFactory States { get { return _states; } }
-    public Rigidbody2D RigidBody { get { return _rig; } }
-    public SpriteRenderer SpriteRenderer { get { return _spriteRenderer; } }
-    public CircleCollider2D Col { get { return _col; } }
 
     // Walking
     public float WalkDirection { get { return _direction.x; } set { _direction.x = value; } }
@@ -98,15 +95,12 @@ public class PlayerController : ComponentsGetter
     public bool IsGrounded {
         get 
         {
-            return _groundChecker.IsGrounded; 
+            return MyGroundChecker.IsGrounded; 
         }
     }
 
     public int MaxAirJumps { get { return _maxAirJumps; } }
     public int JumpPhase { get { return _jumpPhase; } set { _jumpPhase = value; } }
-
-    // Weapon
-    public WeaponController WeaponController { get { return _weaponController; } }
 
     // Roll
     public bool DoRoll { get { return _doRoll; } set { _doRoll = value; } }
@@ -128,7 +122,7 @@ public class PlayerController : ComponentsGetter
 
     private void FixedUpdate()
     {
-        if (_groundChecker.IsGrounded)
+        if (IsGrounded)
         {
             _groundRemember = _groundRememberTime;
             _stepsSinceLastGrounded = 0;
@@ -140,15 +134,15 @@ public class PlayerController : ComponentsGetter
             _groundRemember -= Time.fixedDeltaTime;
         }
 
-        _velocity = _rig.velocity;
+        _velocity = MyRigidbody.velocity;
 
         _currentState.UpdateStates(this);
 
-        _rig.velocity = _velocity;
+        MyRigidbody.velocity = _velocity;
 
         _jumpPressedRemember -= Time.fixedDeltaTime;
 
-        Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()} | Direction: {_direction.x}");
+        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()} | Direction: {_direction.x}");
     }
 
     // Inputs Yes
@@ -156,7 +150,7 @@ public class PlayerController : ComponentsGetter
     {
         _direction.x = value;
 
-        _flip.TryToFlip(value);
+        MyFlip.TryToFlip(value);
     }
 
     public void MoveCanceled()

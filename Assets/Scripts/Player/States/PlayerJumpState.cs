@@ -41,17 +41,17 @@ public class PlayerJumpState : PlayerBaseState
             _isJumping = false;
         }
 
-        if(player.RigidBody.velocity.y > 0)
+        if(player.MyRigidbody.velocity.y > 0)
         {
-            player.RigidBody.gravityScale = player.UpwardMovementMultiplier;
+            player.MyRigidbody.gravityScale = player.UpwardMovementMultiplier;
         }
-        else if (player.RigidBody.velocity.y < 0)
+        else if (player.MyRigidbody.velocity.y < 0)
         {
-            player.RigidBody.gravityScale = player.DownwardMovementMultiplier;
+            player.MyRigidbody.gravityScale = player.DownwardMovementMultiplier;
         }
-        else if(player.RigidBody.velocity.y == 0)
+        else if(player.MyRigidbody.velocity.y == 0)
         {
-            player.RigidBody.gravityScale = player.DefaultGravityScale;
+            player.MyRigidbody.gravityScale = player.DefaultGravityScale;
         }
 
         CheckSwitchStates(player);
@@ -108,7 +108,7 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void OnExit(PlayerController player)
     {
-        player.RigidBody.gravityScale = player.DefaultGravityScale;
+        player.MyRigidbody.gravityScale = player.DefaultGravityScale;
     }
 }
 

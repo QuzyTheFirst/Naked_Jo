@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyGroundedState : EnemyBaseState
+public class SimpleEnemyGroundedState : SimpleEnemyBaseState
 {
     public SimpleEnemyGroundedState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory)
     {
@@ -16,7 +16,7 @@ public class SimpleEnemyGroundedState : EnemyBaseState
 
     public override void OnUpdate(SimpleEnemy context)
     {
-        float currentSpeed = context.RigidBody.velocity.x;
+        float currentSpeed = context.MyRigidbody.velocity.x;
 
         float targetSpeed = context.MovementDirection * context.MovementSpeed;
         targetSpeed = Mathf.Lerp(currentSpeed, targetSpeed, context.LerpAmount);
@@ -25,7 +25,7 @@ public class SimpleEnemyGroundedState : EnemyBaseState
 
         float accelRate = targetSpeed == 0 ? context.Deceleration : context.Acceleration;
 
-        context.RigidBody.velocity = new Vector2(context.RigidBody.velocity.x + (Time.fixedDeltaTime * speedDif * accelRate) / context.RigidBody.mass, context.RigidBody.velocity.y);
+        context.MyRigidbody.velocity = new Vector2(context.MyRigidbody.velocity.x + (Time.fixedDeltaTime * speedDif * accelRate) / context.MyRigidbody.mass, context.MyRigidbody.velocity.y);
 
 
         CheckSwitchStates(context);

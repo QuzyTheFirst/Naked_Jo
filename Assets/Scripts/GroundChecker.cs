@@ -24,6 +24,6 @@ public class GroundChecker : ComponentsGetter
 
     private bool GroundCheck()
     {
-        return Physics2D.CircleCast(transform.position, _col.radius, Vector2.down, _checkDistance, _groundMask);
+        return Physics2D.CircleCast(transform.position, MyCircleCollider.radius, Vector2.down, _checkDistance, _groundMask);
     }
 }

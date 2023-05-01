@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class EnemyUnit
 {
-    private SimpleEnemy _enemy;
+    private AIBase _enemy;
 
-    public EnemyUnit(SimpleEnemy enemy)
+    public EnemyUnit(AIBase enemy)
     {
         _enemy = enemy;
     }
@@ -39,6 +39,6 @@ public class EnemyUnit
 
     public SpriteRenderer GetGraphics()
     {
-        return _enemy.SpriteRenderer;
+        return _enemy.MySpriteRenderer;
     }
 }

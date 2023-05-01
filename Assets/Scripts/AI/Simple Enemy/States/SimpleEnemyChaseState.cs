@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyChaseState : EnemyBaseState
+public class SimpleEnemyChaseState : SimpleEnemyBaseState
 {
     public SimpleEnemyChaseState (SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
 
     public override void OnEnter(SimpleEnemy context)
     {
-        context.Flip.TryToFlip(context.MovementDirection);
+        context.MyFlip.TryToFlip(context.MovementDirection);
 
         context.MovementSpeed = context.RunSpeed;
 
@@ -74,7 +74,7 @@ public class SimpleEnemyChaseState : EnemyBaseState
             return;
         }
 
-        context.WeaponController.TargetPos = context.LastPointWhereTargetWereSeen;
+        context.MyWeaponController.TargetPos = context.LastPointWhereTargetWereSeen;
     }
 
     private void KeepGoingOrStop(SimpleEnemy context)
@@ -82,7 +82,7 @@ public class SimpleEnemyChaseState : EnemyBaseState
         Vector2 dir = context.LastPointWhereTargetWereSeen - (Vector2)context.transform.position;
         float movementDir = Mathf.Sign(dir.x);
 
-        context.Flip.TryToFlip(movementDir);
+        context.MyFlip.TryToFlip(movementDir);
 
         bool floorCheck = FloorCheck(context, movementDir);
 
@@ -141,7 +141,7 @@ public class SimpleEnemyChaseState : EnemyBaseState
 
         if (floorHit.collider == false && lowerGroundHit.collider == false)
         {
-            context.RigidBody.velocity *= Vector2.up;
+            context.MyRigidbody.velocity *= Vector2.up;
             context.Movement = SimpleEnemy.MovementState.Stop;
             return true;
         }

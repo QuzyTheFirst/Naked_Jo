@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : ComponentsGetter
+public class AIBase : ComponentsGetter
 {
     public enum MovementState
     {
@@ -62,23 +62,16 @@ public class Enemy : ComponentsGetter
     [Header("Fall State")]
     private bool _fallenOnHisOwn;
 
-    // Enemy States
-    private EnemyBaseState _currentState;
-
     // Corutines
     private Coroutine _stopIgnoringCollisionAfterCoroutine;
     private Coroutine _setTargetUnitCoroutine;
 
     public LayerMask AttackMask { set { _attackMask = value; } }
 
-    public EnemyBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
     public float MovementDirection { get { return (int)_movement; } }
     public float AttackRadius { get { return _attackRadius; } }
     public MovementState Movement { get { return _movement; } set { _movement = value; } }
 
-    public SpriteRenderer SpriteRenderer { get { return _spriteRenderer; } }
-    public Rigidbody2D RigidBody { get { return _rig; } }
-    public Flip Flip { get { return _flip; } }
     public Transform TargetUnitTf { get { return _targetUnit.transform; } }
     public Unit TargetUnit { get { return _targetUnit; } }
 
@@ -96,7 +89,7 @@ public class Enemy : ComponentsGetter
     public float Deceleration { get { return _deceleration; } }
 
     public bool IsPossessed { get { return _isPossessed; } }
-    public bool IsGrounded { get { return _groundChecker.IsGrounded; } }
+    public bool IsGrounded { get { return MyGroundChecker.IsGrounded; } }
 
     public bool CanISeeMyTarget { get { return _canISeeMyTarget; } }
 
@@ -105,10 +98,6 @@ public class Enemy : ComponentsGetter
 
     //Found You
     public GameObject FoundYouGO { get { return _foundYouGO; } }
-
-    public PlayerController PlayerController { get { return _playerController; } }
-    public WeaponController WeaponController { get { return _weaponController; } }
-
     public Vector2 LastPointWhereTargetWereSeen { get { return _lastPointWhereTargetWereSeen; } set { _lastPointWhereTargetWereSeen = value; } }
 
     //Jump State
@@ -122,14 +111,14 @@ public class Enemy : ComponentsGetter
     {
         GetAllComponents(false);
 
-        _weaponController.OnWeaponChange += _weaponController_OnWeaponChange;
+        MyWeaponController.OnWeaponChange += _weaponController_OnWeaponChange;
 
-        _headTrigger.OnPlayerJumpedOnHead += _headTrigger_OnPlayerJumpedOnHead;
-        _headTrigger.OnPlayerJumpedOffHead += _headTrigger_OnPlayerJumpedOffHead;
+        MyHeadTrigger.OnPlayerJumpedOnHead += _headTrigger_OnPlayerJumpedOnHead;
+        MyHeadTrigger.OnPlayerJumpedOffHead += _headTrigger_OnPlayerJumpedOffHead;
 
         _foundYouGO.SetActive(false);
 
-        _playerController.enabled = false;
+        MyPlayerController.enabled = false;
 
         _isPossessed = false;
     }
@@ -155,11 +144,11 @@ public class Enemy : ComponentsGetter
 
     public virtual void Possess(LayerMask attackMask)
     {
-        _spriteRenderer.sprite = _possesedStateSprite;
+        MySpriteRenderer.sprite = _possesedStateSprite;
 
-        _col.gameObject.layer = 8;
+        MyCircleCollider.gameObject.layer = 8;
 
-        _playerController.enabled = true;
+        MyPlayerController.enabled = true;
 
         _stunAnimGO.SetActive(false);
 
@@ -171,22 +160,22 @@ public class Enemy : ComponentsGetter
 
     public virtual void UnPossess(LayerMask attackMask, Transform targetUnit)
     {
-        _spriteRenderer.sprite = _normalStateSprite;
+        MySpriteRenderer.sprite = _normalStateSprite;
 
-        _col.gameObject.layer = 13;
+        MyCircleCollider.gameObject.layer = 13;
 
-        _playerController.enabled = false;
+        MyPlayerController.enabled = false;
 
         _stunAnimGO.SetActive(true);
 
         _isPossessed = false;
 
         //Debug.Log(GroundCheck());
-        if (!_groundChecker.IsGrounded)
+        if (!IsGrounded)
         {
 
             Vector2 dir = (transform.position - targetUnit.position).normalized;
-            _rig.velocity += dir * _unpossessFlyPower;
+            MyRigidbody.velocity += dir * _unpossessFlyPower;
         }
     }
 
@@ -208,16 +197,16 @@ public class Enemy : ComponentsGetter
 
     protected void SearchForNewWeapon()
     {
-        if (_weaponController.IsWeaponTaken || _stunTime > 0f)
+        if (MyWeaponController.IsWeaponTaken || _stunTime > 0f)
             return;
 
-        IWeapon iWeapon = _weaponController.CheckForWeapon();
+        IWeapon iWeapon = MyWeaponController.CheckForWeapon();
         if (iWeapon != null)
         {
             if (iWeapon.IsFlying())
                 return;
 
-            _weaponController.TakeWeapon(iWeapon);
+            MyWeaponController.TakeWeapon(iWeapon);
         }
     }
 
@@ -278,12 +267,12 @@ public class Enemy : ComponentsGetter
         if (_stopIgnoringCollisionAfterCoroutine != null)
             StopCoroutine(_stopIgnoringCollisionAfterCoroutine);
 
-        Physics2D.IgnoreCollision(_col, collision, true);
+        Physics2D.IgnoreCollision(MyCircleCollider, collision, true);
     }
 
     private void _headTrigger_OnPlayerJumpedOffHead(object sender, Collider2D collision)
     {
-        _stopIgnoringCollisionAfterCoroutine = StartCoroutine(StopIgnoringCollisionAfter(_col, collision, .2f));
+        _stopIgnoringCollisionAfterCoroutine = StartCoroutine(StopIgnoringCollisionAfter(MyCircleCollider, collision, .2f));
     }
 
     private IEnumerator StopIgnoringCollisionAfter(Collider2D col1, Collider2D col2, float time)

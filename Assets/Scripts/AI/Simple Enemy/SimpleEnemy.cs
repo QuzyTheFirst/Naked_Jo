@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemy : Enemy
+public class SimpleEnemy : AIBase
 {
     [Header("Simple Enemy")]
     [Header("Chase State")]
@@ -11,6 +11,7 @@ public class SimpleEnemy : Enemy
     private float _chasePlayerAfterDissapearanceTimer;
 
     // Simple Enemy States
+    private SimpleEnemyBaseState _currentState;
     private SimpleEnemyStateFactory _states;
 
     // Shoot
@@ -18,7 +19,10 @@ public class SimpleEnemy : Enemy
 
     public float TimeToNextShoot { get { return _timeToNextShoot; } set { _timeToNextShoot = value; } }
  
-    public float ShootEvery { get { return WeaponController.GetWeaponParams().EnemyAttackRate; } }
+    public float ShootEvery { get { return MyWeaponController.GetWeaponParams().EnemyAttackRate; } }
+
+    //States
+    public SimpleEnemyBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
 
     //Chase State
     public float ChasePlayerAfterDissapearanceTime { get { return _chasePlayerAfterDissapearanceTime; } }
@@ -27,9 +31,9 @@ public class SimpleEnemy : Enemy
     private void Start()
     {
         _states = new SimpleEnemyStateFactory(this);
-        CurrentState = _states.Grounded();
+        _currentState = _states.Grounded();
 
-        CurrentState.OnEnter(this);
+        _currentState.OnEnter(this);
     }
 
     protected override void FixedUpdate()
@@ -50,7 +54,8 @@ public class SimpleEnemy : Enemy
 
         SearchForNewWeapon();
 
-        CurrentState.UpdateStates(this);
+        _currentState.UpdateStates(this);
+        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     } 
 
 
@@ -59,7 +64,7 @@ public class SimpleEnemy : Enemy
         base.Possess(attackMask);
 
         AttackMask = attackMask;
-        _weaponController.SetAttackMask(attackMask);
+        MyWeaponController.SetAttackMask(attackMask);
 
         _chasePlayerAfterDissapearanceTimer = 0f;
     }
@@ -69,14 +74,14 @@ public class SimpleEnemy : Enemy
         base.UnPossess(attackMask, targetUnit);
 
         AttackMask = attackMask;
-        _weaponController.SetAttackMask(attackMask);
+        MyWeaponController.SetAttackMask(attackMask);
     }
 
     public override void Stun(float time)
     {
         base.Stun(time);
 
-        CurrentState.UpdateStates(this);
+        _currentState.UpdateStates(this);
     }
 }
 

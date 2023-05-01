@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyPatrolState : EnemyBaseState
+public class SimpleEnemyPatrolState : SimpleEnemyBaseState
 {
     public SimpleEnemyPatrolState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
 
@@ -13,7 +13,7 @@ public class SimpleEnemyPatrolState : EnemyBaseState
 
         context.MovementSpeed = context.WalkSpeed;
 
-        context.Flip.TryToFlip(context.MovementDirection);
+        context.MyFlip.TryToFlip(context.MovementDirection);
 
         context.TimerBeforeAction = context.TimeBeforeAction;
     }
@@ -35,12 +35,12 @@ public class SimpleEnemyPatrolState : EnemyBaseState
         {
             if (context.Movement == SimpleEnemy.MovementState.Right)
             {
-                context.Flip.TryToFlip(-1);
+                context.MyFlip.TryToFlip(-1);
                 context.Movement = SimpleEnemy.MovementState.Left;
             }
             else
             {
-                context.Flip.TryToFlip(1);
+                context.MyFlip.TryToFlip(1);
                 context.Movement = SimpleEnemy.MovementState.Right;
             }
         }
@@ -49,12 +49,12 @@ public class SimpleEnemyPatrolState : EnemyBaseState
         {
             if (context.Movement == SimpleEnemy.MovementState.Right)
             {
-                context.Flip.TryToFlip(-1);
+                context.MyFlip.TryToFlip(-1);
                 context.Movement = SimpleEnemy.MovementState.Left;
             }
             else
             {
-                context.Flip.TryToFlip(1);
+                context.MyFlip.TryToFlip(1);
                 context.Movement = SimpleEnemy.MovementState.Right;
             }
         }
@@ -91,7 +91,7 @@ public class SimpleEnemyPatrolState : EnemyBaseState
 
     private void UpdateWeaponTargetPos(SimpleEnemy context)
     {
-        context.WeaponController.TargetPos = (Vector2)context.transform.position + Vector2.right * context.MovementDirection;
+        context.MyWeaponController.TargetPos = (Vector2)context.transform.position + Vector2.right * context.MovementDirection;
     }
 
     public override void OnExit(SimpleEnemy context)
