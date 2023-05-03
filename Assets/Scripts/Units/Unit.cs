@@ -25,7 +25,15 @@ public class Unit : ComponentsGetter, IDamagable
 
     public void Damage(float amount)
     {
-        OnDeath?.Invoke(this, EventArgs.Empty);
+        if (IsPlayer)
+        {
+            OnDeath?.Invoke(this, EventArgs.Empty);
+        }
+        else
+        {
+            if (MyEnemyController.Damage())
+                OnDeath?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

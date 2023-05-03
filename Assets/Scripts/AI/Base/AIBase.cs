@@ -173,7 +173,6 @@ public class AIBase : ComponentsGetter
         //Debug.Log(GroundCheck());
         if (!IsGrounded)
         {
-
             Vector2 dir = (transform.position - targetUnit.position).normalized;
             MyRigidbody.velocity += dir * _unpossessFlyPower;
         }
@@ -285,4 +284,8 @@ public class AIBase : ComponentsGetter
         Physics2D.IgnoreCollision(col1, col2, false);
     }
 
+    public virtual bool Damage()
+    {
+        return true;
+    }
 }

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyChaseState : SimpleEnemyBaseState
+public class SturdyChaseState : SturdyBaseState
 {
-    public SimpleEnemyChaseState (SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
+    public SturdyChaseState(Sturdy context, SturdyStateFactory factory) : base(context, factory) { }
 
-    public override void OnEnter(SimpleEnemy context)
+    public override void OnEnter(Sturdy context)
     {
         context.MyFlip.TryToFlip(context.MovementDirection);
 
@@ -15,7 +15,7 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         context.Movement = AIBase.MovementState.Stop;
     }
 
-    public override void OnUpdate(SimpleEnemy context)
+    public override void OnUpdate(Sturdy context)
     {
         if (context.StunTime > 0f || context.TargetUnit == null)
         {
@@ -35,7 +35,7 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         CheckSwitchStates(context);
     }
 
-    public override void CheckSwitchStates(SimpleEnemy context)
+    public override void CheckSwitchStates(Sturdy context)
     {
         if (context.StunTime > 0f)
         {
@@ -50,23 +50,23 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         }
 
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
-        if(distance < context.AttackRadius && context.CanISeeMyTarget)
+        if (distance < context.AttackRadius && context.CanISeeMyTarget)
         {
             SwitchState(Factory.Attack());
             return;
         }
     }
-    public override void InitializeSubState(SimpleEnemy context)
+    public override void InitializeSubState(Sturdy context)
     {
-        
+
     }
-    public override void OnExit(SimpleEnemy context)
+    public override void OnExit(Sturdy context)
     {
-        
+
     }
 
     //My Methods
-    private void UpdateWeaponTargetPos(SimpleEnemy context)
+    private void UpdateWeaponTargetPos(Sturdy context)
     {
         if (context.TargetUnit == null)
         {
@@ -77,7 +77,7 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         context.MyWeaponController.TargetPos = context.LastPointWhereTargetWereSeen;
     }
 
-    private void KeepGoingOrStop(SimpleEnemy context)
+    private void KeepGoingOrStop(Sturdy context)
     {
         Vector2 dir = context.LastPointWhereTargetWereSeen - (Vector2)context.transform.position;
         float movementDir = Mathf.Sign(dir.x);
@@ -92,16 +92,16 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         {
             if (movementDir == 1)
             {
-                context.Movement = SimpleEnemy.MovementState.Right;
+                context.Movement = AIBase.MovementState.Right;
             }
             else if (movementDir == -1)
             {
-                context.Movement = SimpleEnemy.MovementState.Left;
+                context.Movement = AIBase.MovementState.Left;
             }
         }
     }
 
-    private bool WallCheck(SimpleEnemy context, float movementDir)
+    private bool WallCheck(Sturdy context, float movementDir)
     {
         //Wall
         RaycastHit2D wallHit = Physics2D.Raycast(context.transform.position, Vector2.right * movementDir, 1f, context.GroundMask);
@@ -110,18 +110,18 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
 
         if (wallHit.collider == true && upperGroundHit.collider == true)
         {
-            context.Movement = SimpleEnemy.MovementState.Stop;
+            context.Movement = Sturdy.MovementState.Stop;
             return true;
         }
         else if (wallHit.collider == true && upperGroundHit.collider == false)
         {
             if (movementDir == 1)
             {
-                context.Movement = SimpleEnemy.MovementState.Right;
+                context.Movement = AIBase.MovementState.Right;
             }
             else if (movementDir == -1)
             {
-                context.Movement = SimpleEnemy.MovementState.Left;
+                context.Movement = AIBase.MovementState.Left;
             }
 
             context.DoJump = true;
@@ -132,7 +132,7 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         return false;
     }
 
-    private static bool FloorCheck(SimpleEnemy context, float movementDir)
+    private static bool FloorCheck(Sturdy context, float movementDir)
     {
         //Floor
         RaycastHit2D floorHit = Physics2D.Raycast(context.transform.position, Vector2.down + Vector2.right * movementDir, 1f, context.GroundMask);
@@ -142,18 +142,18 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         if (floorHit.collider == false && lowerGroundHit.collider == false)
         {
             context.MyRigidbody.velocity *= Vector2.up;
-            context.Movement = SimpleEnemy.MovementState.Stop;
+            context.Movement = AIBase.MovementState.Stop;
             return true;
         }
         else if (floorHit.collider == false && lowerGroundHit.collider == true)
         {
             if (movementDir == 1)
             {
-                context.Movement = SimpleEnemy.MovementState.Right;
+                context.Movement = AIBase.MovementState.Right;
             }
             else if (movementDir == -1)
             {
-                context.Movement = SimpleEnemy.MovementState.Left;
+                context.Movement = AIBase.MovementState.Left;
             }
 
             context.FallenOnHisOwn = true;

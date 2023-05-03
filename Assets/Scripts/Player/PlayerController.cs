@@ -39,8 +39,6 @@ public class PlayerController : ComponentsGetter
     [Header("Ground Check")]
     [SerializeField] private float _groundRememberTime = .2f;
 
-    [SerializeField, Range(0, 90)] private float _maxGroundAngle = 50f;
-
     [SerializeField] private LayerMask _groundMask;
 
     [SerializeField] private PhysicsMaterial2D _frictionLessMat;

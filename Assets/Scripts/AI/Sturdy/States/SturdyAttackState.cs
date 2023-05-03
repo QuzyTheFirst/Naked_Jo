@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyAttackState : SimpleEnemyBaseState
-{ 
+public class SturdyAttackState : SturdyBaseState
+{
     private bool _isAttacking = false;
     private float _attackTime;
 
@@ -12,16 +12,16 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
 
     private bool _aimAtPlayer;
 
-    public SimpleEnemyAttackState(SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
+    public SturdyAttackState(Sturdy context, SturdyStateFactory factory) : base(context, factory) { }
 
-    public override void OnEnter(SimpleEnemy context)
+    public override void OnEnter(Sturdy context)
     {
         context.Movement = AIBase.MovementState.Stop;
     }
 
-    public override void OnUpdate(SimpleEnemy context)
+    public override void OnUpdate(Sturdy context)
     {
-        if(context.StunTime > 0f || context.TargetUnit == null || !context.CanISeeMyTarget)
+        if (context.StunTime > 0f || context.TargetUnit == null || !context.CanISeeMyTarget)
         {
             CheckSwitchStates(context);
             return;
@@ -77,7 +77,7 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
         CheckSwitchStates(context);
     }
 
-    public override void CheckSwitchStates(SimpleEnemy context)
+    public override void CheckSwitchStates(Sturdy context)
     {
         if (context.StunTime > 0f)
         {
@@ -102,7 +102,7 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
         }
     }
 
-    private void UpdateWeaponTargetPos(SimpleEnemy context)
+    private void UpdateWeaponTargetPos(Sturdy context)
     {
         if (context.TargetUnit == null)
         {
@@ -116,13 +116,13 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
             context.MyWeaponController.TargetPos = _attackPos;
     }
 
-    public override void OnExit(SimpleEnemy context)
+    public override void OnExit(Sturdy context)
     {
-        
+
     }
-    
-    public override void InitializeSubState(SimpleEnemy context)
+
+    public override void InitializeSubState(Sturdy context)
     {
-        
+
     }
 }
