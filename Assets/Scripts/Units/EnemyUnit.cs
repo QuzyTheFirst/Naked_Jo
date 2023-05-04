@@ -7,6 +7,8 @@ public class EnemyUnit
 {
     private AIBase _enemy;
 
+    public bool IsPossesed { get { return _enemy.IsPossessed; } }
+
     public EnemyUnit(AIBase enemy)
     {
         _enemy = enemy;

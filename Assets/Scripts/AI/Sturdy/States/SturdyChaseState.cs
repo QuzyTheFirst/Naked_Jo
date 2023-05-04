@@ -55,6 +55,12 @@ public class SturdyChaseState : SturdyBaseState
             SwitchState(Factory.Attack());
             return;
         }
+
+        if (context.DoRoll)
+        {
+            SwitchState(Factory.Dash());
+            return;
+        }
     }
     public override void InitializeSubState(Sturdy context)
     {

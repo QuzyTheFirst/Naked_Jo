@@ -6,10 +6,18 @@ public class Sturdy : AIBase
 {
     [Header("Sturdy")]
     [SerializeField] private int _healthPoints = 2;
+    [SerializeField] private float _lookForDangerRadius = 2f;
 
     [Header("Chase State")]
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
     private float _chasePlayerAfterDissapearanceTimer;
+
+    // Rolling
+    [Header("Rolling")]
+    [SerializeField] private float _rollingCooldown;
+    private float _nextRollingTime;
+    private bool _doRoll;
+    private float _rollingDirection;
 
     // Simple Enemy States
     private SturdyBaseState _currentState;
@@ -29,12 +37,18 @@ public class Sturdy : AIBase
     public float ChasePlayerAfterDissapearanceTime { get { return _chasePlayerAfterDissapearanceTime; } }
     public float ChasePlayerAfterDissapearanceTimer { get { return _chasePlayerAfterDissapearanceTimer; } set { _chasePlayerAfterDissapearanceTimer = value; } }
 
+    //Rolling State
+    public bool isDangerAround { get { return CheckForDangerAround(); } }
+    public float RollingDirection { get { return _rollingDirection; } set { _rollingDirection = value; } }
+    public bool DoRoll { get { return _doRoll; } set { _doRoll = value; } }
     private void Start()
     {
         _states = new SturdyStateFactory(this);
         _currentState = _states.Grounded();
 
         _currentState.OnEnter(this);
+
+        _nextRollingTime = Time.time;
     }
 
     protected override void FixedUpdate()
@@ -53,9 +67,20 @@ public class Sturdy : AIBase
             _chasePlayerAfterDissapearanceTimer -= Time.fixedDeltaTime;
         }
 
-        SearchForNewWeapon();
+        if (Time.time > _nextRollingTime)
+        {
+            Collider2D danger = CheckForDangerAround();
+            if (danger != null)
+            {
+                _rollingDirection = Mathf.Sign((danger.transform.position - transform.position).x);
+                _doRoll = true;
+                _nextRollingTime = Time.time + _rollingCooldown;
+            }
+        }
 
         _currentState.UpdateStates(this);
+
+        //Debug.Log("Is it dangerous: " + CheckForDangerAround());
         //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     }
 
@@ -93,5 +118,32 @@ public class Sturdy : AIBase
             return true;
 
         return false;
+    }
+
+    public Collider2D CheckForDangerAround()
+    {
+        Collider2D coll = Physics2D.OverlapCircle(transform.position, _lookForDangerRadius, LayerMask.GetMask("Bullet") + LayerMask.GetMask("FlyingWeapon"));
+        if(coll != null)
+        {
+            return coll;
+        }
+
+
+        float distanceToPlayer = Vector2.Distance(transform.position, TargetUnitTf.position);
+        if(distanceToPlayer <= _lookForDangerRadius)
+        {
+            if (TargetUnit.IsAttacking)
+            {
+                return TargetUnit.MyCircleCollider;
+            }
+        }
+
+        return null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, _lookForDangerRadius);
     }
 }

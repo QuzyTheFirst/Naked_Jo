@@ -201,6 +201,11 @@ public class Weapon : MonoBehaviour, IWeapon
         return _weaponState == WeaponState.Flying;
     }
 
+    public virtual bool IsAttacking()
+    {
+        return false;
+    }
+
     public virtual WeaponType GetWeaponType()
     {
         Debug.LogError("Not Implemented");

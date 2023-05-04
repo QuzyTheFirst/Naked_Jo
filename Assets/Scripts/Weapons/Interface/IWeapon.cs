@@ -23,6 +23,8 @@ public interface IWeapon
 
     public bool IsFlying();
 
+    public bool IsAttacking();
+
     public WeaponParams GetWeaponParams();
 
     public void SetAttackMask(LayerMask attackMask);

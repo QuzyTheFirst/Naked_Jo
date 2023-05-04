@@ -13,6 +13,17 @@ public class Unit : ComponentsGetter, IDamagable
     public static event EventHandler OnDeath;
     public static event EventHandler<Collision2D> OnCollisionEnter;
 
+    public bool IsPlayer { get { return _isPlayer; } }
+
+    public bool IsAttacking { 
+        get {
+            if (MyWeaponController != null)
+                return MyWeaponController.IsAttacking;
+
+            return false;
+        }
+    }
+
     private void Awake()
     {
         base.GetAllComponents(true);
@@ -20,8 +31,6 @@ public class Unit : ComponentsGetter, IDamagable
         Player = new PlayerUnit(MyPlayerController);
         Enemy = new EnemyUnit(MyEnemyController);
     }
-
-    public bool IsPlayer { get { return _isPlayer; } }
 
     public void Damage(float amount)
     {

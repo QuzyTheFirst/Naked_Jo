@@ -35,6 +35,9 @@ public class PlayerController : ComponentsGetter
     [SerializeField, Range(0f, 5f)] private float _upwardMovementMultiplier = 1.7f;
     private float _defaultGravityScale = 1f;
 
+    // Attack
+    private bool _isAttacking;
+
     // Ground Check
     [Header("Ground Check")]
     [SerializeField] private float _groundRememberTime = .2f;

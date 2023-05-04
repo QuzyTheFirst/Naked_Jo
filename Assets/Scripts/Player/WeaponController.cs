@@ -26,6 +26,7 @@ public class WeaponController : ComponentsGetter
 
     public Vector2 TargetPos { get { return _targetPos; } set { _targetPos = value; } }
     public bool IsWeaponTaken { get { return _currentWeapon != _unremovableIWeapon; } }
+    public bool IsAttacking { get { return _currentWeapon.IsAttacking(); } }
     public float FullAttackTime 
     { 
         get 
@@ -56,6 +57,9 @@ public class WeaponController : ComponentsGetter
             return;
 
         _currentWeapon.OnUpdate(_targetPos);
+
+        //if(IsAttacking)
+        //    Debug.Log($"Is Attacking: {IsAttacking} | Full Attack Time: {FullAttackTime} | Time.time: {Time.time}");
 
         if (_keepAttacking && _temporaryTarget != null)
             Shoot(_temporaryTarget);

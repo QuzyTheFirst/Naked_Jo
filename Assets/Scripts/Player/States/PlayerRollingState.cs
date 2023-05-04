@@ -66,7 +66,6 @@ public class PlayerRollingState : PlayerBaseState
         DisableIFrames();
 
         player.Velocity = _oldVelocity;
-        //Debug.Log("Exited Rolling State");
     }
 
     private bool ObstaclesCheck(PlayerController player)

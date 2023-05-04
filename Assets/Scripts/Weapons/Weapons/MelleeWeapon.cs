@@ -9,6 +9,9 @@ public class MelleeWeapon : Weapon
     private float _lastAttackTime;
     private float _attackTimer = 0;
 
+    private bool _isAttacking = false;
+    private float _attackTime;
+
     private Animator _anim;
 
     private Vector2 dir;
@@ -41,11 +44,14 @@ public class MelleeWeapon : Weapon
 
         //Debug.Log("Attack Transform");
 
+        _isAttacking = true;
+
         _anim.SetTrigger("Prepare");
 
         StartCoroutine(Attack(target, _weaponParams.PrepareTime));
 
         _lastAttackTime = Time.time;
+
         return true;
     }
 
@@ -95,7 +101,7 @@ public class MelleeWeapon : Weapon
 
             yield return new WaitForFixedUpdate();
         }
-        _attackTimer = 0;
+        _isAttacking = false;
     }
 
     public override bool AIShoot(Unit targetUnit)
@@ -105,11 +111,14 @@ public class MelleeWeapon : Weapon
 
         //Debug.Log("AI Attack");
 
+        _isAttacking = true;
+
         _anim.SetTrigger("Prepare");
 
         StartCoroutine(AIAttack(targetUnit, _weaponParams.PrepareTime));
 
         _lastAttackTime = Time.time;
+
         return true;
     }
 
@@ -171,7 +180,7 @@ public class MelleeWeapon : Weapon
 
             yield return new WaitForFixedUpdate();
         }
-        _attackTimer = 0;
+        _isAttacking = false;
     }
 
     private void CanDeflectBulletsAbility(Vector2 target)
@@ -203,7 +212,10 @@ public class MelleeWeapon : Weapon
     {
         return -1;
     }
-
+    public override bool IsAttacking()
+    {
+        return _isAttacking;
+    }
     public override void DropWeapon()
     {
         base.DropWeapon();

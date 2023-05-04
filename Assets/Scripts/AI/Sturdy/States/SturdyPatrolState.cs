@@ -82,6 +82,12 @@ public class SturdyPatrolState : SturdyBaseState
             return;
         }
 
+        if (context.DoRoll)
+        {
+            SwitchState(Factory.Dash());
+            return;
+        }
+
         if (context.CanISeeMyTarget)
         {
             SwitchState(Factory.Chase());
