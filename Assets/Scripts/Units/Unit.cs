@@ -32,7 +32,7 @@ public class Unit : ComponentsGetter, IDamagable
         Enemy = new EnemyUnit(MyEnemyController);
     }
 
-    public void Damage(float amount)
+    public void Damage()
     {
         if (IsPlayer)
         {

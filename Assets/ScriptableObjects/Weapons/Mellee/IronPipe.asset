@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e644329ca1e1e04abcaec79fb5f4101, type: 3}
   m_Name: IronPipe
   m_EditorClassIdentifier: 
-  PlayerAttackRate: 0.5
+  PlayerAttackRate: 1
   WeaponDistanceFromUnit: 0.5
-  EnemyAttackRate: 0.5
+  EnemyAttackRate: 1
   DistanceBeforeInitiatingAttack: 2.25
   AttackRange: 0.9
   AttackDistance: 0.9

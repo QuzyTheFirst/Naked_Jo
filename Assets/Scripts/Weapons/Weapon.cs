@@ -56,6 +56,27 @@ public class Weapon : MonoBehaviour, IWeapon
         _mainTf.localPosition = dir * distanceFromPlayer;
     }
 
+    public void Init(Unit unit, Transform parent)
+    {
+        _unit = unit;
+
+        _rig.bodyType = RigidbodyType2D.Kinematic;
+        _rig.simulated = false;
+
+        SetParent(parent);
+    }
+
+    public void SetParent(Transform parent)
+    {
+        _mainTf.parent = parent;
+        _mainTf.localPosition = Vector2.zero;
+    }
+
+    public void Unparent()
+    {
+        _mainTf.parent = null;
+    }
+
     public virtual bool Shoot(Transform target)
     {
         Debug.Log("Shooted Transform");
@@ -225,27 +246,6 @@ public class Weapon : MonoBehaviour, IWeapon
     }
 
     public virtual void ResetAmmo() { }
-
-    public void Init(Unit unit, Transform parent)
-    {
-        _unit = unit;
-
-        _rig.bodyType = RigidbodyType2D.Kinematic;
-        _rig.simulated = false;
-
-        SetParent(parent);
-    }
-
-    public void SetParent(Transform parent)
-    {
-        _mainTf.parent = parent;
-        _mainTf.localPosition = Vector2.zero;
-    }
-
-    public void Unparent()
-    {
-        _mainTf.parent = null;
-    }
 
     public SpriteRenderer GetSpriteRenderer()
     {

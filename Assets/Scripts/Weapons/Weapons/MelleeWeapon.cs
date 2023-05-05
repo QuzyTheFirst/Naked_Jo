@@ -46,7 +46,7 @@ public class MelleeWeapon : Weapon
 
         _isAttacking = true;
 
-        if(_weaponParams.PrepareTime >0)
+        if(_weaponParams.PrepareTime > 0)
             _anim.SetTrigger("Prepare");
 
         StartCoroutine(Attack(target, _weaponParams.PrepareTime));
@@ -67,6 +67,8 @@ public class MelleeWeapon : Weapon
 
         SoundManager.Instance.Play(_weaponParams.AttackSoundName);
 
+        _attackTimer = 0f;
+
         while (_attackTimer < _weaponParams.AttackTime)
         {
             dir = (target.position - UnitController.transform.position).normalized;
@@ -74,23 +76,23 @@ public class MelleeWeapon : Weapon
             CanDeflectBulletsAbility(target.transform.position);
 
             _attackTimer += Time.fixedDeltaTime;
-            Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
 
+            Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
+            //Debug.Log($"Damaged {hitObjs.Length} units");
             foreach (Collider2D obj in hitObjs)
             {
                 if (obj.transform == UnitController.transform)
                     continue;
 
-                RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir);
+                RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir, _weaponParams.AttackDistance + _weaponParams.AttackRange, LayerMask.GetMask("Ground") + LayerMask.GetMask("Platform") + AttackMask);
                 if (hit.transform != obj.transform)
                     continue;
 
                 IDamagable iDamagable = obj.GetComponent<IDamagable>();
-
                 if (iDamagable != null)
                 {
                     _hitted = true;
-                    iDamagable.Damage(60f);
+                    iDamagable.Damage();
                 }
             }
 
@@ -134,6 +136,8 @@ public class MelleeWeapon : Weapon
 
         SoundManager.Instance.Play(_weaponParams.AttackSoundName);
 
+        _attackTimer = 0f;
+
         while (_attackTimer < _weaponParams.AttackTime)
         {
             if (targetUnit == null)
@@ -160,7 +164,7 @@ public class MelleeWeapon : Weapon
                 if (obj.transform == UnitController.transform)
                     continue;
 
-                RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir);
+                RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir, _weaponParams.AttackDistance + _weaponParams.AttackRange, LayerMask.GetMask("Ground") + LayerMask.GetMask("Platform") + AttackMask);
                 if (hit.transform != obj.transform)
                     continue;
 
@@ -169,7 +173,7 @@ public class MelleeWeapon : Weapon
                 if (iDamagable != null)
                 {
                     _hitted = true;
-                    iDamagable.Damage(60f);
+                    iDamagable.Damage();
                 }
             }
 

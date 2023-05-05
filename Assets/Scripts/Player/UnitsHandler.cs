@@ -43,6 +43,8 @@ public class UnitsHandler : PlayerInputHandler
     [SerializeField] private ParticleSystem _explosionParticles;
     [SerializeField] private Transform _explosionRadiusVisuals;
     [SerializeField] private float _explosionCooldownTime;
+    private Coroutine _explosionCoroutine;
+    private Unit _explodingUnit;
     private float _explosionCooldownTimer;
     private float _explosionTimer;
     private bool _isExplosionGoing;
@@ -378,13 +380,15 @@ public class UnitsHandler : PlayerInputHandler
             _isExplosionGoing = true;
             _currentUnit.Player.SetMaxSpeedModifier(.1f);
 
-            SpriteRenderer enemyGraphics = _currentUnit.Enemy.GetGraphics();
-
-            LeanTween.color(enemyGraphics.gameObject, Color.black, .25f);
+            LeanTween.color(_currentUnit.MySpriteRenderer.gameObject, Color.black, _timeToExplode - .1f);
 
             _explosionRadiusVisuals.gameObject.SetActive(true);
 
             SoundManager.Instance.FadeInVolume("Explode", 1f, .2f);
+
+            _explodingUnit = _currentUnit;
+
+            _explosionCoroutine = StartCoroutine(ExplosionCoroutine(_timeToExplode, _explodingUnit));
         }
     }
 
@@ -392,12 +396,32 @@ public class UnitsHandler : PlayerInputHandler
     {
         _isExplosionButtonPressed = false;
 
-        if (_isExplosionGoing && _currentUnit != null)
-        {
-            Unit oldUnit = _currentUnit;
-            EnemyUnit enemy = _currentUnit.Enemy;
+        if(_explosionCoroutine != null)
+            StopCoroutine(_explosionCoroutine);
 
-            _playerUnit.transform.position = _currentUnit.transform.position;
+        _isExplosionGoing = false;
+
+        _explosionRadiusVisuals.gameObject.SetActive(false);
+
+        if (_explodingUnit != null)
+        {
+            _explodingUnit.Player.SetMaxSpeedModifier(1f);
+
+            LeanTween.cancel(_explodingUnit.MySpriteRenderer.gameObject);
+            _explodingUnit.MySpriteRenderer.color = Color.white;
+        }
+    }
+
+    private IEnumerator ExplosionCoroutine(float time, Unit explodingUnit)
+    {
+        yield return new WaitForSeconds(time);
+
+        if (_isExplosionGoing && explodingUnit != null)
+        {
+            Unit oldUnit = explodingUnit;
+            EnemyUnit enemy = explodingUnit.Enemy;
+
+            _playerUnit.transform.position = explodingUnit.transform.position;
 
             enemy.UnPossess(_enemyAttackMask, _playerUnit.transform);
 
@@ -405,9 +429,9 @@ public class UnitsHandler : PlayerInputHandler
             SetUnit(_playerUnit);
             _playerUnit.gameObject.SetActive(true);
 
-            oldUnit.Damage(0);
+            oldUnit.Damage();
 
-            Collider2D[] colls = Physics2D.OverlapCircleAll(_currentUnit.transform.position, _explosionRadius, _playerAttackMask);
+            Collider2D[] colls = Physics2D.OverlapCircleAll(explodingUnit.transform.position, _explosionRadius, _playerAttackMask);
             foreach (Collider2D col in colls)
             {
                 Unit unit = col.GetComponent<Unit>();

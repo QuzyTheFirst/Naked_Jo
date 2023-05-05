@@ -139,7 +139,7 @@ public class RangeWeapon : Weapon
             IDamagable iDamagable = hit.transform.GetComponent<IDamagable>();
             if (iDamagable != null)
             {
-                iDamagable.Damage(0f);
+                iDamagable.Damage();
             }
 
             Rigidbody2D rig = hit.transform.GetComponent<Rigidbody2D>();

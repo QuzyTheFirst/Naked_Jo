@@ -48,11 +48,13 @@ public class PlayerRollingState : PlayerBaseState
         if (player.IsWalking)
         {
             SwitchState(Factory.Walk());
+            return;
         }
 
         if (!player.IsWalking)
         {
             SwitchState(Factory.Idle());
+            return;
         }
     }
 

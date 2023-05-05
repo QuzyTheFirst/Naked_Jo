@@ -46,11 +46,11 @@ public class ExplodiusExplodeState : ExplodiusBaseState
                 if (unit == context.MyUnit)
                     continue;
 
-                unit.Damage(100f);
+                unit.Damage();
             }
         }
 
-        context.MyUnit.Damage(100f);
+        context.MyUnit.Damage();
     }
 
 }

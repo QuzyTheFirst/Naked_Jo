@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class SimpleEnemyAttackState : SimpleEnemyBaseState
 { 
-    private bool _isAttacking = false;
-    private float _attackTime;
-
     private Vector2 _attackPos;
-    private Transform _attackTf;
 
     private bool _aimAtPlayer;
 
@@ -27,17 +23,12 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
             return;
         }
 
-        if (_attackTime > 0)
+        if (!context.MyWeaponController.IsAttacking)
         {
-            _attackTime -= Time.fixedDeltaTime;
-        }
-        else
-        {
-            _isAttacking = false;
             _aimAtPlayer = true;
         }
 
-        if (_isAttacking && _aimAtPlayer && context.TargetUnit != null)
+        if (context.MyWeaponController.IsAttacking && _aimAtPlayer && context.TargetUnit != null)
         {
             if (context.TargetUnit.Player.IsRolling)
             {
@@ -45,7 +36,7 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
             }
         }
 
-        if (!_isAttacking && context.TargetUnit != null)
+        if (!context.MyWeaponController.IsAttacking && context.TargetUnit != null)
         {
             Vector2 dir = context.TargetUnitTf.position - context.transform.position;
             context.MyFlip.TryToFlip(Mathf.Sign(dir.x));
@@ -58,13 +49,11 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
         if (Time.time > context.TimeToNextShoot && context.TargetUnit != null)
         {
             // Here is my text bitch
-            _isAttacking = context.MyWeaponController.AIShoot(context.TargetUnit);
+            context.MyWeaponController.AIShoot(context.TargetUnit);
 
-            if (_isAttacking)
+            if (context.MyWeaponController.IsAttacking)
             {
-                _attackTime = context.MyWeaponController.FullAttackTime;
                 _attackPos = context.TargetUnitTf.position;
-                _attackTf = context.TargetUnitTf;
             }
 
             context.MyWeaponController.ResetAmmo();
@@ -85,7 +74,7 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
             return;
         }
 
-        if (_isAttacking)
+        if (context.MyWeaponController.IsAttacking)
             return;
 
         if (context.TargetUnit == null)
@@ -110,7 +99,7 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
             return;
         }
 
-        if (_aimAtPlayer && !_isAttacking)
+        if (_aimAtPlayer && !context.MyWeaponController.IsAttacking)
             context.MyWeaponController.TargetPos = context.TargetUnitTf.position;
         else
             context.MyWeaponController.TargetPos = _attackPos;
