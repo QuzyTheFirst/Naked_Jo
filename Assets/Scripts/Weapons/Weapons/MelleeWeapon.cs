@@ -46,7 +46,8 @@ public class MelleeWeapon : Weapon
 
         _isAttacking = true;
 
-        _anim.SetTrigger("Prepare");
+        if(_weaponParams.PrepareTime >0)
+            _anim.SetTrigger("Prepare");
 
         StartCoroutine(Attack(target, _weaponParams.PrepareTime));
 

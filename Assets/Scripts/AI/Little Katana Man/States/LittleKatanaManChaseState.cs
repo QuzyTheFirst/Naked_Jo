@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyChaseState : SimpleEnemyBaseState
+public class LittleKatanaManChaseState : LittleKatanaManBaseState
 {
-    public SimpleEnemyChaseState (SimpleEnemy context, SimpleEnemyStateFactory factory) : base(context, factory) { }
+    public LittleKatanaManChaseState(LittleKatanaMan context, LittleKatanaManStateFactory factory) : base(context, factory) { }
 
-    public override void OnEnter(SimpleEnemy context)
+    public override void OnEnter(LittleKatanaMan context)
     {
         context.MyFlip.TryToFlip(context.MovementDirection);
 
@@ -15,7 +15,7 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         context.Movement = AIBase.MovementState.Stop;
     }
 
-    public override void OnUpdate(SimpleEnemy context)
+    public override void OnUpdate(LittleKatanaMan context)
     {
         if (context.StunTime > 0f || context.TargetUnit == null)
         {
@@ -35,11 +35,17 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         CheckSwitchStates(context);
     }
 
-    public override void CheckSwitchStates(SimpleEnemy context)
+    public override void CheckSwitchStates(LittleKatanaMan context)
     {
         if (context.StunTime > 0f)
         {
             SwitchState(Factory.Stun());
+            return;
+        }
+
+        if (context.BulletsToDeflect.Length > 0)
+        {
+            SwitchState(Factory.BulletsDeflect());
             return;
         }
 
@@ -50,23 +56,23 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         }
 
         float distance = Vector2.Distance(context.transform.position, context.TargetUnitTf.position);
-        if(distance < context.AttackRadius && context.CanISeeMyTarget)
+        if (distance < context.AttackRadius && context.CanISeeMyTarget)
         {
             SwitchState(Factory.Attack());
             return;
         }
     }
-    public override void InitializeSubState(SimpleEnemy context)
+    public override void InitializeSubState(LittleKatanaMan context)
     {
-        
+
     }
-    public override void OnExit(SimpleEnemy context)
+    public override void OnExit(LittleKatanaMan context)
     {
-        
+
     }
 
     //My Methods
-    private void UpdateWeaponTargetPos(SimpleEnemy context)
+    private void UpdateWeaponTargetPos(LittleKatanaMan context)
     {
         if (context.TargetUnit == null)
         {
@@ -77,7 +83,7 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         context.MyWeaponController.TargetPos = context.LastPointWhereTargetWereSeen;
     }
 
-    private void KeepGoingOrStop(SimpleEnemy context)
+    private void KeepGoingOrStop(LittleKatanaMan context)
     {
         Vector2 dir = context.LastPointWhereTargetWereSeen - (Vector2)context.transform.position;
         float movementDir = Mathf.Sign(dir.x);
@@ -101,7 +107,7 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         }
     }
 
-    private bool WallCheck(SimpleEnemy context, float movementDir)
+    private bool WallCheck(LittleKatanaMan context, float movementDir)
     {
         //Wall
         RaycastHit2D wallHit = Physics2D.Raycast(context.transform.position, Vector2.right * movementDir, 1f, context.GroundMask);
@@ -132,7 +138,7 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
         return false;
     }
 
-    private static bool FloorCheck(SimpleEnemy context, float movementDir)
+    private static bool FloorCheck(LittleKatanaMan context, float movementDir)
     {
         //Floor
         RaycastHit2D floorHit = Physics2D.Raycast(context.transform.position, Vector2.down + Vector2.right * movementDir, 1f, context.GroundMask);
