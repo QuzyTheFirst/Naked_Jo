@@ -299,6 +299,12 @@ public class UnitsHandler : PlayerInputHandler
             _currentUnit.MyWeaponController.OnWeaponChange -= WeaponController_OnWeaponChange;
         }
 
+        bool changeImmediately = false;
+        if (_currentUnit.IsPlayer)
+        {
+            changeImmediately = true;
+        }
+
         if (!newUnit.IsPlayer)
             newUnit.MyWeaponController.OnWeaponChange += WeaponController_OnWeaponChange;
 
@@ -310,10 +316,10 @@ public class UnitsHandler : PlayerInputHandler
 
         SetUIAmmoAmount(newUnit);
 
-        SetEnemiesTargetUnit();
+        SetEnemiesTargetUnit(changeImmediately);
     }
 
-    private void SetEnemiesTargetUnit()
+    private void SetEnemiesTargetUnit(bool immediately = false)
     {
         if (_enemiesCantSeeYou)
             return;
@@ -323,7 +329,7 @@ public class UnitsHandler : PlayerInputHandler
             if (_units[i] == _playerUnit)
                 continue;
 
-            _units[i].Enemy.SetTargetUnit(_currentUnit);
+            _units[i].Enemy.SetTargetUnit(_currentUnit, immediately);
         }
     }
 

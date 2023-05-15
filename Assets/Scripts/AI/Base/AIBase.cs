@@ -185,7 +185,7 @@ public class AIBase : ComponentsGetter
 
         Vector2 dir = (_targetUnit.transform.position - transform.position).normalized;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 100f, _groundMask + _playerMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 100f, _groundMask + _playerMask + LayerMask.GetMask("UnpossesedStunnedEnemy"));
         if (hit.transform == _targetUnit.transform)
         {
             return true;
@@ -214,9 +214,14 @@ public class AIBase : ComponentsGetter
         _stunTime = time;
     }
 
-    public void SetTargetUnit(Unit newUnit, float time)
+    public void SetTargetUnit(Unit newUnit, float time, bool changeImmediately = false)
     {
-        //Debug.Log("New Unit: " + newUnit.transform.name);
+        if (changeImmediately)
+        {
+            _targetUnit = newUnit;
+            return;
+        }
+
         _setTargetUnitCoroutine = StartCoroutine(SetTargetUnitCoroutine(newUnit, time));
     }
 

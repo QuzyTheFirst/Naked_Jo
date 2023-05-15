@@ -19,9 +19,9 @@ public class EnemyUnit
         _enemy.Stun(time);
     }
 
-    public void SetTargetUnit(Unit target)
+    public void SetTargetUnit(Unit target, bool immediately = false)
     {
-        _enemy.SetTargetUnit(target, .5f);
+        _enemy.SetTargetUnit(target, .5f, immediately);
     }
 
     public void Possess(LayerMask attackMask)

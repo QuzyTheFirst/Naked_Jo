@@ -26,7 +26,10 @@ public class ScaredHumanStunState : ScaredHumanBaseState
         if (context.StunTime <= 0f)
         {
             if (context.CanISeeMyTarget)
+            {
                 SwitchState(Factory.Retreat());
+                return;
+            }
 
             SwitchState(Factory.Idle());
         }

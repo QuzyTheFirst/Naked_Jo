@@ -29,9 +29,26 @@ public class ScaredHuman : AIBase
         Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     }
 
+    public override void Possess(LayerMask attackMask)
+    {
+        base.Possess(attackMask);
+
+        AttackMask = attackMask;
+        MyWeaponController.SetAttackMask(attackMask);
+    }
+
+    public override void UnPossess(LayerMask attackMask, Transform targetUnit)
+    {
+        base.UnPossess(attackMask, targetUnit);
+
+        AttackMask = attackMask;
+        MyWeaponController.SetAttackMask(attackMask);
+    }
+
     public override void Stun(float time)
     {
         base.Stun(time);
+        Debug.Log("Stun For: " + time);
 
         _currentState.UpdateStates(this);
     }

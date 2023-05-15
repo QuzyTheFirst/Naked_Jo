@@ -37,11 +37,18 @@ public class ScaredHumanRetreatState : ScaredHumanBaseState
             context.Movement = AIBase.MovementState.Right;
         }
 
+        UpdateWeaponTargetPos(context);
+
         CheckSwitchStates(context);
     }
 
     public override void CheckSwitchStates(ScaredHuman context)
     {
+        if(context.StunTime > 0f)
+        {
+            SwitchState(Factory.Stun());
+        }
+
         if (!context.CanISeeMyTarget)
         {
             Debug.Log("GoToIdle!");
@@ -52,6 +59,17 @@ public class ScaredHumanRetreatState : ScaredHumanBaseState
     public override void OnExit(ScaredHuman context)
     {
         Debug.Log("Retreat state exit");
+    }
+
+    private void UpdateWeaponTargetPos(ScaredHuman context)
+    {
+        if (context.TargetUnit == null)
+        {
+            Debug.LogWarning("Target Unit hasn't been setted up!");
+            return;
+        }
+
+        context.MyWeaponController.TargetPos = context.LastPointWhereTargetWereSeen;
     }
 
     public override void InitializeSubState(ScaredHuman context)
