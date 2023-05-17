@@ -123,6 +123,10 @@ public class PlayerController : ComponentsGetter
 
     private void FixedUpdate()
     {
+        Camera mainCamera = Camera.main;
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        MyFlip.TryToFlip((mainCamera.ScreenToWorldPoint(mousePos) - transform.position).x);
+
         if (IsGrounded)
         {
             _groundRemember = _groundRememberTime;
@@ -150,8 +154,6 @@ public class PlayerController : ComponentsGetter
     public void MovePerformed(float value)
     {
         _direction.x = value;
-
-        MyFlip.TryToFlip(value);
     }
 
     public void MoveCanceled()

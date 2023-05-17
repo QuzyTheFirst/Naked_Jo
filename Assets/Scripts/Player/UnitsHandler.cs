@@ -12,7 +12,7 @@ public class UnitsHandler : PlayerInputHandler
     [SerializeField] private bool _enemiesCantSeeYou;
 
     [Header("Level")]
-    [SerializeField] private GameObject _nextLevelLoader;
+    [SerializeField] private NextLevelLoader _nextLevelLoader;
 
     [Header("Cursor")]
     [SerializeField] private CursorController _cursorController;
@@ -154,10 +154,7 @@ public class UnitsHandler : PlayerInputHandler
             }
         }
 
-        CheckForNextLevelLoaderSpawn();
-
         _postProcessingController = GetComponent<PostProcessingController>();
-        _postProcessingController.SetUpPostProcessingController(_slowMoPPVolume, _killPPVolume);
     }
 
     private void Start()
@@ -173,9 +170,6 @@ public class UnitsHandler : PlayerInputHandler
 
         SetUnit(_playerUnit);
 
-        if(_nextLevelLoader != null)
-            _nextLevelLoader.SetActive(false);
-
         if ((_units.Count - 1) == 0)
         {
             if (_playerUnit != null && _nextLevelLoader != null)
@@ -185,6 +179,9 @@ public class UnitsHandler : PlayerInputHandler
         _slowMotionTimer = _slowMotionTime;
 
         _nakedJOUnpossession.gameObject.SetActive(false);
+
+        CheckForNextLevelLoaderActivation();
+        _postProcessingController.SetUpPostProcessingController(_slowMoPPVolume, _killPPVolume);
     }
 
     private void Update()
@@ -198,7 +195,7 @@ public class UnitsHandler : PlayerInputHandler
         if (_currentUnit != null)
             _cameraTargetController.UpdateTargetPos(_currentUnit.transform.position);
 
-        CheckForNextLevelLoaderSpawn();
+        CheckForNextLevelLoaderActivation();
 
         if (_isPossessionKeyPressed)
             ShowPossessionLine();
@@ -279,11 +276,11 @@ public class UnitsHandler : PlayerInputHandler
         _currentUnit.MyWeaponController.TargetPos = _mousePosInWorld;
     }
 
-    private void CheckForNextLevelLoaderSpawn()
+    private void CheckForNextLevelLoaderActivation()
     {
         if (_units.Count == 1 && _nextLevelLoader != null)
         {
-            _nextLevelLoader.SetActive(true);
+            _nextLevelLoader.Activate();
         }
     }
 
@@ -300,10 +297,10 @@ public class UnitsHandler : PlayerInputHandler
         }
 
         bool changeImmediately = false;
-        if (_currentUnit.IsPlayer)
+        /*if (_currentUnit.IsPlayer)
         {
             changeImmediately = true;
-        }
+        }*/
 
         if (!newUnit.IsPlayer)
             newUnit.MyWeaponController.OnWeaponChange += WeaponController_OnWeaponChange;
@@ -372,7 +369,10 @@ public class UnitsHandler : PlayerInputHandler
             {
                 _keyHolder.RemoveKey(keyDoor.KeyType);
                 GameUIController.Instance.SetKeys(_keyHolder.KeyList);
-                keyDoor.OpenDoor(1);
+
+                Vector2 dir = collision.transform.position - transform.position;
+                float sign = Mathf.Sign(dir.x);
+                keyDoor.OpenDoor((Door.OpenDoorDirection)sign);
             }
         }
     }

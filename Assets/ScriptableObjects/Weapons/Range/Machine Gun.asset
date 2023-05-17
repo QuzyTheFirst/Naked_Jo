@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerAttackRate: 0.1
   WeaponDistanceFromUnit: 0.5
-  EnemyAttackRate: 0.5
+  EnemyAttackRate: 0.1
   DistanceBeforeInitiatingAttack: 20
   Ammo: 30
   AmountOfBulletsToSpawn: 1

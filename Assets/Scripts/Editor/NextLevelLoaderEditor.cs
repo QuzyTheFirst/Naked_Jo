@@ -13,7 +13,7 @@ public class NextLevelLoaderEditor : Editor
         NextLevelLoader loader = target as NextLevelLoader;
 
         BoxCollider2D collider = loader.GetComponent<BoxCollider2D>();
-        SpriteRenderer spriteRenderer = loader.SpriteRenderer;
+        SpriteRenderer spriteRenderer = loader.Graphics;
 
         ChangeSize(collider, spriteRenderer);
     }

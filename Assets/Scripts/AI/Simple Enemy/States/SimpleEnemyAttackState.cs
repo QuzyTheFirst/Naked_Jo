@@ -13,6 +13,11 @@ public class SimpleEnemyAttackState : SimpleEnemyBaseState
     public override void OnEnter(SimpleEnemy context)
     {
         context.Movement = AIBase.MovementState.Stop;
+
+        if (context.MyWeaponController.GetWeaponType() == Weapon.WeaponType.Range)
+        {
+            context.TimerBeforeAction = context.TimeBeforeAction;
+        }
     }
 
     public override void OnUpdate(SimpleEnemy context)

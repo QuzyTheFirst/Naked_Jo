@@ -6,6 +6,9 @@ using UnityEngine;
 public class SimpleEnemy : AIBase
 {
     [Header("Simple Enemy")]
+
+    [SerializeField] private bool _startWithIdle = false;
+
     [Header("Chase State")]
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
     private float _chasePlayerAfterDissapearanceTimer;
@@ -16,6 +19,8 @@ public class SimpleEnemy : AIBase
 
     // Shoot
     private float _timeToNextShoot;
+
+    public bool StartWithIdle { get { return _startWithIdle;} set { _startWithIdle = value; } }
 
     public float TimeToNextShoot { get { return _timeToNextShoot; } set { _timeToNextShoot = value; } }
  

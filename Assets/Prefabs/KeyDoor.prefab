@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6389455433269798173}
   - component: {fileID: 6389455433269798115}
   - component: {fileID: 6389455433269798113}
-  - component: {fileID: 6389455433269798172}
   m_Layer: 3
   m_Name: KeyDoor
   m_TagString: Untagged
@@ -47,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d94c167537d4c45b41bea0d9a179a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _openedSprite: {fileID: -448535740, guid: da8aa5a01ae987f4d9d14a5bb77b128c, type: 3}
   _keyType: 1
 --- !u!212 &6389455433269798115
 SpriteRenderer:
@@ -126,23 +126,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.12, y: 2}
   m_EdgeRadius: 0
---- !u!95 &6389455433269798172
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6389455433269798174}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 16095132bdd1ca64ebec420410fb47d4, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0

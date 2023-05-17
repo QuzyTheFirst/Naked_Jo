@@ -26,7 +26,7 @@ public class ScaredHuman : AIBase
         base.FixedUpdate();
 
         _currentState.UpdateStates(this);
-        Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
+        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     }
 
     public override void Possess(LayerMask attackMask)

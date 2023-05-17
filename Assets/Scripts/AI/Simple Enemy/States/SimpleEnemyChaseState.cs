@@ -105,8 +105,10 @@ public class SimpleEnemyChaseState : SimpleEnemyBaseState
     {
         //Wall
         RaycastHit2D wallHit = Physics2D.Raycast(context.transform.position, Vector2.right * movementDir, 1f, context.GroundMask);
-        RaycastHit2D upperGroundHit = Physics2D.Raycast(context.transform.position, Vector2.up + Vector2.right * movementDir, 1f, context.GroundMask);
+        RaycastHit2D upperGroundHit = Physics2D.Raycast(context.transform.position, Vector2.up + Vector2.right * movementDir, 1.5f, context.GroundMask);
+
         Debug.DrawLine(context.transform.position, context.transform.position + Vector3.up + Vector3.right * movementDir, Color.red);
+        Debug.DrawLine(context.transform.position, context.transform.position + Vector3.right * movementDir, Color.red);
 
         if (wallHit.collider == true && upperGroundHit.collider == true)
         {

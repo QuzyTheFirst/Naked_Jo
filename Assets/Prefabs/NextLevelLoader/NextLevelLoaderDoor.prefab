@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5006521323930612466}
-  - component: {fileID: 3946540123230556192}
+  - component: {fileID: 31398598}
   - component: {fileID: 5006521323930612467}
   - component: {fileID: 5006521323930612465}
   m_Layer: 3
-  m_Name: Door
+  m_Name: NextLevelLoaderDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3946540123230556192
+--- !u!114 &31398598
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5006521323930612494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed722088345d15a4c975380b2d9c8f82, type: 3}
+  m_Script: {fileID: 11500000, guid: d62d4f97645dc8044a5e9bef3fba7932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _openedSprite: {fileID: -448535740, guid: da8aa5a01ae987f4d9d14a5bb77b128c, type: 3}
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 1007668793, guid: da8aa5a01ae987f4d9d14a5bb77b128c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

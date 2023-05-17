@@ -7,6 +7,7 @@ public class SimpleEnemyStateFactory
     enum EnemyStates
     {
         Patrol,
+        Idle,
         Chase,
         Attack,
         Stun,
@@ -24,6 +25,7 @@ public class SimpleEnemyStateFactory
         _states = new Dictionary<EnemyStates, SimpleEnemyBaseState>();
 
         _states.Add(EnemyStates.Patrol, new SimpleEnemyPatrolState(_context, this));
+        _states.Add(EnemyStates.Idle, new SimpleEnemyIdleState(_context, this));
         _states.Add(EnemyStates.Chase, new SimpleEnemyChaseState(_context, this));
         _states.Add(EnemyStates.Attack, new SimpleEnemyAttackState(_context, this));
         _states.Add(EnemyStates.Stun, new SimpleEnemyStunState(_context, this));
@@ -40,6 +42,10 @@ public class SimpleEnemyStateFactory
     public SimpleEnemyBaseState Patrol()
     {
         return _states[EnemyStates.Patrol];
+    }
+    public SimpleEnemyBaseState Idle()
+    {
+        return _states[EnemyStates.Idle];
     }
     public SimpleEnemyBaseState Chase()
     {

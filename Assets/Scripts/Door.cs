@@ -4,31 +4,26 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
+    public enum OpenDoorDirection
+    {
+        Right = 1,
+        Left = -1
+    }
+
     [SerializeField] private Sprite _openedSprite;
 
-    private BoxCollider2D _boxCollider;
-    private SpriteRenderer _spriteRenderer;
+    protected BoxCollider2D _boxCollider;
+    protected SpriteRenderer _spriteRenderer;
 
-    private void Awake()
+    protected void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _boxCollider = GetComponent<BoxCollider2D>();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OpenDoor(OpenDoorDirection openDoorDirection)
     {
-        if (collision.gameObject.layer != 8)
-            return;
-
-        Vector2 dir = transform.position - collision.transform.position;
-        float sign = Mathf.Sign(dir.x);
-
-        OpenDoor(sign);
-    }
-
-    private void OpenDoor(float value)
-    {
-        if(value > 0)
+        if(openDoorDirection == OpenDoorDirection.Right)
             _spriteRenderer.flipX = true;
 
         SoundManager.Instance.Play("DoorOpen");
