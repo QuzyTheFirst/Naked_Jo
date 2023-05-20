@@ -53,6 +53,12 @@ public class ExplodiusGroundedState : ExplodiusBaseState
             return;
         }
 
+        if (context.StartWithIdle)
+        {
+            SetSubState(Factory.Idle());
+            return;
+        }
+
         if (context.TargetUnit == null)
         {
             SetSubState(Factory.Patrol());

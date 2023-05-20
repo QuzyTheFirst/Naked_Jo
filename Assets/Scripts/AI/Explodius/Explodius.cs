@@ -5,6 +5,8 @@ using UnityEngine;
 public class Explodius : AIBase
 {
     [Header("Explodius")]
+    [SerializeField] private bool _startWithIdle = false;
+    private bool _isExploding = false;
 
     [Header("Chase State")]
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
@@ -14,7 +16,10 @@ public class Explodius : AIBase
     [SerializeField] private float _distanceToStartExplosion;
     [SerializeField] private float _explosionRadius;
     [SerializeField] private float _timeToExplode = .5f;
+    [SerializeField] private ParticleSystem _explosionParticles;
     private float _explodeTimer;
+
+    private bool _hasExplosionStarted = false;
 
     // Simple Enemy States
     private ExplodiusBaseState _currentState;
@@ -22,6 +27,9 @@ public class Explodius : AIBase
 
     //States
     public ExplodiusBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
+
+    //Idle State
+    public bool StartWithIdle { get { return _startWithIdle; } set { _startWithIdle = value; } }
 
     //Chase State
     public float ChasePlayerAfterDissapearanceTime { get { return _chasePlayerAfterDissapearanceTime; } }
@@ -31,6 +39,10 @@ public class Explodius : AIBase
     public float DistanceToStartExplosion { get { return _distanceToStartExplosion; } }
     public float ExplosionRadius { get { return _explosionRadius; } set { _explosionRadius = value; } }
     public float ExplodeTimer { get { return _explodeTimer; } set { _explodeTimer = value; } }
+    public float TimeToExplode { get { return _timeToExplode; } }
+    public bool HasExplosionStarted { get { return _hasExplosionStarted; } set { _hasExplosionStarted = value; } }
+
+    public bool IsExploding { get { return _isExploding; } }
 
     private void Start()
     {
@@ -44,6 +56,11 @@ public class Explodius : AIBase
 
     protected override void FixedUpdate()
     {
+        if (_hasExplosionStarted && IsPossessed)
+        {
+            _currentState.UpdateStates(this);
+        }
+
         if (IsPossessed)
             return;
 
@@ -62,6 +79,46 @@ public class Explodius : AIBase
 
         _currentState.UpdateStates(this);
         Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
+    }
+
+    public override bool Damage()
+    {
+        if (!_isExploding)
+            Explode(this);
+
+        return true;
+    }
+
+    public void Explode(Explodius context)
+    {
+        _isExploding = true;
+
+        Collider2D[] colls = Physics2D.OverlapCircleAll(context.transform.position, context.ExplosionRadius);
+        foreach (Collider2D col in colls)
+        {
+            Unit unit = col.GetComponent<Unit>();
+            if (unit != null)
+            {
+                if (unit == context.MyUnit)
+                    continue;
+
+                if (unit.MyEnemyController is Explodius)
+                {
+                    Explodius explodius = unit.MyEnemyController as Explodius;
+
+                    if (explodius.IsExploding)
+                        continue;
+                }
+
+                unit.Damage();
+            }
+        }
+
+        ParticleSystem particles = Instantiate(_explosionParticles);
+        particles.transform.position = transform.position;
+        particles.Play();
+
+        context.MyUnit.Damage();
     }
 
     private void OnDrawGizmos()

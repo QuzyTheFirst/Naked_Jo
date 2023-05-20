@@ -136,7 +136,7 @@ public class ExplodiusChaseState : ExplodiusBaseState
     {
         //Floor
         RaycastHit2D floorHit = Physics2D.Raycast(context.transform.position, Vector2.down + Vector2.right * movementDir, 1f, context.GroundMask);
-        RaycastHit2D lowerGroundHit = Physics2D.Raycast(context.transform.position + Vector3.right * .6f * movementDir, Vector2.down, 2f, context.GroundMask);
+        RaycastHit2D lowerGroundHit = Physics2D.Raycast(context.transform.position + Vector3.right * .6f * movementDir, Vector2.down, 10f, context.GroundMask);
         Debug.DrawLine(context.transform.position + Vector3.right * .6f * movementDir, context.transform.position + Vector3.right * .6f * movementDir + Vector3.down * 2f, Color.red);
 
         if (floorHit.collider == false && lowerGroundHit.collider == false)

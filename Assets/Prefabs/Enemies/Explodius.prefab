@@ -263,10 +263,12 @@ MonoBehaviour:
     m_Bits: 1032
   _stunAnimGO: {fileID: 868382421}
   _foundYouGO: {fileID: 2113892610}
+  _startWithIdle: 0
   _chasePlayerAfterDissapearanceTime: 5
   _distanceToStartExplosion: 1.25
-  _explosionRadius: 2.5
+  _explosionRadius: 3
   _timeToExplode: 0.5
+  _explosionParticles: {fileID: 6433794356205726586, guid: d0fb848a6ecf2d8439018b345d067ebb, type: 3}
 --- !u!1 &2975549893915386162
 GameObject:
   m_ObjectHideFlags: 0

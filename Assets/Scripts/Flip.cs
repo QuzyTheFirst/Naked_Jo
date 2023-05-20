@@ -6,6 +6,10 @@ public class Flip : MonoBehaviour
 {
     private SpriteRenderer _spriteRenderer;
 
+    private Vector2 _lookDirection;
+
+    public Vector2 LookDirection { get { return _lookDirection; } }
+
     private void Awake()
     {
         _spriteRenderer = transform.Find("Graphics").GetComponent<SpriteRenderer>();
@@ -22,10 +26,12 @@ public class Flip : MonoBehaviour
         if(x > 0)
         {
             _spriteRenderer.flipX = false;
+            _lookDirection = Vector2.right;
         }
         else if(x < 0)
         {
             _spriteRenderer.flipX = true;
+            _lookDirection = Vector2.left;
         }
     }
 }

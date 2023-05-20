@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ZoomInOut",
+                    "type": "Button",
+                    "id": "5d534e89-fa3a-4acc-a7f3-929ef8823a27",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -206,6 +215,17 @@
                     "processors": "",
                     "groups": "KeyboardAndMouse",
                     "action": "Explode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "089ee75d-5d49-465d-bbbd-d13410f7d588",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "ZoomInOut",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

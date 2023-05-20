@@ -107,18 +107,17 @@ public class Weapon : MonoBehaviour, IWeapon
         _rig.angularVelocity = 480f;
     }
 
-    public void DropWeapon(Vector2 dir)
+    public void DropWeapon(Vector2 dropVector, float power, float distanceFromUnit)
     {
         DropWeapon();
 
-        float distanceFromPlayer = 1.25f;
+        Vector2 dropDir = dropVector.normalized;
 
-        Vector2 spawnPos = (Vector2)_mainTf.position + (dir * distanceFromPlayer);
+        Vector2 spawnPos = (Vector2)_mainTf.position + (dropDir * distanceFromUnit);
 
         _mainTf.position = spawnPos;
 
-        float speed = 3f;
-        _rig.velocity = dir * speed;
+        _rig.velocity = dropDir * power;
     }
 
     public virtual void ThrowWeapon(Vector2 targetPos)
@@ -202,7 +201,7 @@ public class Weapon : MonoBehaviour, IWeapon
         {
             unit.Enemy.Stun(2f);
 
-            unit.MyWeaponController.DropWeapon(new Vector2(sign, 0f));
+            unit.MyWeaponController.DropWeapon(new Vector2(sign, 0f), 3f, .5f);
 
             SoundManager.Instance.Play("HitInFlight");
         }

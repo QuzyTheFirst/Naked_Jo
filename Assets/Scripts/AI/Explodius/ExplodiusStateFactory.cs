@@ -7,6 +7,7 @@ public class ExplodiusStateFactory
     enum ExplodiusStates
     {
         Patrol,
+        Idle,
         Chase,
         Explode,
         Grounded,
@@ -23,6 +24,7 @@ public class ExplodiusStateFactory
         _states = new Dictionary<ExplodiusStates, ExplodiusBaseState>();
 
         _states.Add(ExplodiusStates.Patrol, new ExplodiusPatrolState(_context, this));
+        _states.Add(ExplodiusStates.Idle, new ExplodiusIdleState(_context, this));
         _states.Add(ExplodiusStates.Chase, new ExplodiusChaseState(_context, this));
         _states.Add(ExplodiusStates.Explode, new ExplodiusExplodeState(_context, this));
         _states.Add(ExplodiusStates.Grounded, new ExplodiusGroundedState(_context, this));
@@ -34,6 +36,10 @@ public class ExplodiusStateFactory
     public ExplodiusBaseState Patrol()
     {
         return _states[ExplodiusStates.Patrol];
+    }
+    public ExplodiusBaseState Idle()
+    {
+        return _states[ExplodiusStates.Idle];
     }
     public ExplodiusBaseState Chase()
     {
@@ -53,7 +59,6 @@ public class ExplodiusStateFactory
     {
         return _states[ExplodiusStates.Falling];
     }
-
     public ExplodiusBaseState Jumping()
     {
         return _states[ExplodiusStates.Jumping];

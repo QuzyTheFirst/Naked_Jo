@@ -15,7 +15,7 @@ public interface IWeapon
     public void ThrowWeapon(Vector2 targetPos);
 
     public void DropWeapon();
-    public void DropWeapon(Vector2 dir);
+    public void DropWeapon(Vector2 dir, float power, float distanceFromUnit);
 
     public SpriteRenderer GetSpriteRenderer();
 

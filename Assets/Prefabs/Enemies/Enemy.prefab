@@ -87,7 +87,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &868382423
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -104,7 +104,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2113892610
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,31 +318,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08f41a21306352a40bba4a92704a5944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weaponToTake: {fileID: 0}
-  _attackMask:
-    serializedVersion: 2
-    m_Bits: 8448
-  _visionRadius: 3.83
-  _weaponMask:
-    serializedVersion: 2
-    m_Bits: 2048
-  _timeBeforeAction: 0.2
-  _runSpeed: 6
-  _walkSpeed: 4
+  _runSpeed: 7
+  _walkSpeed: 5
   _lerpAmount: 8
   _acceleration: 10
   _deceleration: 8
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 1032
   _possesedStateSprite: {fileID: 21300000, guid: dfa321de60f2802418c325c06cf65fa9, type: 3}
   _normalStateSprite: {fileID: 21300000, guid: 40a517a415a5d4549bc6690297309ff2, type: 3}
   _playerMask:
     serializedVersion: 2
     m_Bits: 256
   _unpossessFlyPower: 5
+  _timeBeforeAction: 0.2
+  _attackMask:
+    serializedVersion: 2
+    m_Bits: 8448
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 1032
   _stunAnimGO: {fileID: 868382421}
   _foundYouGO: {fileID: 2113892610}
+  _startWithIdle: 0
   _chasePlayerAfterDissapearanceTime: 5
 --- !u!1 &2975549893915386162
 GameObject:
@@ -391,19 +388,12 @@ MonoBehaviour:
   _acceleration: 8
   _decceleration: 10
   _lerpAmount: 8
-  _accelInAir: 7
-  _deccelInAir: 7
-  _doConserveMomentum: 0
   _jumpHeight: 2
   _jumpPressedRememberTime: 0.2
   _maxAirJumps: 0
   _downwardMovementMultiplier: 3
   _upwardMovementMultiplier: 1.7
-  _jumpPhase: 0
-  _groundCheck: {fileID: 229848941609337848}
-  _groundCheckDistance: 0.2
   _groundRememberTime: 0.2
-  _maxGroundAngle: 50
   _groundMask:
     serializedVersion: 2
     m_Bits: 1032

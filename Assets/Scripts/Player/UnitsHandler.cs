@@ -499,7 +499,8 @@ public class UnitsHandler : PlayerInputHandler
     private void KillEnemy(Unit unit)
     {
         Debug.Log(unit.name);
-        unit.MyWeaponController.DropWeapon();
+
+        unit.MyWeaponController.DropWeapon(unit.MyFlip.LookDirection, 1f, .5f);
 
         if (_currentUnit != unit)
         {

@@ -105,12 +105,12 @@ public class WeaponController : ComponentsGetter
         ActivateUnremovableWeapon();
     } 
 
-    public void DropWeapon(Vector2 dir)
+    public void DropWeapon(Vector2 dir, float power, float distanceFromUnit)
     {
         if (_currentWeapon == _unremovableIWeapon || _currentWeapon == null)
             return;
 
-        _currentWeapon.DropWeapon(dir);
+        _currentWeapon.DropWeapon(dir, power, distanceFromUnit);
 
         ActivateUnremovableWeapon();
     }
