@@ -79,9 +79,17 @@ public class SortingWindow : EditorWindow
 
             GameObject mainFolder = CreateOrFindFolder("Sorted Folder", allObjects);
 
+            GameObject[] mainFolderChildren = new GameObject[mainFolder.transform.childCount];
+            int i = 0;
+            foreach(Transform tf in mainFolder.transform)
+            {
+                mainFolderChildren[i] = tf.gameObject;
+                i++;
+            }
+
             foreach(SortingItem item in Items)
             {
-                GameObject folder = CreateOrFindFolder(item.FolderName, allObjects);
+                GameObject folder = CreateOrFindFolder(item.FolderName, mainFolderChildren);
 
                 folder.transform.parent = mainFolder.transform;
 

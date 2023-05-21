@@ -21,6 +21,9 @@ public class PlayerInputHandler : PlayerComponentsGetter
     protected event EventHandler PossessPerformed;
     protected event EventHandler PossessCanceled;
 
+    protected event EventHandler ZoomInPerformed;
+    protected event EventHandler ZoomOutCanceled;
+
     protected event EventHandler RestartPerformed;
 
     protected event EventHandler PickUpThrowPerformed;
@@ -53,6 +56,9 @@ public class PlayerInputHandler : PlayerComponentsGetter
         playerControls.Player.Possess.performed += Possess_performed;
         playerControls.Player.Possess.canceled += Possess_canceled;
 
+        playerControls.Player.ZoomInOut.performed += ZoomInOut_performed;
+        playerControls.Player.ZoomInOut.canceled += ZoomInOut_canceled;
+
         playerControls.Player.Restart.performed += Restart_performed;
 
         playerControls.Player.PickUp.performed += PickUp_performed;
@@ -61,6 +67,16 @@ public class PlayerInputHandler : PlayerComponentsGetter
 
         playerControls.Player.Explode.performed += Explode_performed;
         playerControls.Player.Explode.canceled += Explode_canceled;
+    }
+
+    private void ZoomInOut_performed(InputAction.CallbackContext obj)
+    {
+        ZoomInPerformed?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void ZoomInOut_canceled(InputAction.CallbackContext obj)
+    {
+        ZoomOutCanceled?.Invoke(this, EventArgs.Empty);
     }
 
     private void Crouch_performed(InputAction.CallbackContext obj)

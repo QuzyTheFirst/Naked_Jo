@@ -130,6 +130,9 @@ public class UnitsHandler : PlayerInputHandler
         ExplodePerformed += UnitsHandler_ExplodePerformed;
         ExplodeCanceled += UnitsHandler_ExplodeCanceled;
 
+        ZoomInPerformed += UnitsHandler_ZoomInPerformed;
+        ZoomOutCanceled += UnitsHandler_ZoomOutCanceled;
+
         // Components
         _cameraTargetController = GetComponent<CameraTargetController>();
         _keyHolder = GetComponent<KeyHolder>();
@@ -155,6 +158,16 @@ public class UnitsHandler : PlayerInputHandler
         }
 
         _postProcessingController = GetComponent<PostProcessingController>();
+    }
+
+    private void UnitsHandler_ZoomOutCanceled(object sender, EventArgs e)
+    {
+        _cameraTargetController.ToggleTargetPosLerp(false);
+    }
+
+    private void UnitsHandler_ZoomInPerformed(object sender, EventArgs e)
+    {
+        _cameraTargetController.ToggleTargetPosLerp(true);
     }
 
     private void Start()

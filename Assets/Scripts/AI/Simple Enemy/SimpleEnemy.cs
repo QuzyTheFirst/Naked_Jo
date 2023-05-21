@@ -62,7 +62,7 @@ public class SimpleEnemy : AIBase
         _currentState.UpdateStates(this);
         //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
         float distance = Vector2.Distance(transform.position, TargetUnitTf.position);
-        Debug.Log($"Target Unit: {TargetUnit} | Is in Attack radius: {distance < AttackRadius} | Can I see my target: {CanISeeMyTarget}");
+        //Debug.Log($"Target Unit: {TargetUnit} | Is in Attack radius: {distance < AttackRadius} | Can I see my target: {CanISeeMyTarget}");
     } 
 
 
