@@ -92,7 +92,7 @@ public class MelleeWeapon : Weapon
                 if (iDamagable != null)
                 {
                     _hitted = true;
-                    iDamagable.Damage();
+                    iDamagable.Damage(1);
                 }
             }
 
@@ -173,7 +173,7 @@ public class MelleeWeapon : Weapon
                 if (iDamagable != null)
                 {
                     _hitted = true;
-                    iDamagable.Damage();
+                    iDamagable.Damage(1);
                 }
             }
 

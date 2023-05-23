@@ -6,6 +6,9 @@ using TMPro;
 
 public class GameUIController : MonoBehaviour
 {
+    [Header("Interface Parts")]
+    [SerializeField] private GameObject[] _interfaceParts;
+
     [Header("Keys")]
     [SerializeField] private Sprite _goldenKey;
     [SerializeField] private Sprite _silverKey;
@@ -275,6 +278,14 @@ public class GameUIController : MonoBehaviour
         {
             LeanTween.cancel(_nkyRectTransform.gameObject);
             LeanTween.move(_nkyRectTransform, _nkyHidePos, 1f).setEase(LeanTweenType.easeOutQuad).setDelay(.5f);
+        }
+    }
+
+    public void ToggleInterfaceVisibility(bool value)
+    {
+        foreach(GameObject go in _interfaceParts)
+        {
+            go.SetActive(value);
         }
     }
 }

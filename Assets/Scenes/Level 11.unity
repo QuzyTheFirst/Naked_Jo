@@ -35338,35 +35338,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5293217723770899494, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
-      value: -7
+      value: -24.565317
       objectReference: {fileID: 0}
     - target: {fileID: 5293217723770899494, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
-      value: 14
+      value: 25.585632
       objectReference: {fileID: 0}
     - target: {fileID: 5293217723770899494, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
-      value: -7
+      value: -24.939045
       objectReference: {fileID: 0}
     - target: {fileID: 5293217723770899494, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
-      value: -6
+      value: -10.733915
       objectReference: {fileID: 0}
     - target: {fileID: 5293217723770899494, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
-      value: 61
+      value: 57.387276
       objectReference: {fileID: 0}
     - target: {fileID: 5293217723770899494, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
-      value: -6
+      value: -11.356797
       objectReference: {fileID: 0}
     - target: {fileID: 5293217723770899494, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
-      value: 61
+      value: 56.390663
       objectReference: {fileID: 0}
     - target: {fileID: 5293217723770899494, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
-      value: 14
+      value: 25.336477
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c45af7635f715f1418a123da5607d105, type: 3}

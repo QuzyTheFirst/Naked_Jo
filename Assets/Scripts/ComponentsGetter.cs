@@ -24,6 +24,8 @@ public class ComponentsGetter : MonoBehaviour
 
     private KeyHolder _keyHolder;
 
+    private CostumeChanger _costumeChanger;
+
     public CircleCollider2D MyCircleCollider { get { return _col; } }
     public Rigidbody2D MyRigidbody { get { return _rig; } }
     public Unit MyUnit { get { return _unit; } }
@@ -35,7 +37,7 @@ public class ComponentsGetter : MonoBehaviour
     public Flip MyFlip { get { return _flip; } }
     public SpriteRenderer MySpriteRenderer { get { return _spriteRenderer; } }
     public KeyHolder MyKeyHolder { get { return _keyHolder; } }
-
+    public CostumeChanger MyCostumeChanger { get { return _costumeChanger; } }
     protected void GetAllComponents(bool isParent)
     {
         Transform startPoint;
@@ -68,5 +70,7 @@ public class ComponentsGetter : MonoBehaviour
         _spriteRenderer = startPoint.Find("Graphics").GetComponent<SpriteRenderer>();
 
         _keyHolder = startPoint.GetComponent<KeyHolder>();
+
+        _costumeChanger = _spriteRenderer.GetComponent<CostumeChanger>();
     }
 }

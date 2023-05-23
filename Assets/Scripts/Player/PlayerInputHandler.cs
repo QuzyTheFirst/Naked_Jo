@@ -33,6 +33,9 @@ public class PlayerInputHandler : PlayerComponentsGetter
     protected event EventHandler ExplodePerformed;
     protected event EventHandler ExplodeCanceled;
 
+    protected event EventHandler InteractionPerformed;
+    protected event EventHandler InteractionCanceled;
+
     private PlayerControls playerControls;
 
     protected new void Awake()
@@ -67,6 +70,19 @@ public class PlayerInputHandler : PlayerComponentsGetter
 
         playerControls.Player.Explode.performed += Explode_performed;
         playerControls.Player.Explode.canceled += Explode_canceled;
+
+        playerControls.Player.Interact.performed += Interact_performed;
+        playerControls.Player.Interact.canceled += Interact_canceled;
+    }
+
+    private void Interact_canceled(InputAction.CallbackContext obj)
+    {
+        InteractionCanceled?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Interact_performed(InputAction.CallbackContext obj)
+    {
+        InteractionPerformed?.Invoke(this, EventArgs.Empty);
     }
 
     private void ZoomInOut_performed(InputAction.CallbackContext obj)

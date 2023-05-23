@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 164284235}
   - component: {fileID: 164284236}
+  - component: {fileID: 1814696223045300420}
   m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
@@ -84,6 +85,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1814696223045300420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164284234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871196dde9ccc044fb4d2c49f1391724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _JONakedSprite: {fileID: 21300000, guid: 5e24a945ca444ef4e9d62f0adf468c9b, type: 3}
+  _JOWhiteCostumeSprite: {fileID: 21300000, guid: c9574998999bc85419652c990b933ad9, type: 3}
+  _JOBlackCostumeSprite: {fileID: 21300000, guid: 186cce15165c3e342ab2f8bc11bd9011, type: 3}
 --- !u!1 &70697952752167936
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +316,6 @@ MonoBehaviour:
   _downwardMovementMultiplier: 3
   _upwardMovementMultiplier: 1.7
   _groundRememberTime: 0.2
-  _maxGroundAngle: 50
   _groundMask:
     serializedVersion: 2
     m_Bits: 1032

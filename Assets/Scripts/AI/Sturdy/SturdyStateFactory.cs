@@ -7,6 +7,7 @@ public class SturdyStateFactory
     enum SturdyStates
     {
         Patrol,
+        Idle,
         Chase,
         Attack,
         Dash,
@@ -26,6 +27,7 @@ public class SturdyStateFactory
         _states = new Dictionary<SturdyStates, SturdyBaseState>();
 
         _states.Add(SturdyStates.Patrol, new SturdyPatrolState(_context, this));
+        _states.Add(SturdyStates.Idle, new SturdyIdleState(_context, this));
         _states.Add(SturdyStates.Chase, new SturdyChaseState(_context, this));
         _states.Add(SturdyStates.Attack, new SturdyAttackState(_context, this));
         _states.Add(SturdyStates.Dash, new SturdyDashState(_context, this));
@@ -40,6 +42,10 @@ public class SturdyStateFactory
     public SturdyBaseState Patrol()
     {
         return _states[SturdyStates.Patrol];
+    }
+    public SturdyBaseState Idle()
+    {
+        return _states[SturdyStates.Idle];
     }
     public SturdyBaseState Chase()
     {

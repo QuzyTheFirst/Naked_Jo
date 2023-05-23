@@ -32,7 +32,7 @@ public class Unit : ComponentsGetter, IDamagable
         Enemy = new EnemyUnit(MyEnemyController);
     }
 
-    public void Damage()
+    public void Damage(int amount)
     {
         if (IsPlayer)
         {
@@ -40,7 +40,7 @@ public class Unit : ComponentsGetter, IDamagable
         }
         else
         {
-            if (MyEnemyController.Damage())
+            if (MyEnemyController.Damage(amount))
                 OnDeath?.Invoke(this, EventArgs.Empty);
         }
     }

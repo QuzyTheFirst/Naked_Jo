@@ -31,7 +31,11 @@ public class NextLevelLoader : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == 8)
+        if (collision.gameObject.layer == 8)
+        {
+            collision.GetComponent<Unit>().MyCostumeChanger.SaveCostume();
+
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
     }
 }

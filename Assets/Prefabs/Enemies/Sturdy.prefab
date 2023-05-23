@@ -87,7 +87,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &868382423
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -104,7 +104,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2113892610
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,8 +318,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623d9c4c2eea4074a82c5d92343b3ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runSpeed: 6
-  _walkSpeed: 3
+  _runSpeed: 10
+  _walkSpeed: 5
   _lerpAmount: 8
   _acceleration: 10
   _deceleration: 8
@@ -331,14 +332,15 @@ MonoBehaviour:
   _timeBeforeAction: 0.2
   _attackMask:
     serializedVersion: 2
-    m_Bits: 10240
+    m_Bits: 8448
   _groundMask:
     serializedVersion: 2
     m_Bits: 1032
   _stunAnimGO: {fileID: 868382421}
   _foundYouGO: {fileID: 2113892610}
+  _startWithIdle: 0
   _healthPoints: 2
-  _lookForDangerRadius: 2
+  _lookForDangerRadius: 3
   _chasePlayerAfterDissapearanceTime: 5
   _rollingCooldown: 1
 --- !u!1 &2975549893915386162

@@ -9,6 +9,12 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
     public override void OnEnter(LittleKatanaMan context)
     {
         context.Movement = AIBase.MovementState.Stop;
+
+        if (context.BulletsToDeflect.Length > 0)
+        {
+            DeflectBullets(context, context.BulletsToDeflect);
+            context.BulletsToDeflect = new Collider2D[0];
+        }
     }
 
     public override void OnUpdate(LittleKatanaMan context)

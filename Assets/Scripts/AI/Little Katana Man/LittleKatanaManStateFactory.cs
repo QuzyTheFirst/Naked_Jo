@@ -7,6 +7,7 @@ public class LittleKatanaManStateFactory
     enum LittleKatanaManStates
     {
         Patrol,
+        Idle,
         Chase,
         Attack,
         Stun,
@@ -26,6 +27,7 @@ public class LittleKatanaManStateFactory
         _states = new Dictionary<LittleKatanaManStates, LittleKatanaManBaseState>();
 
         _states.Add(LittleKatanaManStates.Patrol, new LittleKatanaManPatrolState(_context, this));
+        _states.Add(LittleKatanaManStates.Idle, new LittleKatanaManIdleState(_context, this));
         _states.Add(LittleKatanaManStates.Chase, new LittleKatanaManChaseState(_context, this));
         _states.Add(LittleKatanaManStates.Attack, new LittleKatanaManAttackState(_context, this));
         _states.Add(LittleKatanaManStates.Stun, new LittleKatanaManStunState(_context, this));
@@ -44,6 +46,10 @@ public class LittleKatanaManStateFactory
     public LittleKatanaManBaseState Patrol()
     {
         return _states[LittleKatanaManStates.Patrol];
+    }
+    public LittleKatanaManBaseState Idle()
+    {
+        return _states[LittleKatanaManStates.Idle];
     }
     public LittleKatanaManBaseState Chase()
     {

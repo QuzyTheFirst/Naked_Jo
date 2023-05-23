@@ -11115,6 +11115,10 @@ MonoBehaviour:
   _platformMask:
     serializedVersion: 2
     m_Bits: 1024
+  _interactionRadius: 1.5
+  _playerInteractionMask:
+    serializedVersion: 2
+    m_Bits: 131072
   _slowMoPPVolume: {fileID: 2374862704258226892}
   _killPPVolume: {fileID: 8463037622832599680}
 --- !u!114 &3075758548341443518
@@ -11129,9 +11133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88f703aad715acb49bf4034f05dfbba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 4720332016028251083}
-  targetPosLerp: 0.4
-  maxDistance: 4
+  _target: {fileID: 4720332016028251083}
+  _targetPosLerp: 0.4
+  _maxDistance: 4
 --- !u!114 &978779067
 MonoBehaviour:
   m_ObjectHideFlags: 0

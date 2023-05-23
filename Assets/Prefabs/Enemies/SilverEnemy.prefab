@@ -87,7 +87,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &868382423
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -104,7 +104,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2113892610
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,6 +330,7 @@ MonoBehaviour:
     m_Bits: 256
   _unpossessFlyPower: 5
   _timeBeforeAction: 0.2
+  _healthPoints: 1
   _attackMask:
     serializedVersion: 2
     m_Bits: 8448
@@ -337,6 +339,7 @@ MonoBehaviour:
     m_Bits: 1032
   _stunAnimGO: {fileID: 868382421}
   _foundYouGO: {fileID: 2113892610}
+  _startWithIdle: 0
   _chasePlayerAfterDissapearanceTime: 5
 --- !u!1 &2975549893915386162
 GameObject:
@@ -392,7 +395,6 @@ MonoBehaviour:
   _downwardMovementMultiplier: 3
   _upwardMovementMultiplier: 1.7
   _groundRememberTime: 0.2
-  _maxGroundAngle: 50
   _groundMask:
     serializedVersion: 2
     m_Bits: 1032

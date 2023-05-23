@@ -66,7 +66,7 @@ public class ExplodiusJumpingState : ExplodiusBaseState
 
     public override void InitializeSubState(Explodius context)
     {
-        if (context.StunTime > 0f)
+        if (context.StunTime > 0f || context.HasExplosionStarted)
         {
             SetSubState(Factory.Explode());
         }

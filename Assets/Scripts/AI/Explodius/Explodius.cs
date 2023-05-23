@@ -56,6 +56,8 @@ public class Explodius : AIBase
 
     protected override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         if (_hasExplosionStarted && IsPossessed)
         {
             _currentState.UpdateStates(this);
@@ -63,8 +65,6 @@ public class Explodius : AIBase
 
         if (IsPossessed)
             return;
-
-        base.FixedUpdate();
 
         if (CanISeeMyTarget)
         {
@@ -78,10 +78,10 @@ public class Explodius : AIBase
         SearchForNewWeapon();
 
         _currentState.UpdateStates(this);
-        Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
+        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     }
 
-    public override bool Damage()
+    public override bool Damage(int amount)
     {
         if (!_isExploding)
             Explode(this);
@@ -110,7 +110,7 @@ public class Explodius : AIBase
                         continue;
                 }
 
-                unit.Damage();
+                unit.Damage(100);
             }
         }
 
@@ -118,7 +118,7 @@ public class Explodius : AIBase
         particles.transform.position = transform.position;
         particles.Play();
 
-        context.MyUnit.Damage();
+        context.MyUnit.Damage(100);
     }
 
     private void OnDrawGizmos()

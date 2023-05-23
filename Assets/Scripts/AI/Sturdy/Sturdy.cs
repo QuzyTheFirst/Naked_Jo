@@ -5,8 +5,8 @@ using UnityEngine;
 public class Sturdy : AIBase
 {
     [Header("Sturdy")]
-    [SerializeField] private int _healthPoints = 2;
-    [SerializeField] private float _lookForDangerRadius = 2f;
+    [SerializeField] private bool _startWithIdle = false;
+    [SerializeField] private float _lookForDangerRadius = 3f;
 
     [Header("Chase State")]
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
@@ -22,6 +22,8 @@ public class Sturdy : AIBase
     // Simple Enemy States
     private SturdyBaseState _currentState;
     private SturdyStateFactory _states;
+
+    public bool StartWithIdle { get { return _startWithIdle; } set { _startWithIdle = value; } }
 
     // Shoot
     private float _timeToNextShoot;
@@ -53,10 +55,10 @@ public class Sturdy : AIBase
 
     protected override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         if (IsPossessed)
             return;
-
-        base.FixedUpdate();
 
         if (CanISeeMyTarget)
         {
@@ -108,16 +110,6 @@ public class Sturdy : AIBase
         base.Stun(time);
 
         _currentState.UpdateStates(this);
-    }
-
-    public override bool Damage()
-    {
-        _healthPoints--;
-
-        if(_healthPoints <= 0)
-            return true;
-
-        return false;
     }
 
     public Collider2D CheckForDangerAround()

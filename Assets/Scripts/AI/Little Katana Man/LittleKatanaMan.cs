@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class LittleKatanaMan : AIBase
 {
-    [Header("LittleKatanMan")]
+    [Header("LittleKatanaMan")]
+    [SerializeField] private bool _startWithIdle = false;
+
     [Header("Chase State")]
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
     private float _chasePlayerAfterDissapearanceTimer;
@@ -19,6 +21,8 @@ public class LittleKatanaMan : AIBase
     // Simple Enemy States
     private LittleKatanaManBaseState _currentState;
     private LittleKatanaManStateFactory _states;
+
+    public bool StartWithIdle { get { return _startWithIdle; } set { _startWithIdle = value; } }
 
     // Shoot
     private float _timeToNextShoot;
@@ -51,10 +55,10 @@ public class LittleKatanaMan : AIBase
 
     protected override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         if (IsPossessed)
             return;
-
-        base.FixedUpdate();
 
         if (CanISeeMyTarget)
         {
@@ -72,7 +76,7 @@ public class LittleKatanaMan : AIBase
         }
 
         _currentState.UpdateStates(this);
-        Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
+        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     }
 
 

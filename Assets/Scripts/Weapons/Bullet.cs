@@ -49,7 +49,7 @@ public class Bullet : MonoBehaviour
         IDamagable iDamagable = collision.transform.GetComponent<IDamagable>();
         if (iDamagable != null)
         {
-            iDamagable.Damage();
+            iDamagable.Damage(1);
         }
 
         Rigidbody2D rig = collision.transform.GetComponent<Rigidbody2D>();

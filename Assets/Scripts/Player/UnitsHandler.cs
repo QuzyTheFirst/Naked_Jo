@@ -61,6 +61,10 @@ public class UnitsHandler : PlayerInputHandler
     [Header("Crouch")]
     [SerializeField] private LayerMask _platformMask;
 
+    [Header("Interaction")]
+    [SerializeField] private float _interactionRadius;
+    [SerializeField] private LayerMask _playerInteractionMask;
+
     [Header("Post Processing")]
     [SerializeField] private PostProcessVolume _slowMoPPVolume;
     [SerializeField] private PostProcessVolume _killPPVolume;
@@ -133,6 +137,9 @@ public class UnitsHandler : PlayerInputHandler
         ZoomInPerformed += UnitsHandler_ZoomInPerformed;
         ZoomOutCanceled += UnitsHandler_ZoomOutCanceled;
 
+        InteractionPerformed += UnitsHandler_InteractionPerformed;
+        InteractionCanceled += UnitsHandler_InteractionCanceled;
+
         // Components
         _cameraTargetController = GetComponent<CameraTargetController>();
         _keyHolder = GetComponent<KeyHolder>();
@@ -158,6 +165,24 @@ public class UnitsHandler : PlayerInputHandler
         }
 
         _postProcessingController = GetComponent<PostProcessingController>();
+    }
+
+    private void UnitsHandler_InteractionCanceled(object sender, EventArgs e)
+    {
+        
+    }
+
+    private void UnitsHandler_InteractionPerformed(object sender, EventArgs e)
+    {
+        Collider2D[] colls = Physics2D.OverlapCircleAll(_currentUnit.transform.position, _interactionRadius, _playerInteractionMask);
+        foreach (Collider2D col in colls)
+        {
+            IInteractable interactable = col.GetComponent<IInteractable>();
+            if (interactable != null)
+            {
+                interactable.Interaction(this);
+            }
+        }
     }
 
     private void UnitsHandler_ZoomOutCanceled(object sender, EventArgs e)
@@ -195,6 +220,8 @@ public class UnitsHandler : PlayerInputHandler
 
         CheckForNextLevelLoaderActivation();
         _postProcessingController.SetUpPostProcessingController(_slowMoPPVolume, _killPPVolume);
+
+        _playerUnit.MyCostumeChanger.LoadCostume();
     }
 
     private void Update()
@@ -448,7 +475,7 @@ public class UnitsHandler : PlayerInputHandler
             SetUnit(_playerUnit);
             _playerUnit.gameObject.SetActive(true);
 
-            oldUnit.Damage();
+            oldUnit.Damage(100);
 
             Collider2D[] colls = Physics2D.OverlapCircleAll(explodingUnit.transform.position, _explosionRadius, _playerAttackMask);
             foreach (Collider2D col in colls)
@@ -707,6 +734,7 @@ public class UnitsHandler : PlayerInputHandler
         unit.Enemy.UnPossess(_enemyAttackMask, _playerUnit.transform);
 
         SetUnit(_playerUnit);
+        ChangeJOAppearance(CostumeChanger.Costumes.Naked);
 
         GameUIController.Instance.DisableAmmoAmount();
 
@@ -962,4 +990,41 @@ public class UnitsHandler : PlayerInputHandler
         else
             Gizmos.DrawWireSphere(Vector2.zero, _explosionRadius);
     }
+
+    #region CutsceneController
+    public void ToggleCurrentUnitVisibility(bool value)
+    {
+        _currentUnit.MySpriteRenderer.enabled = value;
+    }
+
+    public void SetCameraTarget(Vector2 pos)
+    {
+        _cameraTargetController.SetCameraTargetPos(pos);
+    }
+
+    public void ResetCameraTarget()
+    {
+        _cameraTargetController.ResetCameraTargetPos();
+    }
+
+    public void ToggleInterfaceVisibility(bool value)
+    {
+        GameUIController.Instance.ToggleInterfaceVisibility(value);
+    }
+    public bool IsCurrentUnitMoving()
+    {
+        if (_currentUnit.MyPlayerController.IsWalking)
+            return true;
+
+        return false;
+    }
+
+    public void ChangeJOAppearance(CostumeChanger.Costumes costume)
+    {
+        if (!_currentUnit.IsPlayer)
+            return;
+
+        _currentUnit.MySpriteRenderer.GetComponent<CostumeChanger>().SetCostume(costume);
+    }
+    #endregion
 }

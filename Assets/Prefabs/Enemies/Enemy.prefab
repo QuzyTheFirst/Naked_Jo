@@ -330,6 +330,7 @@ MonoBehaviour:
     m_Bits: 256
   _unpossessFlyPower: 5
   _timeBeforeAction: 0.2
+  _healthPoints: 1
   _attackMask:
     serializedVersion: 2
     m_Bits: 8448

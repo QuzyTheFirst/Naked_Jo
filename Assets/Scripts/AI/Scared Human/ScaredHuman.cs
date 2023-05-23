@@ -20,10 +20,10 @@ public class ScaredHuman : AIBase
 
     protected override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         if (IsPossessed)
             return;
-
-        base.FixedUpdate();
 
         _currentState.UpdateStates(this);
         //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
