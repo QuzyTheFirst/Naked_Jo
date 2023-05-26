@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0056c1217db6a04ca3c9fc17d2c4911, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  PlayerAttackRate: 0
+  PlayerAttackRate: 0.3
   WeaponDistanceFromUnit: 0.5
   EnemyAttackRate: 1
   DistanceBeforeInitiatingAttack: 10

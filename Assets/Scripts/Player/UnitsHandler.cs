@@ -474,6 +474,7 @@ public class UnitsHandler : PlayerInputHandler
             //_units.Remove(_currentUnit);
             SetUnit(_playerUnit);
             _playerUnit.gameObject.SetActive(true);
+            _playerUnit.MyCostumeChanger.SetCostume(CostumeChanger.Costumes.Naked);
 
             oldUnit.Damage(100);
 

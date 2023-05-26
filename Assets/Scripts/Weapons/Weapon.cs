@@ -135,19 +135,15 @@ public class Weapon : MonoBehaviour, IWeapon
 
         Vector2 theTargetPos = targetPos;
 
-        bool value = false;
-
         Collider2D[] enemyHitsOnTargetPos = Physics2D.OverlapCircleAll(theTargetPos, 1f, LayerMask.GetMask("Enemy"));
         foreach(Collider2D col in enemyHitsOnTargetPos)
         {
             if(col.gameObject.layer == enemy && col.gameObject != _unit.gameObject)
             {
                 theTargetPos = col.transform.position;
-                value = true;
                 break;
             }
         }
-        Debug.Log($"Has target changed: {value} | Target Pos: {theTargetPos}");
 
         float distanceFromPlayer = 1.25f;
         //Vector2 dir = (theTargetPos - (Vector2)_mainTf.position).normalized;
