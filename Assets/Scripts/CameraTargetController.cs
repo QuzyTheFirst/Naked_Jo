@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class CameraTargetController : MonoBehaviour
 {
     private const float TARGET_POS_STANDART_LERP = .4f;
-    private const float TARGET_POS_MAX_LERP = 1f;
+    private const float TARGET_POS_MAX_LERP = 2f;
 
     [SerializeField] private Transform _target;
 
