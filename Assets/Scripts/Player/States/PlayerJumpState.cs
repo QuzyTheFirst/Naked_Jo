@@ -33,7 +33,7 @@ public class PlayerJumpState : PlayerBaseState
 
         if (_isJumping && !player.IsJumpButtonPressed && player.Velocity.y > 0)
         {
-            player.Velocity = new Vector2(player.Velocity.x, player.Velocity.y / 2);
+            //player.Velocity = new Vector2(player.Velocity.x, player.Velocity.y / 2);
             _isJumping = false;
         }
         else if(_isJumping && player.Velocity.y <= 0)
