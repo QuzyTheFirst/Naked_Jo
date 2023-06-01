@@ -71,10 +71,10 @@ public class PlayerJumpState : PlayerBaseState
             player.JumpPressedRemember = 0f;
             player.StepsSinceLastJump = 0;
 
-            if (player.Velocity.y > 0f)
+            /*if (player.Velocity.y > 0f)
             {
                 _jumpPower = Mathf.Max(_jumpPower - player.Velocity.y, 0f);
-            }
+            }*/
 
             player.Velocity = Vector2.up * _jumpPower + Vector2.right * player.Velocity.x;
 

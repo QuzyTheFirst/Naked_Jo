@@ -26,7 +26,7 @@ public class WeaponController : ComponentsGetter
 
     public Vector2 TargetPos { get { return _targetPos; } set { _targetPos = value; } }
     public bool IsWeaponTaken { get { return _currentWeapon != _unremovableIWeapon; } }
-    public bool IsAttacking { get { return _currentWeapon.IsAttacking(); } }
+    public bool IsAttacking { get { return _currentWeapon != null ? _currentWeapon.IsAttacking() : false; } }
     public float FullAttackTime 
     { 
         get 

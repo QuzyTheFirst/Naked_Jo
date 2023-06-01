@@ -69,6 +69,8 @@ public class MelleeWeapon : Weapon
 
         _attackTimer = 0f;
 
+        List<Collider2D> attackedColliders = new List<Collider2D>();
+
         while (_attackTimer < _weaponParams.AttackTime)
         {
             dir = (target.position - UnitController.transform.position).normalized;
@@ -77,22 +79,23 @@ public class MelleeWeapon : Weapon
 
             _attackTimer += Time.fixedDeltaTime;
 
-            Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
+            Collider2D[] hitColls = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
             //Debug.Log($"Damaged {hitObjs.Length} units");
-            foreach (Collider2D obj in hitObjs)
+            foreach (Collider2D coll in hitColls)
             {
-                if (obj.transform == UnitController.transform)
+                if (coll.transform == UnitController.transform || attackedColliders.Contains(coll))
                     continue;
 
                 RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir, _weaponParams.AttackDistance + _weaponParams.AttackRange, LayerMask.GetMask("Ground") + LayerMask.GetMask("Platform") + AttackMask);
-                if (hit.transform != obj.transform)
+                if (hit.transform != coll.transform)
                     continue;
 
-                IDamagable iDamagable = obj.GetComponent<IDamagable>();
+                IDamagable iDamagable = coll.GetComponent<IDamagable>();
                 if (iDamagable != null)
                 {
                     _hitted = true;
                     iDamagable.Damage(1);
+                    attackedColliders.Add(coll);
                 }
             }
 
@@ -138,6 +141,8 @@ public class MelleeWeapon : Weapon
 
         _attackTimer = 0f;
 
+        List<Collider2D> attackedColliders = new List<Collider2D>();
+
         while (_attackTimer < _weaponParams.AttackTime)
         {
             if (targetUnit == null)
@@ -157,23 +162,24 @@ public class MelleeWeapon : Weapon
             CanDeflectBulletsAbility(targetUnit.transform.position);
 
             _attackTimer += Time.fixedDeltaTime;
-            Collider2D[] hitObjs = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
+            Collider2D[] hitColls = Physics2D.OverlapCircleAll((Vector2)UnitController.transform.position + dir * _weaponParams.AttackDistance, _weaponParams.AttackRange, AttackMask);
 
-            foreach (Collider2D obj in hitObjs)
+            foreach (Collider2D coll in hitColls)
             {
-                if (obj.transform == UnitController.transform)
+                if (coll.transform == UnitController.transform || attackedColliders.Contains(coll))
                     continue;
 
                 RaycastHit2D hit = Physics2D.Raycast(UnitController.transform.position, dir, _weaponParams.AttackDistance + _weaponParams.AttackRange, LayerMask.GetMask("Ground") + LayerMask.GetMask("Platform") + AttackMask);
-                if (hit.transform != obj.transform)
+                if (hit.transform != coll.transform)
                     continue;
 
-                IDamagable iDamagable = obj.GetComponent<IDamagable>();
+                IDamagable iDamagable = coll.GetComponent<IDamagable>();
 
                 if (iDamagable != null)
                 {
                     _hitted = true;
                     iDamagable.Damage(1);
+                    attackedColliders.Add(coll);
                 }
             }
 

@@ -12,6 +12,9 @@ public class Sturdy : AIBase
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
     private float _chasePlayerAfterDissapearanceTimer;
 
+    [Header("Helmet")]
+    [SerializeField] private GameObject _helmet;
+
     // Rolling
     [Header("Rolling")]
     [SerializeField] private float _rollingCooldown;
@@ -131,6 +134,12 @@ public class Sturdy : AIBase
         }
 
         return null;
+    }
+
+    public override bool Damage(int amount)
+    {
+        _helmet.SetActive(false);
+        return base.Damage(amount);
     }
 
     private void OnDrawGizmos()

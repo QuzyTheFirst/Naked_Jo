@@ -11,6 +11,8 @@ public class Bullet : MonoBehaviour
 
     private Rigidbody2D _rig;
 
+    private bool _hittedTarget = false;
+
     [Header("Deflection")]
     [SerializeField] private float _deflectionDuration = .5f;
     private float _deflectionTimer;
@@ -46,6 +48,10 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (_hittedTarget)
+            return;
+        _hittedTarget = true;
+
         IDamagable iDamagable = collision.transform.GetComponent<IDamagable>();
         if (iDamagable != null)
         {

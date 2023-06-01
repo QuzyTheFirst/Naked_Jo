@@ -45,8 +45,6 @@ public class AIBase : ComponentsGetter
 
     [Header("Health")]
     [SerializeField] private int _healthPoints = 1;
-    private bool _canBeDamaged = true;
-    private float _canBeDamagedTimer;
 
     [Header("Weapon")]
     [SerializeField] private LayerMask _attackMask;
@@ -73,8 +71,6 @@ public class AIBase : ComponentsGetter
 
     //Health
     public int HealthPoints { get { return _healthPoints; } set { _healthPoints = value; } }
-    public bool CanBeDamaged { get { return _canBeDamaged; } set { _canBeDamaged = value; } }
-    public float CanBeDamagedTimer { get { return _canBeDamagedTimer; } set { _canBeDamagedTimer = value; } }
 
     public LayerMask AttackMask { set { _attackMask = value; } }
 
@@ -135,15 +131,6 @@ public class AIBase : ComponentsGetter
 
     protected virtual void FixedUpdate()
     {
-        if (_canBeDamagedTimer > 0f)
-        {
-            _canBeDamagedTimer -= Time.deltaTime;
-        }
-        else
-        {
-            _canBeDamaged = true;
-        }
-
         if (_isPossessed)
             return;
 
@@ -310,14 +297,7 @@ public class AIBase : ComponentsGetter
 
     public virtual bool Damage(int amount)
     {
-        Debug.Log("canbee: " + _canBeDamaged);
-        if (!_canBeDamaged)
-            return false;
-
         _healthPoints -= amount;
-        _canBeDamaged = false;
-        _canBeDamagedTimer = .2f;
-        Debug.Log($"Health: {_healthPoints}");
 
         return _healthPoints <= 0 ? true : false;
     }
