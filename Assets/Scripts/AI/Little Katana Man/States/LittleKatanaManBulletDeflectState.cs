@@ -6,6 +6,8 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
 {
     public LittleKatanaManBulletDeflectState(LittleKatanaMan context, LittleKatanaManStateFactory factory) : base(context, factory) { }
 
+    private Vector2 _lastBulletPos;
+
     public override void OnEnter(LittleKatanaMan context)
     {
         context.Movement = AIBase.MovementState.Stop;
@@ -13,7 +15,6 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
         if (context.BulletsToDeflect.Length > 0)
         {
             DeflectBullets(context, context.BulletsToDeflect);
-            context.BulletsToDeflect = new Collider2D[0];
         }
     }
 
@@ -24,8 +25,9 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
         if (context.BulletsToDeflect.Length > 0)
         {
             DeflectBullets(context, context.BulletsToDeflect);
-            context.BulletsToDeflect = new Collider2D[0];
         }
+
+        UpdateWeaponTargetPos(context);
 
         CheckSwitchStates(context);
     }
@@ -65,6 +67,11 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
 
     }
 
+    private void UpdateWeaponTargetPos(LittleKatanaMan context)
+    {
+        context.MyWeaponController.TargetPos = _lastBulletPos;
+    }
+
     private void DeflectBullets(LittleKatanaMan context, Collider2D[] bullets)
     {
         foreach (Collider2D col in bullets)
@@ -89,6 +96,10 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
             bullet.transform.rotation = Quaternion.Euler(0, 0, rotZ);
 
             rig.velocity = newDir * speed;
+
+            _lastBulletPos = bullet.transform.position;
         }
+
+        context.BulletsToDeflect = new Collider2D[0];
     }
 }

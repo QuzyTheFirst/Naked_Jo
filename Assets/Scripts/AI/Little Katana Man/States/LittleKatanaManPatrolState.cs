@@ -8,8 +8,8 @@ public class LittleKatanaManPatrolState : LittleKatanaManBaseState
 
     public override void OnEnter(LittleKatanaMan context)
     {
-        if (context.Movement == LittleKatanaMan.MovementState.Stop)
-            context.Movement = LittleKatanaMan.MovementState.Right;
+        if (context.Movement == AIBase.MovementState.Stop)
+            context.Movement = AIBase.MovementState.Right;
 
         context.MovementSpeed = context.WalkSpeed;
 
@@ -33,29 +33,29 @@ public class LittleKatanaManPatrolState : LittleKatanaManBaseState
 
         if (floorHit.collider == false)
         {
-            if (context.Movement == LittleKatanaMan.MovementState.Right)
+            if (context.Movement == AIBase.MovementState.Right)
             {
                 context.MyFlip.TryToFlip(-1);
-                context.Movement = LittleKatanaMan.MovementState.Left;
+                context.Movement = AIBase.MovementState.Left;
             }
             else
             {
                 context.MyFlip.TryToFlip(1);
-                context.Movement = LittleKatanaMan.MovementState.Right;
+                context.Movement = AIBase.MovementState.Right;
             }
         }
 
         if (wallHit.collider == true)
         {
-            if (context.Movement == LittleKatanaMan.MovementState.Right)
+            if (context.Movement == AIBase.MovementState.Right)
             {
                 context.MyFlip.TryToFlip(-1);
-                context.Movement = LittleKatanaMan.MovementState.Left;
+                context.Movement = AIBase.MovementState.Left;
             }
             else
             {
                 context.MyFlip.TryToFlip(1);
-                context.Movement = LittleKatanaMan.MovementState.Right;
+                context.Movement = AIBase.MovementState.Right;
             }
         }
 
@@ -72,6 +72,12 @@ public class LittleKatanaManPatrolState : LittleKatanaManBaseState
             return;
         }
 
+        if (context.BulletsToDeflect.Length > 0)
+        {
+            SwitchState(Factory.BulletsDeflect());
+            return;
+        }
+
         if (context.TargetUnit == null)
             return;
 
@@ -79,12 +85,6 @@ public class LittleKatanaManPatrolState : LittleKatanaManBaseState
         if (context.CanISeeMyTarget && distance < context.AttackRadius)
         {
             SwitchState(Factory.Attack());
-            return;
-        }
-
-        if(context.BulletsToDeflect.Length > 0)
-        {
-            SwitchState(Factory.BulletsDeflect());
             return;
         }
 

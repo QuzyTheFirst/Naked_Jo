@@ -45,19 +45,28 @@ EditorBuildSettings:
     path: Assets/Scenes/Level 12 Explodius.unity
     guid: 6018302d783c82c4db6e795b87a68b58
   - enabled: 1
-    path: Assets/Scenes/Level 13 Closet Shop.unity
-    guid: 81d088f912d528e4b8596489f3c087cb
-  - enabled: 1
-    path: Assets/Scenes/Level 14 Explodius Shop.unity
+    path: Assets/Scenes/Level 13 Explodius Shop.unity
     guid: 4566149b6b7e033419f141bba9e5c946
   - enabled: 1
-    path: Assets/Scenes/Level 16 Sturdy.unity
+    path: Assets/Scenes/Level 14 Sturdy.unity
     guid: 8e2ef36081625b54ba3193dee8daf64f
   - enabled: 1
-    path: Assets/Scenes/Level 17 Sturdy and Explodius.unity
+    path: Assets/Scenes/Level 15 Sturdy and Explodius.unity
     guid: 45d35c74637f3b04589279e4b224f6e9
   - enabled: 1
-    path: Assets/Scenes/Level 15 Last Level.unity
+    path: Assets/Scenes/Level 16 Little Katana Man.unity
+    guid: 926296158e8827844b52f6f7d1a586cc
+  - enabled: 1
+    path: Assets/Scenes/Level 17 Closet Shop.unity
+    guid: 81d088f912d528e4b8596489f3c087cb
+  - enabled: 1
+    path: Assets/Scenes/Level 18 The Mansion.unity
+    guid: 4c92a85f6696b1744924c1499dbc3102
+  - enabled: 1
+    path: Assets/Scenes/Level 19 Final Boss.unity
+    guid: b902d70e99546eb4a8a73217227e1b46
+  - enabled: 1
+    path: Assets/Scenes/Level 20 Last Level.unity
     guid: 20da149f23e920743b19f954b4551d15
   - enabled: 1
     path: Assets/Scenes/Game Crasher.unity

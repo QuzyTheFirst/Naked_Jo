@@ -35,6 +35,12 @@ public class LittleKatanaManIdleState : LittleKatanaManBaseState
             return;
         }
 
+        if (context.BulletsToDeflect.Length > 0)
+        {
+            SwitchState(Factory.BulletsDeflect());
+            return;
+        }
+
         if (context.TargetUnit == null)
         {
             return;

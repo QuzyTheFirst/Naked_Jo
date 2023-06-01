@@ -77,6 +77,12 @@ public class LittleKatanaManAttackState : LittleKatanaManBaseState
         if (context.MyWeaponController.IsAttacking)
             return;
 
+        if (context.BulletsToDeflect.Length > 0)
+        {
+            SwitchState(Factory.BulletsDeflect());
+            return;
+        }
+
         if (context.TargetUnit == null)
         {
             SwitchState(Factory.Patrol());
