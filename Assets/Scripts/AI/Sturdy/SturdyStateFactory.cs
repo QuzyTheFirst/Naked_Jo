@@ -30,7 +30,7 @@ public class SturdyStateFactory
         _states.Add(SturdyStates.Idle, new SturdyIdleState(_context, this));
         _states.Add(SturdyStates.Chase, new SturdyChaseState(_context, this));
         _states.Add(SturdyStates.Attack, new SturdyAttackState(_context, this));
-        _states.Add(SturdyStates.Dash, new SturdyDashState(_context, this));
+        _states.Add(SturdyStates.Dash, new SturdyRollingState(_context, this));
         _states.Add(SturdyStates.Stun, new SturdyStunState(_context, this));
 
         _states.Add(SturdyStates.Grounded, new SturdyGroundedState(_context, this));

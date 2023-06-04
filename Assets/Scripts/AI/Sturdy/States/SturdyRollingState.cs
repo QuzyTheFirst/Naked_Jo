@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SturdyDashState : SturdyBaseState
+public class SturdyRollingState : SturdyBaseState
 {
-    public SturdyDashState(Sturdy context, SturdyStateFactory factory) : base(context, factory) { }
+    public SturdyRollingState(Sturdy context, SturdyStateFactory factory) : base(context, factory) { }
 
     float _time;
 
