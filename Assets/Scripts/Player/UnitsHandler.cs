@@ -598,6 +598,8 @@ public class UnitsHandler : PlayerInputHandler
 
         unit.KillUnit();
 
+        ToggleInterfaceVisibility(false);
+
         SetEnemiesTargetUnit(null, true);
         Debug.Log("You are dead");
     }

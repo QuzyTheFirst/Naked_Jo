@@ -1795,7 +1795,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a95c8d5196b8df445bad01fb393f1595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interfaceParts: []
+  _interfaceParts:
+  - {fileID: 1745598066640422625}
+  - {fileID: 6615043323276606930}
+  - {fileID: 262223861}
+  - {fileID: 1143638663}
+  - {fileID: 1945600703}
+  - {fileID: 1589344145}
+  - {fileID: 1248347641}
+  - {fileID: 1517635305}
   _goldenKey: {fileID: 21300000, guid: e227f0d18e92289449587a236dc6a056, type: 3}
   _silverKey: {fileID: 21300000, guid: 3fc88ab34aa91fa4ea40e013f732559f, type: 3}
   _bronzeKey: {fileID: 21300000, guid: 4e33faa18dc1ee840b66d1236dd9f2c2, type: 3}
