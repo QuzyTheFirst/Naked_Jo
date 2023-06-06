@@ -593,6 +593,7 @@ GameObject:
   - component: {fileID: 1231440164}
   - component: {fileID: 6241506870422636142}
   - component: {fileID: 4993706771387130529}
+  - component: {fileID: 7768779427030620919}
   m_Layer: 7
   m_Name: BigKatanaMan
   m_TagString: Enemy
@@ -699,6 +700,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.63
+--- !u!114 &7768779427030620919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6241506870422636143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7efe9a8fcf1dc9d42ba65004c43e63d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _goldKeyPf: {fileID: 8961444215993739431, guid: eb6cdb7a25fc3ba4a94cd8c1e6118f01, type: 3}
+  _silverKeyPf: {fileID: 1938531038230644482, guid: d980358be5af37a48b48ac105c945e52, type: 3}
+  _bronzeKeyPf: {fileID: 4037860497649604304, guid: 23eee59a0cc677c4ab14fbeaecdebb8c, type: 3}
+  KeyList: 01000000
 --- !u!1001 &259746738081842153
 PrefabInstance:
   m_ObjectHideFlags: 0
