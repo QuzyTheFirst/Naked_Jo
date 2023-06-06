@@ -32,6 +32,9 @@ public class UnitsHandler : PlayerInputHandler
     private float _possessionCooldownTimer = 0f;
     private bool _isPossessionKeyPressed = false;
 
+    [Header("Blood")]
+    [SerializeField] private static ParticleSystem _bloodParticleSystem;
+
     [Header("Attack Masks")]
     [SerializeField] private LayerMask _enemyAttackMask;
     [SerializeField] private LayerMask _playerAttackMask;
@@ -86,6 +89,9 @@ public class UnitsHandler : PlayerInputHandler
     private float _movementDirection = 0f;
 
     private Coroutine _keepAttackingCoroutine;
+
+    // Blood
+    public static ParticleSystem BloodParticleSystem { get { return _bloodParticleSystem; } }
 
     protected override void OnEnable()
     {
@@ -222,6 +228,8 @@ public class UnitsHandler : PlayerInputHandler
         _postProcessingController.SetUpPostProcessingController(_slowMoPPVolume, _killPPVolume);
 
         _playerUnit.MyCostumeChanger.LoadCostume();
+
+        _bloodParticleSystem = GetComponentInChildren<BloodParticlesCollision>().BloodParticleSystem;
     }
 
     private void Update()

@@ -96,6 +96,9 @@ public class MelleeWeapon : Weapon
                     _hitted = true;
                     iDamagable.Damage(1);
                     attackedColliders.Add(coll);
+
+                    UnitsHandler.BloodParticleSystem.transform.position = coll.transform.position;
+                    UnitsHandler.BloodParticleSystem.Play();
                 }
 
                 Rigidbody2D rig = coll.GetComponent<Rigidbody2D>();
@@ -186,6 +189,10 @@ public class MelleeWeapon : Weapon
                     _hitted = true;
                     iDamagable.Damage(1);
                     attackedColliders.Add(coll);
+
+                    UnitsHandler.BloodParticleSystem.transform.position = coll.transform.position;
+                    UnitsHandler.BloodParticleSystem.transform.rotation = Quaternion.Euler(dir);
+                    UnitsHandler.BloodParticleSystem.Play();
                 }
 
                 Rigidbody2D rig = coll.GetComponent<Rigidbody2D>();
