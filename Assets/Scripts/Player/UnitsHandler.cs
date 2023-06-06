@@ -353,10 +353,10 @@ public class UnitsHandler : PlayerInputHandler
 
         SetUIAmmoAmount(newUnit);
 
-        SetEnemiesTargetUnit(changeImmediately);
+        SetEnemiesTargetUnit(newUnit, changeImmediately);
     }
 
-    private void SetEnemiesTargetUnit(bool immediately = false)
+    private void SetEnemiesTargetUnit(Unit targetUnit, bool immediately = false)
     {
         if (_enemiesCantSeeYou)
             return;
@@ -366,7 +366,7 @@ public class UnitsHandler : PlayerInputHandler
             if (_units[i] == _playerUnit)
                 continue;
 
-            _units[i].Enemy.SetTargetUnit(_currentUnit, immediately);
+            _units[i].Enemy.SetTargetUnit(targetUnit, immediately);
         }
     }
 
@@ -419,6 +419,9 @@ public class UnitsHandler : PlayerInputHandler
 
     private void UnitsHandler_ExplodePerformed(object sender, EventArgs e)
     {
+        if (_currentUnit.IsDead)
+            return;
+
         _isExplosionButtonPressed = true;
 
         if (_isExplosionButtonPressed && !_currentUnit.IsPlayer && _explosionCooldownTimer < 0f)
@@ -555,7 +558,7 @@ public class UnitsHandler : PlayerInputHandler
             ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
             _postProcessingController.PlayKillPostProcessAnim();
 
-            Destroy(unit.transform.gameObject);
+            unit.KillUnit();
             return;
         }
 
@@ -582,16 +585,10 @@ public class UnitsHandler : PlayerInputHandler
 
     private void KillPlayer(Unit unit)
     {
-        PlayerUnit player = unit.Player;
+        unit.KillUnit();
 
-        /*unit.enabled = true;
-        unit.WeaponController.DropWeapon();
-
-        Destroy(unit.transform.gameObject);*/
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-        //Debug.Log("You are dead");
+        SetEnemiesTargetUnit(null, true);
+        Debug.Log("You are dead");
     }
     #endregion
 
@@ -603,12 +600,18 @@ public class UnitsHandler : PlayerInputHandler
         if (!_isSlowMotionKeyPressed || _isExplosionButtonPressed)
             return;
 
+        if (_currentUnit.IsDead)
+            return;
+
         _isPossessionKeyPressed = true;
     }
 
     private void UnitsHandler_PossessCanceled(object sender, EventArgs e)
     {
         if (!_isSlowMotionKeyPressed || _isExplosionButtonPressed)
+            return;
+
+        if (_currentUnit.IsDead)
             return;
 
         _isPossessionKeyPressed = false;
@@ -852,6 +855,9 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_SlowMotionPerformed(object sender, EventArgs e)
     {
+        if (_currentUnit.IsDead)
+            return;
+
         _isSlowMotionKeyPressed = true;
 
         if (_slowMotionTimer > 0f)
@@ -863,6 +869,9 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_SlowMotionCanceled(object sender, EventArgs e)
     {
+        if (_currentUnit.IsDead)
+            return;
+
         _isSlowMotionKeyPressed = false;
         Time.timeScale = 1f;
 
@@ -938,11 +947,17 @@ public class UnitsHandler : PlayerInputHandler
         if (_isSlowMotionKeyPressed)
             return;
 
-        if(_currentUnit.MyWeaponController != null)
+        if (_currentUnit.IsDead)
+            return;
+
+        if (_currentUnit.MyWeaponController != null)
             _currentUnit.MyWeaponController.TryPickUpWeapon();
     }
     public void UnitsHandler_CrouchPerformed(object sender, EventArgs e)
     {
+        if (_currentUnit.IsDead)
+            return;
+
         RaycastHit2D hit = Physics2D.Raycast(_currentUnit.transform.position, Vector2.down, 1f, _platformMask);
         if (hit.transform != null)
         {
@@ -968,7 +983,10 @@ public class UnitsHandler : PlayerInputHandler
 
     private bool StartRolling(float dir)
     {
-         return _currentUnit.Player.Roll(dir);
+        if (_currentUnit.IsDead)
+            return false;
+
+        return _currentUnit.Player.Roll(dir);
     }
 
     private IEnumerator EnableCollision(Collider2D col1, Collider2D col2, float time)

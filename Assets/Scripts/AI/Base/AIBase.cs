@@ -78,7 +78,7 @@ public class AIBase : ComponentsGetter
     public float AttackRadius { get { return _attackRadius; } }
     public MovementState Movement { get { return _movement; } set { _movement = value; } }
 
-    public Transform TargetUnitTf { get { return _targetUnit.transform; } }
+    public Transform TargetUnitTf { get { return _targetUnit ? _targetUnit.transform : null; } }
     public Unit TargetUnit { get { return _targetUnit; } }
 
     public LayerMask GroundMask { get { return _groundMask; } }

@@ -97,6 +97,12 @@ public class MelleeWeapon : Weapon
                     iDamagable.Damage(1);
                     attackedColliders.Add(coll);
                 }
+
+                Rigidbody2D rig = coll.GetComponent<Rigidbody2D>();
+                if(rig != null)
+                {
+                    rig.velocity = dir * 6;
+                }
             }
 
             if (_hitted)
@@ -180,6 +186,12 @@ public class MelleeWeapon : Weapon
                     _hitted = true;
                     iDamagable.Damage(1);
                     attackedColliders.Add(coll);
+                }
+
+                Rigidbody2D rig = coll.GetComponent<Rigidbody2D>();
+                if (rig != null)
+                {
+                    rig.velocity = dir * 6;
                 }
             }
 

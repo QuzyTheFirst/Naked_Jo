@@ -6,6 +6,10 @@ using UnityEngine;
 public class Unit : ComponentsGetter, IDamagable
 {
     [SerializeField] protected bool _isPlayer = false;
+    [SerializeField] private Sprite _deadBody;
+    [SerializeField] private PhysicsMaterial2D _deadBodyMat;
+
+    private bool _isDead = false;
 
     public PlayerUnit Player;
     public EnemyUnit Enemy;
@@ -14,6 +18,7 @@ public class Unit : ComponentsGetter, IDamagable
     public static event EventHandler<Collision2D> OnCollisionEnter;
 
     public bool IsPlayer { get { return _isPlayer; } }
+    public bool IsDead { get { return _isDead; } }
 
     public bool IsAttacking { 
         get {
@@ -32,16 +37,48 @@ public class Unit : ComponentsGetter, IDamagable
         Enemy = new EnemyUnit(MyEnemyController);
     }
 
+    public void KillUnit()
+    {
+        if(_deadBody != null)
+            MySpriteRenderer.sprite = _deadBody;
+
+        gameObject.layer = 12;
+        MyRigidbody.sharedMaterial = _deadBodyMat;
+        MyCircleCollider.sharedMaterial = _deadBodyMat;
+
+        Player.MoveCanceled();
+        Player.JumpCanceled();
+
+        Destroy(MyGroundChecker.gameObject);
+        Destroy(MyPlayerController.gameObject);
+
+        if (!_isPlayer)
+        {
+            MyEnemyController.StunAnimGO.SetActive(false);
+            MyEnemyController.Movement = AIBase.MovementState.Stop;
+            Destroy(MyEnemyController.gameObject);
+            Destroy(MyWeaponController.gameObject);
+            Destroy(MyHeadTrigger.gameObject);
+        }
+
+        _isDead = true;
+
+        enabled = false;
+    }
+
     public void Damage(int amount)
     {
         if (IsPlayer)
         {
             OnDeath?.Invoke(this, EventArgs.Empty);
+
+            _isDead = true;
         }
         else
         {
             if (MyEnemyController.Damage(amount))
                 OnDeath?.Invoke(this, EventArgs.Empty);
+            _isDead = true;
         }
     }
 
