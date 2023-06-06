@@ -90,9 +90,6 @@ public class UnitsHandler : PlayerInputHandler
 
     private Coroutine _keepAttackingCoroutine;
 
-    // Blood
-    public static ParticleSystem BloodParticleSystem { get { return _bloodParticleSystem; } }
-
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -566,6 +563,9 @@ public class UnitsHandler : PlayerInputHandler
             ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
             _postProcessingController.PlayKillPostProcessAnim();
 
+            _bloodParticleSystem.transform.position = unit.transform.position;
+            _bloodParticleSystem.Play();
+
             unit.KillUnit();
             return;
         }
@@ -593,6 +593,9 @@ public class UnitsHandler : PlayerInputHandler
 
     private void KillPlayer(Unit unit)
     {
+        _bloodParticleSystem.transform.position = unit.transform.position;
+        _bloodParticleSystem.Play();
+
         unit.KillUnit();
 
         SetEnemiesTargetUnit(null, true);

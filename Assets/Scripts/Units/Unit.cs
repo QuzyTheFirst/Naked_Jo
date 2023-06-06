@@ -45,6 +45,8 @@ public class Unit : ComponentsGetter, IDamagable
         gameObject.layer = 12;
         MyRigidbody.sharedMaterial = _deadBodyMat;
         MyCircleCollider.sharedMaterial = _deadBodyMat;
+        MySpriteRenderer.sortingOrder = -1;
+        MySpriteRenderer.color = Color.grey;
 
         Player.MoveCanceled();
         Player.JumpCanceled();
