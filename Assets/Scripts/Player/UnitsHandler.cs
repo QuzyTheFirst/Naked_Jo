@@ -144,6 +144,8 @@ public class UnitsHandler : PlayerInputHandler
         InteractionPerformed += UnitsHandler_InteractionPerformed;
         InteractionCanceled += UnitsHandler_InteractionCanceled;
 
+        OpenPauseMenuPerformed += UnitsHandler_OpenPauseMenuPerformed;
+
         // Components
         _cameraTargetController = GetComponent<CameraTargetController>();
         _keyHolder = GetComponent<KeyHolder>();
@@ -169,6 +171,16 @@ public class UnitsHandler : PlayerInputHandler
         }
 
         _postProcessingController = GetComponent<PostProcessingController>();
+
+
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
+        Time.timeScale = 1;
+    }
+
+    private void UnitsHandler_OpenPauseMenuPerformed(object sender, EventArgs e)
+    {
+        GameUIController.Instance.TogglePauseMenu(!GameUIController.IsPauseMenuOpened);
     }
 
     private void UnitsHandler_InteractionCanceled(object sender, EventArgs e)
@@ -609,6 +621,7 @@ public class UnitsHandler : PlayerInputHandler
         unit.KillUnit();
 
         ToggleInterfaceVisibility(false);
+        GameUIController.Instance.ToggleRestartPanel(true);
 
         SetEnemiesTargetUnit(null, true);
         Debug.Log("You are dead");
@@ -635,7 +648,11 @@ public class UnitsHandler : PlayerInputHandler
             return;
 
         if (_currentUnit.IsDead)
+        {
+            _isPossessionKeyPressed = false;
+            HidePossessionLine();
             return;
+        }
 
         _isPossessionKeyPressed = false;
 
@@ -881,6 +898,9 @@ public class UnitsHandler : PlayerInputHandler
         if (_currentUnit.IsDead)
             return;
 
+        if (GameUIController.IsPauseMenuOpened)
+            return;
+
         _isSlowMotionKeyPressed = true;
 
         if (_slowMotionTimer > 0f)
@@ -892,7 +912,7 @@ public class UnitsHandler : PlayerInputHandler
 
     public void UnitsHandler_SlowMotionCanceled(object sender, EventArgs e)
     {
-        if (_currentUnit.IsDead)
+        if (GameUIController.IsPauseMenuOpened)
             return;
 
         _isSlowMotionKeyPressed = false;

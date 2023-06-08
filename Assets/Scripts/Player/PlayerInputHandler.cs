@@ -36,6 +36,8 @@ public class PlayerInputHandler : PlayerComponentsGetter
     protected event EventHandler InteractionPerformed;
     protected event EventHandler InteractionCanceled;
 
+    protected event EventHandler OpenPauseMenuPerformed;
+
     private PlayerControls playerControls;
 
     protected new void Awake()
@@ -73,6 +75,13 @@ public class PlayerInputHandler : PlayerComponentsGetter
 
         playerControls.Player.Interact.performed += Interact_performed;
         playerControls.Player.Interact.canceled += Interact_canceled;
+
+        playerControls.Player.OpenPauseMenu.performed += OpenPauseMenu_performed;
+    }
+
+    private void OpenPauseMenu_performed(InputAction.CallbackContext obj)
+    {
+        OpenPauseMenuPerformed?.Invoke(this, EventArgs.Empty);
     }
 
     private void Interact_canceled(InputAction.CallbackContext obj)

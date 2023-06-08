@@ -125,6 +125,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenPauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f7d5d38-6e40-4450-897c-7a9f89ebc577"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -270,6 +279,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""892f6f1f-cddb-4286-a6be-c1c17399229a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""OpenPauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -306,6 +326,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Explode = m_Player.FindAction("Explode", throwIfNotFound: true);
         m_Player_ZoomInOut = m_Player.FindAction("ZoomInOut", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_OpenPauseMenu = m_Player.FindAction("OpenPauseMenu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -378,6 +399,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Explode;
     private readonly InputAction m_Player_ZoomInOut;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_OpenPauseMenu;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -393,6 +415,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Explode => m_Wrapper.m_Player_Explode;
         public InputAction @ZoomInOut => m_Wrapper.m_Player_ZoomInOut;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @OpenPauseMenu => m_Wrapper.m_Player_OpenPauseMenu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -435,6 +458,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @OpenPauseMenu.started += instance.OnOpenPauseMenu;
+            @OpenPauseMenu.performed += instance.OnOpenPauseMenu;
+            @OpenPauseMenu.canceled += instance.OnOpenPauseMenu;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -472,6 +498,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @OpenPauseMenu.started -= instance.OnOpenPauseMenu;
+            @OpenPauseMenu.performed -= instance.OnOpenPauseMenu;
+            @OpenPauseMenu.canceled -= instance.OnOpenPauseMenu;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -511,5 +540,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnExplode(InputAction.CallbackContext context);
         void OnZoomInOut(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnOpenPauseMenu(InputAction.CallbackContext context);
     }
 }

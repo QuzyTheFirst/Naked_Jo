@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -66,7 +67,16 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private Vector2 _nkyShowPos;
     [SerializeField] private Vector2 _nkyHidePos;
 
+    [Header("Restart")]
+    [SerializeField] private GameObject _restartPanel;
+
+    [Header("Pause Menu")]
+    [SerializeField] private GameObject _pauseMenu;
+    private static bool _isPauseMenuOpened = false;
+
     public static GameUIController Instance;
+
+    public static bool IsPauseMenuOpened { get { return _isPauseMenuOpened; } }
 
     private void Awake()
     {
@@ -76,6 +86,8 @@ public class GameUIController : MonoBehaviour
 
         _pointerRectTransform.gameObject.SetActive(false);
         _isPointerActivated = false;
+
+        _isPauseMenuOpened = false;
     }
 
     private void Update()
@@ -281,11 +293,46 @@ public class GameUIController : MonoBehaviour
         }
     }
 
+    public void ToggleRestartPanel(bool value)
+    {
+        _restartPanel.SetActive(value);
+    }
+
     public void ToggleInterfaceVisibility(bool value)
     {
         foreach(GameObject go in _interfaceParts)
         {
             go.SetActive(value);
         }
+    }
+
+    public void TogglePauseMenu(bool value)
+    {
+        ToggleInterfaceVisibility(!value);
+
+        Time.timeScale = value ? 0 : 1;
+        _pauseMenu.SetActive(value);
+
+        Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Confined;
+        Cursor.visible = value ? true : false;
+
+        _isPauseMenuOpened = value;
+    }
+
+    public void Continue()
+    {
+        TogglePauseMenu(false);
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void BackToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+    public void Exit()
+    {
+        Application.Quit();
     }
 }
