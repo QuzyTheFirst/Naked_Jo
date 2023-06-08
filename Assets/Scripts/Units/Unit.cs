@@ -10,6 +10,7 @@ public class Unit : ComponentsGetter, IDamagable
     [SerializeField] private PhysicsMaterial2D _deadBodyMat;
 
     private bool _isDead = false;
+    private bool _hasExploded = false;
 
     public PlayerUnit Player;
     public EnemyUnit Enemy;
@@ -19,6 +20,7 @@ public class Unit : ComponentsGetter, IDamagable
 
     public bool IsPlayer { get { return _isPlayer; } }
     public bool IsDead { get { return _isDead; } }
+    public bool HasExploded { get { return _hasExploded; } set { _hasExploded = value; } }
 
     public bool IsAttacking { 
         get {
@@ -39,6 +41,9 @@ public class Unit : ComponentsGetter, IDamagable
 
     public void KillUnit()
     {
+        if (_isDead)
+            return;
+
         if(_deadBody != null)
             MySpriteRenderer.sprite = _deadBody;
 
@@ -73,14 +78,11 @@ public class Unit : ComponentsGetter, IDamagable
         if (IsPlayer)
         {
             OnDeath?.Invoke(this, EventArgs.Empty);
-
-            _isDead = true;
         }
         else
         {
             if (MyEnemyController.Damage(amount))
                 OnDeath?.Invoke(this, EventArgs.Empty);
-            _isDead = true;
         }
     }
 

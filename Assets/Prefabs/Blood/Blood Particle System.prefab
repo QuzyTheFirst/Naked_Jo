@@ -602,7 +602,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 10
+    maxNumParticles: 100
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -662,8 +662,8 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
-    angle: 60
+    type: 0
+    angle: 45
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -807,7 +807,7 @@ ParticleSystem:
           m_RotationOrder: 4
     arc:
       value: 360
-      mode: 0
+      mode: 3
       spread: 0
       speed:
         serializedVersion: 2
@@ -4883,7 +4883,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c042c9aa309065c40997e0c75225b028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splatPrefabs:
-  - {fileID: 7401764913897899677, guid: 14fa7745ba37e7a46a1b59ba750a8c60, type: 3}
-  - {fileID: 7401764913897899677, guid: 9bda164973227c547bf5ed80a5d2df18, type: 3}
-  - {fileID: 7401764913897899677, guid: ed33891317a5fdd4fb7900ead4da8785, type: 3}
+  _splatPrefabs: []
+  _bloodSplattersContainer: {fileID: 0}

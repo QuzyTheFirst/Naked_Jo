@@ -33,7 +33,8 @@ public class UnitsHandler : PlayerInputHandler
     private bool _isPossessionKeyPressed = false;
 
     [Header("Blood")]
-    [SerializeField] private static ParticleSystem _bloodParticleSystem;
+    [SerializeField] private ParticleSystem _bloodParticleSystem;
+    [SerializeField] private Transform _enemyBodyParts;
 
     [Header("Attack Masks")]
     [SerializeField] private LayerMask _enemyAttackMask;
@@ -225,8 +226,6 @@ public class UnitsHandler : PlayerInputHandler
         _postProcessingController.SetUpPostProcessingController(_slowMoPPVolume, _killPPVolume);
 
         _playerUnit.MyCostumeChanger.LoadCostume();
-
-        _bloodParticleSystem = GetComponentInChildren<BloodParticlesCollision>().BloodParticleSystem;
     }
 
     private void Update()
@@ -484,6 +483,7 @@ public class UnitsHandler : PlayerInputHandler
             _playerUnit.gameObject.SetActive(true);
             _playerUnit.MyCostumeChanger.SetCostume(CostumeChanger.Costumes.Naked);
 
+            oldUnit.HasExploded = true;
             oldUnit.Damage(100);
 
             Collider2D[] colls = Physics2D.OverlapCircleAll(explodingUnit.transform.position, _explosionRadius, _playerAttackMask);
@@ -563,10 +563,20 @@ public class UnitsHandler : PlayerInputHandler
             ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
             _postProcessingController.PlayKillPostProcessAnim();
 
-            _bloodParticleSystem.transform.position = unit.transform.position;
-            _bloodParticleSystem.Play();
+            Debug.Log(unit.transform.name + " : " + unit.HasExploded);
 
-            unit.KillUnit();
+            if (unit.HasExploded)
+            {
+                Instantiate(_enemyBodyParts, unit.transform.position, Quaternion.identity);
+                Destroy(unit.transform.gameObject);
+            }
+            else
+            {
+                _bloodParticleSystem.transform.position = unit.transform.position;
+                _bloodParticleSystem.Play();
+
+                unit.KillUnit();
+            }
             return;
         }
 

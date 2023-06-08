@@ -290,9 +290,13 @@ public class AIBase : ComponentsGetter
         yield return new WaitForSeconds(time);
 
         if (col1 == null || col2 == null)
+        {
             yield return null;
-
-        Physics2D.IgnoreCollision(col1, col2, false);
+        }
+        else
+        {
+            Physics2D.IgnoreCollision(col1, col2, false);
+        }
     }
 
     public virtual bool Damage(int amount)

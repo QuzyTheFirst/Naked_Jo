@@ -5,10 +5,13 @@ using UnityEngine;
 public class RangeWeapon : Weapon
 {
     [SerializeField] private RangeWeaponParams _weaponParams;
+    [SerializeField] private ParticleSystem _particleSystem;
 
     private int _currentAmmo;
 
     private float _lastAttackTime = 0;
+
+    private Animator _anim;
 
     public int CurrentAmmo { get { return _currentAmmo; } set { _currentAmmo = value; } }
 
@@ -24,6 +27,7 @@ public class RangeWeapon : Weapon
     {
         base.Awake();
         _currentAmmo = _weaponParams.Ammo;
+        _anim = GetComponent<Animator>();
     }
 
     public override void OnUpdate(Vector2 targetPos)
@@ -79,6 +83,14 @@ public class RangeWeapon : Weapon
         }
 
         SoundManager.Instance.Play("PistolShoot");
+        _anim.SetTrigger("Shoot");
+
+        _particleSystem.transform.position = (Vector2)unitTf.transform.position + (vectorToTarget.normalized * distanceFromPlayer);
+
+        /*Quaternion particleRotation = Quaternion.LookRotation(vectorToTarget, Vector3.forward);
+        Debug.Log(particleRotation);
+        _particleSystem.transform.rotation = Quaternion.Euler(90,90,90);*/
+        _particleSystem.Play();
 
         _currentAmmo--;
         _lastAttackTime = Time.time;
@@ -125,6 +137,8 @@ public class RangeWeapon : Weapon
         }
 
         SoundManager.Instance.Play("PistolShoot");
+        _anim.SetTrigger("Shoot");
+        _particleSystem.Play();
 
         _currentAmmo--;
         _lastAttackTime = Time.time;

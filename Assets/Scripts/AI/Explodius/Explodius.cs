@@ -84,14 +84,21 @@ public class Explodius : AIBase
     public override bool Damage(int amount)
     {
         if (!_isExploding)
+        {
             Explode(this);
+            return false;
+        }
 
         return true;
     }
 
     public void Explode(Explodius context)
     {
+        if (_isExploding)
+            return;
+
         _isExploding = true;
+        context.MyUnit.HasExploded = true;
 
         Collider2D[] colls = Physics2D.OverlapCircleAll(context.transform.position, context.ExplosionRadius);
         foreach (Collider2D col in colls)
@@ -108,6 +115,13 @@ public class Explodius : AIBase
 
                     if (explodius.IsExploding)
                         continue;
+                }
+
+                Rigidbody2D rig = col.transform.GetComponent<Rigidbody2D>();
+                if(rig != null)
+                {
+                    Vector2 dir = (col.transform.position - transform.position).normalized;
+                    rig.velocity = dir * 6;
                 }
 
                 unit.Damage(100);

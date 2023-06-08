@@ -74,9 +74,17 @@ public class WeaponController : ComponentsGetter
         float dir = Mathf.Sign((_targetPos - (Vector2)transform.position).x);
 
         if (dir == -1)
+        {
+            renderer.flipX = true;
             renderer.flipY = true;
+            _currentWeapon.GetSpriteRenderer().transform.parent.localScale = new Vector2(-1, 1);
+        }
         else
+        {
+            renderer.flipX = false;
             renderer.flipY = false;
+            _currentWeapon.GetSpriteRenderer().transform.parent.localScale = new Vector2(1, 1);
+        }
     }
 
     public bool Shoot(Transform target)

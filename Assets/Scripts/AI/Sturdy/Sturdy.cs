@@ -123,7 +123,9 @@ public class Sturdy : AIBase
             return coll;
         }
 
-
+        if (TargetUnit == null)
+            return null;
+         
         float distanceToPlayer = Vector2.Distance(transform.position, TargetUnitTf.position);
         if(distanceToPlayer <= _lookForDangerRadius)
         {
@@ -139,6 +141,7 @@ public class Sturdy : AIBase
     public override bool Damage(int amount)
     {
         _helmet.SetActive(false);
+
         return base.Damage(amount);
     }
 
