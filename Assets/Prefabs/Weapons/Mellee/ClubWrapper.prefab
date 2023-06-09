@@ -48,7 +48,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.06}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -59,7 +59,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.31, y: 0.75}
+  m_Size: {x: 0.31, y: 1.25}
   m_EdgeRadius: 0
 --- !u!50 &2772708087972418605
 Rigidbody2D:
@@ -148,7 +148,7 @@ MonoBehaviour:
   _weaponParams: {fileID: 11400000, guid: d0710b6d7c2924142a4b199d3e03b9f8, type: 2}
 --- !u!95 &527060077104225548
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -165,7 +165,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &7530146349971299047
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -179,10 +180,10 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.06}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.49648386, y: 0.56235206}
+    pivot: {x: 0.5, y: 0.52}
     oldSize: {x: 1.25, y: 2.21875}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
@@ -190,7 +191,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.31, y: 0.75}
+  m_Size: {x: 0.31, y: 1.25}
   m_EdgeRadius: 0
 --- !u!212 &563856014105883512
 SpriteRenderer:

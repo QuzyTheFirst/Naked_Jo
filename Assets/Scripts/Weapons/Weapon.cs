@@ -30,6 +30,9 @@ public class Weapon : MonoBehaviour, IWeapon
 
     private Unit _unit;
 
+    private Vector2 _startingBoxColliderSize;
+    private BoxCollider2D _boxCollider;
+
     protected Transform MainTf { get { return _mainTf; } }
     protected Rigidbody2D Rig { get { return _rig; } }
     protected Unit UnitController { get { return _unit; } }
@@ -39,8 +42,11 @@ public class Weapon : MonoBehaviour, IWeapon
     {
         _mainTf = transform.parent;
         _rig = _mainTf.GetComponent<Rigidbody2D>();
+        _boxCollider = _mainTf.GetComponent<BoxCollider2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _weaponWrapper.OnCollisionTouch += _weaponWrapper_OnCollisionTouch;
+
+        _startingBoxColliderSize = _boxCollider.size;
     }
 
     public virtual void OnUpdate(Vector2 targetPos)
@@ -167,6 +173,8 @@ public class Weapon : MonoBehaviour, IWeapon
         _rig.velocity = dir * speed;
         _rig.angularVelocity = 1440f;
 
+        _boxCollider.size = new Vector2(.55f, .55f);
+
         _unit = null;
     }
 
@@ -181,6 +189,8 @@ public class Weapon : MonoBehaviour, IWeapon
         _rig.bodyType = RigidbodyType2D.Dynamic;
         _rig.velocity *= .2f;
         _rig.angularVelocity *= .2f;
+
+        _boxCollider.size = _startingBoxColliderSize;
 
         Vector2 dirToWeapon = (transform.position - collision.transform.position).normalized;
         Vector2 dirToCollision = -dirToWeapon;

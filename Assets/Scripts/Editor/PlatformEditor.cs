@@ -22,5 +22,6 @@ public class PlatformEditor : Editor
 
         collider.size = _size;
         renderer.size = _size;
+        platform.PlatformSpriteMask.localScale = _size;
     }
 }

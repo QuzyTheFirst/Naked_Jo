@@ -6,12 +6,16 @@ public class RangeWeapon : Weapon
 {
     [SerializeField] private RangeWeaponParams _weaponParams;
     [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private Transform _shootPosTf;
 
     private int _currentAmmo;
 
     private float _lastAttackTime = 0;
 
     private Animator _anim;
+
+    // Shooting
+    private Vector2 _shootingPos;
 
     public int CurrentAmmo { get { return _currentAmmo; } set { _currentAmmo = value; } }
 
@@ -28,6 +32,8 @@ public class RangeWeapon : Weapon
         base.Awake();
         _currentAmmo = _weaponParams.Ammo;
         _anim = GetComponent<Animator>();
+
+        _shootingPos = _shootPosTf.localPosition;
     }
 
     public override void OnUpdate(Vector2 targetPos)
@@ -56,7 +62,7 @@ public class RangeWeapon : Weapon
 
         Transform unitTf = UnitController.transform;
 
-        float distanceFromPlayer = 1.25f;
+        float distanceFromPlayer = _weaponParams.WeaponDistanceFromUnit + _shootingPos.x;
         Vector2 vectorToTarget = (target.position - unitTf.position);
         Vector2 perpendicular = Vector2.Perpendicular(vectorToTarget);
 
@@ -66,7 +72,8 @@ public class RangeWeapon : Weapon
 
             Vector2 dir = (vectorToTarget + perpendicular * randNum).normalized;
 
-            Vector2 spawnPos = (Vector2)unitTf.transform.position + (dir * distanceFromPlayer);
+            Vector2 TheVector = Quaternion.LookRotation(vectorToTarget) * _shootingPos;
+            Vector2 spawnPos = (Vector2)unitTf.transform.position + (vectorToTarget.normalized * distanceFromPlayer + TheVector);
 
             float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
@@ -83,13 +90,11 @@ public class RangeWeapon : Weapon
         }
 
         SoundManager.Instance.Play("PistolShoot");
+
         _anim.SetTrigger("Shoot");
 
-        _particleSystem.transform.position = (Vector2)unitTf.transform.position + (vectorToTarget.normalized * distanceFromPlayer);
-
-        /*Quaternion particleRotation = Quaternion.LookRotation(vectorToTarget, Vector3.forward);
-        Debug.Log(particleRotation);
-        _particleSystem.transform.rotation = Quaternion.Euler(90,90,90);*/
+        Vector2 TheVectorTwo = Quaternion.LookRotation(vectorToTarget) * _shootingPos;
+        _shootPosTf.position = (Vector2)unitTf.transform.position + (vectorToTarget.normalized * distanceFromPlayer + TheVectorTwo);
         _particleSystem.Play();
 
         _currentAmmo--;
@@ -110,7 +115,7 @@ public class RangeWeapon : Weapon
 
         Transform unitTf = UnitController.transform;
 
-        float distanceFromPlayer = 1.25f;
+        float distanceFromPlayer = _weaponParams.WeaponDistanceFromUnit + _shootingPos.x;
         Vector2 vectorToTarget = targetUnit.transform.position - unitTf.position;
         Vector2 perpendicular = Vector2.Perpendicular(vectorToTarget);
 
@@ -120,7 +125,8 @@ public class RangeWeapon : Weapon
 
             Vector2 dir = (vectorToTarget + perpendicular * randNum).normalized;
 
-            Vector2 spawnPos = (Vector2)unitTf.transform.position + (dir * distanceFromPlayer);
+            Vector2 TheVector = Quaternion.LookRotation(vectorToTarget) * _shootingPos;
+            Vector2 spawnPos = (Vector2)unitTf.transform.position + (vectorToTarget.normalized * distanceFromPlayer + TheVector);
 
             float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
@@ -138,6 +144,9 @@ public class RangeWeapon : Weapon
 
         SoundManager.Instance.Play("PistolShoot");
         _anim.SetTrigger("Shoot");
+
+        Vector2 TheVectorTwo = Quaternion.LookRotation(vectorToTarget) * _shootingPos;
+        _shootPosTf.position = (Vector2)unitTf.transform.position + (vectorToTarget.normalized * distanceFromPlayer + TheVectorTwo);
         _particleSystem.Play();
 
         _currentAmmo--;

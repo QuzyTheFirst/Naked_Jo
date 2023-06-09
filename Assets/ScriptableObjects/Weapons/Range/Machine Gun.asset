@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Machine Gun
   m_EditorClassIdentifier: 
   PlayerAttackRate: 0.1
-  WeaponDistanceFromUnit: 0.5
+  WeaponDistanceFromUnit: 0.7
   EnemyAttackRate: 0.1
   DistanceBeforeInitiatingAttack: 20
   Ammo: 30

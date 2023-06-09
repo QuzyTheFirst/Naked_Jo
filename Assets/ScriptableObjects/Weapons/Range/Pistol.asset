@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   PlayerAttackRate: 0.1
-  WeaponDistanceFromUnit: 0.5
+  WeaponDistanceFromUnit: 0.65
   EnemyAttackRate: 1
   DistanceBeforeInitiatingAttack: 30
   Ammo: 12

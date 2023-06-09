@@ -63,6 +63,9 @@ public class Unit : ComponentsGetter, IDamagable
         {
             MyEnemyController.StunAnimGO.SetActive(false);
             MyEnemyController.Movement = AIBase.MovementState.Stop;
+
+            MyWeaponController.DropWeapon();
+
             Destroy(MyEnemyController.gameObject);
             Destroy(MyWeaponController.gameObject);
             Destroy(MyHeadTrigger.gameObject);
