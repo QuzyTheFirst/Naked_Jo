@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: f649d0c91dc5d154cbff55b6b21852dc
+guid: 940dfda330710874b9d181554b75adb3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,6 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -124,37 +125,49 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Idle
+      name: MetalPipe_Idle
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 40
+        width: 37
         height: 71
-      alignment: 9
-      pivot: {x: 0.5, y: 0.52}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5a89d0339acf9804ba8b88ad5129a351
-      internalID: -1628716878
+      spriteID: 37e75f3beec0f664688f0efaad8da982
+      internalID: 1248228189
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Prepare
+      name: MetalPipe_Prepare
       rect:
         serializedVersion: 2
-        x: 40
+        x: 37
         y: 0
-        width: 40
+        width: 37
         height: 71
       alignment: 9
       pivot: {x: 0.32, y: 0.28}
@@ -163,19 +176,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a2771b68f0d415540bc5be4bba1dbc82
-      internalID: 1554685966
+      spriteID: a0acce5cb0f018344a2830858c5abbc9
+      internalID: 174905813
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack_0
+      name: MetalPipe_Attack_1
       rect:
         serializedVersion: 2
-        x: 80
+        x: 74
         y: 0
-        width: 40
+        width: 37
         height: 71
       alignment: 9
       pivot: {x: 0.15, y: 0.5}
@@ -184,19 +197,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9fbfae96d54510a498d3f0e34170a676
-      internalID: 1417632201
+      spriteID: 1b1f2bde26d3d4344902e933e8e75f85
+      internalID: 25632213
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack_1
+      name: MetalPipe_Attack_2
       rect:
         serializedVersion: 2
-        x: 120
+        x: 111
         y: 0
-        width: 40
+        width: 37
         height: 71
       alignment: 9
       pivot: {x: 0.15, y: 0.5}
@@ -205,8 +218,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0728a4b5beb49414d9dee45398c83124
-      internalID: -833539821
+      spriteID: d9ec73bd50d842f4483fee06757c60ee
+      internalID: 1404434047
       vertices: []
       indices: 
       edges: []
@@ -222,10 +235,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Idle: -1628716878
-      Attack_0: 1417632201
-      Prepare: 1554685966
-      Attack_1: -833539821
+      MetalPipe_Attack_1: 25632213
+      MetalPipe_Attack_2: 1404434047
+      MetalPipe_Idle: 1248228189
+      MetalPipe_Prepare: 174905813
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

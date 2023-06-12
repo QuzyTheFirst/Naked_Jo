@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Katana
   m_EditorClassIdentifier: 
   PlayerAttackRate: 0.5
-  WeaponDistanceFromUnit: 0.5
+  WeaponDistanceFromUnit: 0.6
   EnemyAttackRate: 0.5
   DistanceBeforeInitiatingAttack: 2.25
   AttackRange: 0.9
   AttackDistance: 0.9
   AttackTime: 0.1
+  EndAttackTime: 0.1
   PrepareTime: 0
   AttackSoundName: ClubAttack
   CanDeflectBullets: 1

@@ -12,6 +12,8 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
     {
         context.Movement = AIBase.MovementState.Stop;
 
+        context.MyWeaponController.GetAnimator().SetTrigger("Block");
+
         if (context.BulletsToDeflect.Length > 0)
         {
             DeflectBullets(context, context.BulletsToDeflect);
@@ -59,7 +61,7 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
 
     public override void OnExit(LittleKatanaMan context)
     {
-
+        context.MyWeaponController.GetAnimator().SetTrigger("Idle");
     }
 
     public override void InitializeSubState(LittleKatanaMan context)

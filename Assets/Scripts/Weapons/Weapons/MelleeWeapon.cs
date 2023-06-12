@@ -7,7 +7,8 @@ public class MelleeWeapon : Weapon
     [SerializeField] private MelleeWeaponParams _weaponParams;
 
     private float _lastAttackTime;
-    private float _attackTimer = 0;
+    private float _attackTimer = 0f;
+    private float _endAttackTimer = 0f;
 
     private bool _isAttacking = false;
     private float _attackTime;
@@ -34,7 +35,10 @@ public class MelleeWeapon : Weapon
 
         //Weapon Position
         float distanceFromPlayer = _weaponParams.WeaponDistanceFromUnit;
-        MainTf.localPosition = dir * distanceFromPlayer;
+        MainTf.localPosition = (dir * distanceFromPlayer);
+
+        if (_handle != null)
+            MainTf.localPosition -= new Vector3(0f, _handle.localPosition.y);
     }
 
     public override bool Shoot(Transform target)
@@ -68,6 +72,7 @@ public class MelleeWeapon : Weapon
         SoundManager.Instance.Play(_weaponParams.AttackSoundName);
 
         _attackTimer = 0f;
+        _endAttackTimer = 0f;
 
         List<Collider2D> attackedColliders = new List<Collider2D>();
 
@@ -113,6 +118,17 @@ public class MelleeWeapon : Weapon
 
             yield return new WaitForFixedUpdate();
         }
+
+        _anim.SetTrigger("EndAttack");
+
+        while (_endAttackTimer < _weaponParams.EndAttackTime)
+        {
+            yield return new WaitForFixedUpdate();
+            _endAttackTimer += Time.fixedDeltaTime;
+        }
+
+        _anim.SetTrigger("Idle");
+
         _isAttacking = false;
     }
 
@@ -146,6 +162,7 @@ public class MelleeWeapon : Weapon
         SoundManager.Instance.Play(_weaponParams.AttackSoundName);
 
         _attackTimer = 0f;
+        _endAttackTimer = 0f;
 
         List<Collider2D> attackedColliders = new List<Collider2D>();
 
@@ -203,6 +220,17 @@ public class MelleeWeapon : Weapon
 
             yield return new WaitForFixedUpdate();
         }
+
+        _anim.SetTrigger("EndAttack");
+
+        while (_endAttackTimer < _weaponParams.EndAttackTime)
+        {
+            yield return new WaitForFixedUpdate();
+            _endAttackTimer += Time.fixedDeltaTime;
+        }
+
+        _anim.SetTrigger("Idle");
+
         _isAttacking = false;
     }
 
@@ -223,12 +251,19 @@ public class MelleeWeapon : Weapon
             float speed = rig.velocity.magnitude;
             Vector2 newVector = target - (Vector2)UnitController.transform.position;
             bullet.GetComponent<Rigidbody2D>().velocity = newVector.normalized * speed;
+            bullet.transform.rotation = Quaternion.LookRotation(Vector3.forward, newVector);
+            bullet.transform.eulerAngles = new Vector3(bullet.transform.eulerAngles.x, bullet.transform.eulerAngles.y, bullet.transform.eulerAngles.z + 90f);
         }
     }
 
     public override WeaponType GetWeaponType()
     {
         return WeaponType.Mellee;
+    }
+
+    public override Animator GetAnimator()
+    {
+        return _anim;
     }
 
     public override int GetCurrentAmmo()
@@ -242,6 +277,13 @@ public class MelleeWeapon : Weapon
     public override void DropWeapon()
     {
         base.DropWeapon();
+
+        _anim.SetTrigger("Idle");
+    }
+
+    public override void ThrowWeapon(Vector2 targetPos)
+    {
+        base.ThrowWeapon(targetPos);
 
         _anim.SetTrigger("Idle");
     }

@@ -32,7 +32,7 @@ public class WeaponController : ComponentsGetter
         get 
         {
             if(_currentWeapon.GetWeaponType() == Weapon.WeaponType.Mellee)
-                return GetMelleeWeaponParams().AttackTime + GetMelleeWeaponParams().PrepareTime;
+                return GetMelleeWeaponParams().AttackTime + GetMelleeWeaponParams().PrepareTime + GetMelleeWeaponParams().EndAttackTime;
 
             return 0;
         } 
@@ -204,6 +204,11 @@ public class WeaponController : ComponentsGetter
             return null;
 
         return _currentWeapon.GetWeaponParams();
+    }
+
+    public Animator GetAnimator()
+    {
+        return _currentWeapon.GetAnimator();
     }
 
     public MelleeWeaponParams GetMelleeWeaponParams()

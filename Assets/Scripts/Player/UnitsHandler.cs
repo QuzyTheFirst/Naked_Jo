@@ -310,6 +310,9 @@ public class UnitsHandler : PlayerInputHandler
 
     private void ChangeSlowMotionTimer(float value, bool upOrDown)
     {
+        if (GameUIController.IsPauseMenuOpened)
+            return;
+
         if(upOrDown)
             _slowMotionTimer += value;
         else

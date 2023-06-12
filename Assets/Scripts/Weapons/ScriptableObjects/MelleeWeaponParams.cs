@@ -10,7 +10,9 @@ public class MelleeWeaponParams : WeaponParams
 
     public float AttackDistance;
 
-    public float AttackTime;
+    public float AttackTime = .1f;
+
+    public float EndAttackTime = .1f;
 
     public float PrepareTime;
 

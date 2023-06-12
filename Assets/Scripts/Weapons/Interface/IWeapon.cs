@@ -18,6 +18,7 @@ public interface IWeapon
     public void DropWeapon(Vector2 dir, float power, float distanceFromUnit);
 
     public SpriteRenderer GetSpriteRenderer();
+    public Animator GetAnimator();
 
     public bool IsEmpty();
 

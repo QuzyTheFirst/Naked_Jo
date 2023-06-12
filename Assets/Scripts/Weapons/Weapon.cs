@@ -19,6 +19,7 @@ public class Weapon : MonoBehaviour, IWeapon
 
     [SerializeField] private WeaponWrapper _weaponWrapper;
     [SerializeField] private LayerMask _attackMask;
+    [SerializeField] protected Transform _handle;
 
     private WeaponState _weaponState = WeaponState.Laying;
 
@@ -251,6 +252,11 @@ public class Weapon : MonoBehaviour, IWeapon
     }
 
     public virtual void ResetAmmo() { }
+
+    public virtual Animator GetAnimator()
+    {
+        return null;
+    }
 
     public SpriteRenderer GetSpriteRenderer()
     {

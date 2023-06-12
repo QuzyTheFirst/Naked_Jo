@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 27645debcd9b6df419dc36224297268e
+guid: 80b556a90e1a1044bb46248b6c3c2882
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,10 +63,11 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 64
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: 4
     textureCompression: 1
@@ -124,68 +125,101 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 256
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: OpenMouth
+      name: Idle
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
+        width: 40
         height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8117c912305822c41aa0f60b992137a2
-      internalID: -642492705
+      spriteID: 4bb66e65af4f63141ad307792334a696
+      internalID: -858736119
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Transition
+      name: Prepare
       rect:
         serializedVersion: 2
-        x: 16
+        x: 40
         y: 0
-        width: 16
+        width: 40
         height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c2614c2cdd097641b7d742bd7d0b955
-      internalID: -2092027092
+      spriteID: d4922158bcb7df94fa59dbbba0e43687
+      internalID: 973082651
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ClosedMouth
+      name: Attack_0
       rect:
         serializedVersion: 2
-        x: 32
+        x: 80
         y: 0
-        width: 16
+        width: 40
         height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a454e9a3eba1f91499cdbec77dbce16e
-      internalID: -1602046842
+      spriteID: 81d844c2f3225454281f98bee868378c
+      internalID: 227545995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_1
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 16
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7556f820772d1584e9b4321bd85099b2
+      internalID: -2097037241
       vertices: []
       indices: 
       edges: []
@@ -201,9 +235,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ClosedMouth: -1602046842
-      Transition: -2092027092
-      OpenMouth: -642492705
+      Attack_0: 227545995
+      Attack_1: -2097037241
+      Idle: -858736119
+      Prepare: 973082651
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
