@@ -87,6 +87,8 @@ public class LittleKatanaMan : AIBase
         AttackMask = attackMask;
         MyWeaponController.SetAttackMask(attackMask);
 
+        MyWeaponController.GetAnimator().SetTrigger("Idle");
+
         _chasePlayerAfterDissapearanceTimer = 0f;
     }
 
