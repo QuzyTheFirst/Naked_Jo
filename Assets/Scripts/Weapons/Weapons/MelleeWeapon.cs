@@ -99,7 +99,7 @@ public class MelleeWeapon : Weapon
                 if (iDamagable != null)
                 {
                     _hitted = true;
-                    iDamagable.Damage(1);
+                    iDamagable.Damage(UnitController.transform.position, 1);
                     attackedColliders.Add(coll);
                 }
 
@@ -201,7 +201,7 @@ public class MelleeWeapon : Weapon
                 if (iDamagable != null)
                 {
                     _hitted = true;
-                    iDamagable.Damage(1);
+                    iDamagable.Damage(UnitController.transform.position, 1);
                     attackedColliders.Add(coll);
                 }
 

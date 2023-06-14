@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class ScaredHuman : AIBase
 {
+    [Header("Scared Human")]
+    [SerializeField] private Sprite _scaredSprite;
+
     // Simple Enemy States
     private ScaredHumanBaseState _currentState;
     private ScaredHumanStateFactory _states;
 
     public ScaredHumanBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
+    public Sprite ScaredSprite { get { return _scaredSprite; } }
 
     private void Start()
     {

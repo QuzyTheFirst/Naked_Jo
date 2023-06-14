@@ -12,8 +12,12 @@ public class Sturdy : AIBase
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
     private float _chasePlayerAfterDissapearanceTimer;
 
-    [Header("Helmet")]
-    [SerializeField] private GameObject _helmet;
+    [Header("Helmet and Sprite")]
+    [SerializeField] private Transform _sturdyHelmet;
+    [SerializeField] private Sprite _sturdyWithoutHelmetPossessed;
+    [SerializeField] private Sprite _sturdyWithoutHelmetNormalState;
+
+    private bool _isDamaged = false;
 
     // Rolling
     [Header("Rolling")]
@@ -54,6 +58,8 @@ public class Sturdy : AIBase
         _currentState.OnEnter(this);
 
         _nextRollingTime = Time.time;
+
+        _sturdyHelmet.gameObject.SetActive(false);
     }
 
     protected override void FixedUpdate()
@@ -98,6 +104,15 @@ public class Sturdy : AIBase
         MyWeaponController.SetAttackMask(attackMask);
 
         _chasePlayerAfterDissapearanceTimer = 0f;
+
+        if (_isDamaged)
+        {
+            MySpriteRenderer.sprite = _sturdyWithoutHelmetPossessed;
+        }
+        else
+        {
+            MySpriteRenderer.sprite = _possesedStateSprite;
+        }
     }
 
     public override void UnPossess(LayerMask attackMask, Transform targetUnit)
@@ -106,6 +121,15 @@ public class Sturdy : AIBase
 
         AttackMask = attackMask;
         MyWeaponController.SetAttackMask(attackMask);
+
+        if (_isDamaged)
+        {
+            MySpriteRenderer.sprite = _sturdyWithoutHelmetNormalState;
+        }
+        else
+        {
+            MySpriteRenderer.sprite = _normalStateSprite;
+        }
     }
 
     public override void Stun(float time)
@@ -138,11 +162,30 @@ public class Sturdy : AIBase
         return null;
     }
 
-    public override bool Damage(int amount)
+    public override bool Damage(Vector2 from, int amount)
     {
-        _helmet.SetActive(false);
+        if (!_isDamaged)
+        {
+            if (IsPossessed)
+            {
+                MySpriteRenderer.sprite = _sturdyWithoutHelmetPossessed;
+            }
+            else
+            {
+                MySpriteRenderer.sprite = _sturdyWithoutHelmetNormalState;
+            }
 
-        return base.Damage(amount);
+            _sturdyHelmet.gameObject.SetActive(true);
+            Vector2 dir = ((Vector2)transform.position - from).normalized;
+
+            Rigidbody2D rig = _sturdyHelmet.GetComponent<Rigidbody2D>();
+            rig.velocity = dir * 12;
+            rig.angularVelocity = 720;
+
+            _isDamaged = true;
+        }
+
+        return base.Damage(from, amount);
     }
 
     private void OnDrawGizmos()

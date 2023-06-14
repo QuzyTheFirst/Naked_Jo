@@ -10,7 +10,7 @@ public class DeathZone : MonoBehaviour
         if(iDamagable != null)
         {
             SoundManager.Instance.Play("ExplodeConsequences");
-            iDamagable.Damage(100);
+            iDamagable.Damage(transform.position, 100);
         }
     }
 }

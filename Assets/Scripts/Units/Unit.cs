@@ -76,7 +76,7 @@ public class Unit : ComponentsGetter, IDamagable
         enabled = false;
     }
 
-    public void Damage(int amount)
+    public void Damage(Vector2 from, int amount)
     {
         if (IsPlayer)
         {
@@ -84,7 +84,7 @@ public class Unit : ComponentsGetter, IDamagable
         }
         else
         {
-            if (MyEnemyController.Damage(amount))
+            if (MyEnemyController.Damage(from, amount))
                 OnDeath?.Invoke(this, EventArgs.Empty);
         }
     }

@@ -263,7 +263,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 336741263, guid: 22812fccec0e37d4db5cec714971dca6, type: 3}
+  m_Sprite: {fileID: 1906354311, guid: a1646d1d769a99841a7602c4f8887a15, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -323,8 +323,8 @@ MonoBehaviour:
   _lerpAmount: 8
   _acceleration: 10
   _deceleration: 8
-  _possesedStateSprite: {fileID: -861284227, guid: 22812fccec0e37d4db5cec714971dca6, type: 3}
-  _normalStateSprite: {fileID: 336741263, guid: 22812fccec0e37d4db5cec714971dca6, type: 3}
+  _possesedStateSprite: {fileID: -1022880985, guid: a1646d1d769a99841a7602c4f8887a15, type: 3}
+  _normalStateSprite: {fileID: 1906354311, guid: a1646d1d769a99841a7602c4f8887a15, type: 3}
   _playerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -339,7 +339,7 @@ MonoBehaviour:
     m_Bits: 1032
   _stunAnimGO: {fileID: 868382421}
   _foundYouGO: {fileID: 2113892610}
-  _scaredSprite: {fileID: 1829169140, guid: 22812fccec0e37d4db5cec714971dca6, type: 3}
+  _scaredSprite: {fileID: -1308699963, guid: a1646d1d769a99841a7602c4f8887a15, type: 3}
 --- !u!1 &2975549893915386162
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,7 +588,7 @@ GameObject:
   - component: {fileID: 6241506870422636142}
   - component: {fileID: 4993706771387130529}
   m_Layer: 7
-  m_Name: Scared Human
+  m_Name: Scared Human 2
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -631,7 +631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPlayer: 0
-  _deadBody: {fileID: -1806488509, guid: 22812fccec0e37d4db5cec714971dca6, type: 3}
+  _deadBody: {fileID: 530304052, guid: a1646d1d769a99841a7602c4f8887a15, type: 3}
   _deadBodyMat: {fileID: 6200000, guid: 43e7e8befefe7fc46b08cfcd796cec66, type: 2}
 --- !u!114 &-3314834110055560292
 MonoBehaviour:

@@ -13,6 +13,8 @@ public class ScaredHumanRetreatState : ScaredHumanBaseState
         context.MovementSpeed = context.WalkSpeed;
 
         context.Movement = AIBase.MovementState.Stop;
+
+        context.MySpriteRenderer.sprite = context.ScaredSprite;
     }
 
     public override void OnUpdate(ScaredHuman context)
@@ -59,6 +61,7 @@ public class ScaredHumanRetreatState : ScaredHumanBaseState
     public override void OnExit(ScaredHuman context)
     {
         Debug.Log("Retreat state exit");
+        context.MySpriteRenderer.sprite = context.NormalStateSprite;
     }
 
     private void UpdateWeaponTargetPos(ScaredHuman context)

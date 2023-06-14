@@ -263,8 +263,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 40a517a415a5d4549bc6690297309ff2, type: 3}
-  m_Color: {r: 0.8679245, g: 0.1915984, b: 0.22131298, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 0ee40df6b54e03a4d8b527ce2c2d635a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -323,8 +323,8 @@ MonoBehaviour:
   _lerpAmount: 8
   _acceleration: 10
   _deceleration: 8
-  _possesedStateSprite: {fileID: 21300000, guid: dfa321de60f2802418c325c06cf65fa9, type: 3}
-  _normalStateSprite: {fileID: 21300000, guid: 40a517a415a5d4549bc6690297309ff2, type: 3}
+  _possesedStateSprite: {fileID: 21300000, guid: a7d32eefe3381e04a9dbcc5c400d0f38, type: 3}
+  _normalStateSprite: {fileID: 21300000, guid: 0ee40df6b54e03a4d8b527ce2c2d635a, type: 3}
   _playerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -555,7 +555,7 @@ Transform:
   m_GameObject: {fileID: 5099117350536868413}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6241506870422636137}
@@ -638,7 +638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPlayer: 0
-  _deadBody: {fileID: 21300000, guid: 0dd6a81e331f2514a928a8b4498bd143, type: 3}
+  _deadBody: {fileID: 21300000, guid: e72e3f161a29cd2419a722618d1f7917, type: 3}
   _deadBodyMat: {fileID: 6200000, guid: 43e7e8befefe7fc46b08cfcd796cec66, type: 2}
 --- !u!114 &-3314834110055560292
 MonoBehaviour:
@@ -731,11 +731,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5069930516999222433, guid: c42f6fe900695524286bb787a8065c91, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5069930516999222433, guid: c42f6fe900695524286bb787a8065c91, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5069930516999222433, guid: c42f6fe900695524286bb787a8065c91, type: 3}
       propertyPath: m_LocalPosition.x

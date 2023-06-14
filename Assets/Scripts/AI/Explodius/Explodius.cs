@@ -81,7 +81,7 @@ public class Explodius : AIBase
         //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     }
 
-    public override bool Damage(int amount)
+    public override bool Damage(Vector2 from, int amount)
     {
         if (!_isExploding)
         {
@@ -124,7 +124,7 @@ public class Explodius : AIBase
                     rig.velocity = dir * 6;
                 }
 
-                unit.Damage(100);
+                unit.Damage(transform.position, 100);
             }
         }
 
@@ -132,7 +132,7 @@ public class Explodius : AIBase
         particles.transform.position = transform.position;
         particles.Play();
 
-        context.MyUnit.Damage(100);
+        context.MyUnit.Damage(transform.position, 100);
     }
 
     private void OnDrawGizmos()

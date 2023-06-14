@@ -25,7 +25,8 @@ public class Bullet : MonoBehaviour
             return _isDeflected; 
         } 
         set { 
-            _deflectionTimer = _deflectionDuration; 
+            _deflectionTimer = _deflectionDuration;
+            _shootPos = transform.position;
             _isDeflected = value; 
         } 
     }
@@ -33,6 +34,7 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         _rig = GetComponent<Rigidbody2D>();
+        _shootPos = transform.position;
     }
     private void Update()
     {
@@ -55,7 +57,7 @@ public class Bullet : MonoBehaviour
         IDamagable iDamagable = collision.transform.GetComponent<IDamagable>();
         if (iDamagable != null)
         {
-            iDamagable.Damage(1);
+            iDamagable.Damage(_shootPos, 1);
         }
 
         Rigidbody2D rig = collision.transform.GetComponent<Rigidbody2D>();

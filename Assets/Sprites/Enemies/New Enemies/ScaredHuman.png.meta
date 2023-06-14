@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cbda79f2525f3f34abf836a2e15c75f0
+guid: 22812fccec0e37d4db5cec714971dca6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -141,106 +141,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Katana_Idle
+      name: ScaredHuman_Scared
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 37
-        height: 71
+        width: 35
+        height: 35
       alignment: 9
-      pivot: {x: 0.51451796, y: 0.5}
+      pivot: {x: 0.515, y: 0.455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b08a1196cd4a0743aa7213261c3c40e
-      internalID: -760401790
+      spriteID: 0b2cbeccc6a9c23409f552518b14f8c1
+      internalID: 1829169140
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Katana_Prepare
+      name: ScaredHuman_Normal
       rect:
         serializedVersion: 2
-        x: 37
+        x: 35
         y: 0
-        width: 37
-        height: 71
+        width: 35
+        height: 35
       alignment: 9
-      pivot: {x: 0.32, y: 0.28}
+      pivot: {x: 0.515, y: 0.455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a582819ebbe7fa6458e263e908d94aab
-      internalID: 798645072
+      spriteID: 119fce45e4c41854cb30235c04686733
+      internalID: 336741263
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Katana_Attack_1
+      name: ScaredHuman_Possessed
       rect:
         serializedVersion: 2
-        x: 74
+        x: 70
         y: 0
-        width: 37
-        height: 71
+        width: 35
+        height: 35
       alignment: 9
-      pivot: {x: 0.15, y: 0.5}
+      pivot: {x: 0.515, y: 0.455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 510d8a5e2a3897642b3129cc78590453
-      internalID: 752543078
+      spriteID: bf93e217450c246448b991652998f669
+      internalID: -861284227
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Katana_Attack_2
+      name: ScaredHuman_Dead
       rect:
         serializedVersion: 2
-        x: 111
+        x: 105
         y: 0
-        width: 37
-        height: 71
+        width: 35
+        height: 35
       alignment: 9
-      pivot: {x: 0.15, y: 0.5}
+      pivot: {x: 0.515, y: 0.455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b1a03cb753bba2845a7a68cf51a8fd5c
-      internalID: -1628672754
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Katana_Block
-      rect:
-        serializedVersion: 2
-        x: 148
-        y: 0
-        width: 37
-        height: 71
-      alignment: 9
-      pivot: {x: 0.5290358, y: 0.52269715}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0f31d640f9845bc458fcf5ac582863dc
-      internalID: 339127083
+      spriteID: c6b3ff9e575021e46a7df5ef4fb88ef2
+      internalID: -1806488509
       vertices: []
       indices: 
       edges: []
@@ -256,11 +235,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Katana_Attack_1: 752543078
-      Katana_Attack_2: -1628672754
-      Katana_Block: 339127083
-      Katana_Idle: -760401790
-      Katana_Prepare: 798645072
+      ScaredHuman_Dead: -1806488509
+      ScaredHuman_Normal: 336741263
+      ScaredHuman_Possessed: -861284227
+      ScaredHuman_Scared: 1829169140
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

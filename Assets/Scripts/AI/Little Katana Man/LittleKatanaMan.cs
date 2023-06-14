@@ -7,6 +7,9 @@ public class LittleKatanaMan : AIBase
     [Header("LittleKatanaMan")]
     [SerializeField] private bool _startWithIdle = false;
 
+    [Header("Hat")]
+    [SerializeField] private Transform _hatTf;
+
     [Header("Chase State")]
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
     private float _chasePlayerAfterDissapearanceTimer;
@@ -51,6 +54,8 @@ public class LittleKatanaMan : AIBase
         _currentState = _states.Grounded();
 
         _currentState.OnEnter(this);
+
+        _hatTf.gameObject.SetActive(false);
     }
 
     protected override void FixedUpdate()
@@ -116,6 +121,19 @@ public class LittleKatanaMan : AIBase
         }
 
         return null;
+    }
+
+    public override bool Damage(Vector2 from, int amount)
+    {
+        _hatTf.gameObject.SetActive(true);
+
+        Vector2 dir = ((Vector2)transform.position - from).normalized;
+
+        Rigidbody2D rig = _hatTf.GetComponent<Rigidbody2D>();
+        rig.velocity = dir * 12;
+        rig.angularVelocity = 720;
+
+        return base.Damage(from, amount);
     }
 
     private void OnDrawGizmos()

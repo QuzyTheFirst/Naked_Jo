@@ -24413,9 +24413,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1424595072, guid: 9b03a86d31c00f04189bab9b3f779f66, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5955555972726093316, guid: 9b03a86d31c00f04189bab9b3f779f66, type: 3}
       propertyPath: m_Name
       value: Wooden Platform
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955555972726093318, guid: 9b03a86d31c00f04189bab9b3f779f66, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955555972726093319, guid: 9b03a86d31c00f04189bab9b3f779f66, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955555972726093319, guid: 9b03a86d31c00f04189bab9b3f779f66, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5955555972726093337, guid: 9b03a86d31c00f04189bab9b3f779f66, type: 3}
       propertyPath: m_RootOrder
@@ -24529,7 +24545,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 519420032, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.4980924
+      value: 1.5020663
       objectReference: {fileID: 0}
     - target: {fileID: 519420032, guid: c45af7635f715f1418a123da5607d105, type: 3}
       propertyPath: m_LocalPosition.y

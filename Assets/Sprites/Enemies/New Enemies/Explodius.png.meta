@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cbda79f2525f3f34abf836a2e15c75f0
+guid: 31d64d3a79c2f08439b5a79c1eda1d06
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -67,7 +67,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 256
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: 4
     textureCompression: 1
@@ -141,106 +141,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Katana_Idle
+      name: Explodius_Normal
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 37
-        height: 71
+        width: 44
+        height: 41
       alignment: 9
-      pivot: {x: 0.51451796, y: 0.5}
+      pivot: {x: 0.5, y: 0.39}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b08a1196cd4a0743aa7213261c3c40e
-      internalID: -760401790
+      spriteID: a52656b4b9a231b439593bf4d52f5612
+      internalID: -1248309901
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Katana_Prepare
+      name: Explodius_Possessed
       rect:
         serializedVersion: 2
-        x: 37
+        x: 44
         y: 0
-        width: 37
-        height: 71
+        width: 44
+        height: 41
       alignment: 9
-      pivot: {x: 0.32, y: 0.28}
+      pivot: {x: 0.5, y: 0.39}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a582819ebbe7fa6458e263e908d94aab
-      internalID: 798645072
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Katana_Attack_1
-      rect:
-        serializedVersion: 2
-        x: 74
-        y: 0
-        width: 37
-        height: 71
-      alignment: 9
-      pivot: {x: 0.15, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 510d8a5e2a3897642b3129cc78590453
-      internalID: 752543078
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Katana_Attack_2
-      rect:
-        serializedVersion: 2
-        x: 111
-        y: 0
-        width: 37
-        height: 71
-      alignment: 9
-      pivot: {x: 0.15, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b1a03cb753bba2845a7a68cf51a8fd5c
-      internalID: -1628672754
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Katana_Block
-      rect:
-        serializedVersion: 2
-        x: 148
-        y: 0
-        width: 37
-        height: 71
-      alignment: 9
-      pivot: {x: 0.5290358, y: 0.52269715}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0f31d640f9845bc458fcf5ac582863dc
-      internalID: 339127083
+      spriteID: 9b195070628f3bb458db5fb3bb27647e
+      internalID: -930360127
       vertices: []
       indices: 
       edges: []
@@ -256,11 +193,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Katana_Attack_1: 752543078
-      Katana_Attack_2: -1628672754
-      Katana_Block: 339127083
-      Katana_Idle: -760401790
-      Katana_Prepare: 798645072
+      Explodius_Normal: -1248309901
+      Explodius_Possessed: -930360127
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -499,7 +499,7 @@ public class UnitsHandler : PlayerInputHandler
             _playerUnit.MyCostumeChanger.SetCostume(CostumeChanger.Costumes.Naked);
 
             oldUnit.HasExploded = true;
-            oldUnit.Damage(100);
+            oldUnit.Damage(oldUnit.transform.position, 100);
 
             Collider2D[] colls = Physics2D.OverlapCircleAll(explodingUnit.transform.position, _explosionRadius, _playerAttackMask);
             foreach (Collider2D col in colls)

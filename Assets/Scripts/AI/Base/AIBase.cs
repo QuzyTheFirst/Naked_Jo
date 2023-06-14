@@ -99,6 +99,10 @@ public class AIBase : ComponentsGetter
 
     public bool CanISeeMyTarget { get { return _canISeeMyTarget; } }
 
+    //Sprites
+    public Sprite PossessedSprite { get { return _possesedStateSprite; } }
+    public Sprite NormalStateSprite { get { return _normalStateSprite; } }
+
     //Stun
     public GameObject StunAnimGO { get { return _stunAnimGO; } }
 
@@ -299,7 +303,7 @@ public class AIBase : ComponentsGetter
         }
     }
 
-    public virtual bool Damage(int amount)
+    public virtual bool Damage(Vector2 from, int amount)
     {
         _healthPoints -= amount;
 
