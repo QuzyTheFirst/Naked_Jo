@@ -266,6 +266,12 @@ MonoBehaviour:
   _foundYouGO: {fileID: 2113892610}
   _startWithIdle: 0
   _chasePlayerAfterDissapearanceTime: 5
+  _obstaclesMask:
+    serializedVersion: 2
+    m_Bits: 8
+  _explosionMask:
+    serializedVersion: 2
+    m_Bits: 8576
   _distanceToStartExplosion: 1.25
   _explosionRadius: 3
   _timeToExplode: 0.5

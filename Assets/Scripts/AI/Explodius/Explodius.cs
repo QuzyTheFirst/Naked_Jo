@@ -12,6 +12,10 @@ public class Explodius : AIBase
     [SerializeField] private float _chasePlayerAfterDissapearanceTime = 5f;
     private float _chasePlayerAfterDissapearanceTimer;
 
+    [Header("Layer masks")]
+    [SerializeField] private LayerMask _obstaclesMask;
+    [SerializeField] private LayerMask _explosionMask;
+
     [Header("Explosion State")]
     [SerializeField] private float _distanceToStartExplosion;
     [SerializeField] private float _explosionRadius;
@@ -100,14 +104,16 @@ public class Explodius : AIBase
         _isExploding = true;
         context.MyUnit.HasExploded = true;
 
-        Collider2D[] colls = Physics2D.OverlapCircleAll(context.transform.position, context.ExplosionRadius);
-        foreach (Collider2D col in colls)
+        Collider2D[] colls = Physics2D.OverlapCircleAll(context.transform.position, context.ExplosionRadius, _explosionMask);
+        foreach (Collider2D coll in colls)
         {
-            Unit unit = col.GetComponent<Unit>();
+            Unit unit = coll.GetComponent<Unit>();
             if (unit != null)
             {
                 if (unit == context.MyUnit)
                     continue;
+
+                Vector2 dir = (coll.transform.position - context.transform.position).normalized;
 
                 if (unit.MyEnemyController is Explodius)
                 {
@@ -117,10 +123,9 @@ public class Explodius : AIBase
                         continue;
                 }
 
-                Rigidbody2D rig = col.transform.GetComponent<Rigidbody2D>();
+                Rigidbody2D rig = coll.transform.GetComponent<Rigidbody2D>();
                 if(rig != null)
                 {
-                    Vector2 dir = (col.transform.position - transform.position).normalized;
                     rig.velocity = dir * 6;
                 }
 

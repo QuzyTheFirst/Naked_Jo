@@ -502,9 +502,9 @@ public class UnitsHandler : PlayerInputHandler
             oldUnit.Damage(oldUnit.transform.position, 100);
 
             Collider2D[] colls = Physics2D.OverlapCircleAll(explodingUnit.transform.position, _explosionRadius, _playerAttackMask);
-            foreach (Collider2D col in colls)
+            foreach (Collider2D coll in colls)
             {
-                Unit unit = col.GetComponent<Unit>();
+                Unit unit = coll.GetComponent<Unit>();
                 if (unit != null)
                 {
                     if (unit.IsPlayer)
@@ -618,10 +618,21 @@ public class UnitsHandler : PlayerInputHandler
 
     private void KillPlayer(Unit unit)
     {
-        _bloodParticleSystem.transform.position = unit.transform.position;
-        _bloodParticleSystem.Play();
+        if (unit.HasExploded)
+        {
+            Instantiate(_enemyBodyParts, unit.transform.position, Quaternion.identity);
 
-        unit.KillUnit();
+            unit.KillUnit();
+
+            unit.MySpriteRenderer.sprite = null;
+        }
+        else
+        {
+            _bloodParticleSystem.transform.position = unit.transform.position;
+            _bloodParticleSystem.Play();
+
+            unit.KillUnit();
+        }
 
         ToggleInterfaceVisibility(false);
         GameUIController.Instance.ToggleRestartPanel(true);
