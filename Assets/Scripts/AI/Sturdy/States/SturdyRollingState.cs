@@ -20,6 +20,8 @@ public class SturdyRollingState : SturdyBaseState
 
         EnableIFrames();
 
+        SoundManager.Instance.Play("Dash");
+
         InitializeSubState(context);
     }
 

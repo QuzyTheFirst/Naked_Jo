@@ -58,6 +58,7 @@ public class Bullet : MonoBehaviour
         if (iDamagable != null)
         {
             iDamagable.Damage(_shootPos, 1);
+            SoundManager.Instance.Play("Hit");
         }
 
         Rigidbody2D rig = collision.transform.GetComponent<Rigidbody2D>();

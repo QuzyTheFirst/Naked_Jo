@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _graphics: {fileID: 542127248508194348}
   _nextLevelLoaderDoor: {fileID: 1896109628974864262}
+  _openDoorDirection: 0
 --- !u!61 &4423314355327783602
 BoxCollider2D:
   m_ObjectHideFlags: 0

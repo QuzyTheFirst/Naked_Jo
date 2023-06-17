@@ -44,7 +44,7 @@ public class PostProcessingController : MonoBehaviour
 
     public void PlayKillPostProcessAnim()
     {
-        Debug.Log("Kill Post Process");
+        //Debug.Log("Kill Post Process");
         GameObject go = _killPostProcessingVolume.gameObject;
 
         LeanTween.cancel(go);

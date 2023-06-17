@@ -22,6 +22,8 @@ public class PlayerRollingState : PlayerBaseState
 
         EnableIFrames();
 
+        SoundManager.Instance.Play("Dash");
+
         InitializeSubState(player);
     }
 

@@ -245,6 +245,7 @@ public class MelleeWeapon : Weapon
 
     private void DeflectBullets(Collider2D[] bullets, Vector2 target)
     {
+        bool deflected = false;
         foreach(Collider2D bullet in bullets)
         {
             Rigidbody2D rig = bullet.GetComponent<Rigidbody2D>();
@@ -253,6 +254,12 @@ public class MelleeWeapon : Weapon
             bullet.GetComponent<Rigidbody2D>().velocity = newVector.normalized * speed;
             bullet.transform.rotation = Quaternion.LookRotation(Vector3.forward, newVector);
             bullet.transform.eulerAngles = new Vector3(bullet.transform.eulerAngles.x, bullet.transform.eulerAngles.y, bullet.transform.eulerAngles.z + 90f);
+            deflected = true;
+        }
+
+        if (deflected)
+        {
+            SoundManager.Instance.Play("KatanaDeflect");
         }
     }
 

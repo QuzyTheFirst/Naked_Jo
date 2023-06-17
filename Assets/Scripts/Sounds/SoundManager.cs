@@ -18,21 +18,36 @@ public class Sound
     public bool randomPitch;
     public bool canPlayWhilePlaying;
 
+    public Coroutine fadeInCoroutine;
+    public Coroutine fadeAwayCoroutine;
+
     public AudioSource source;
 }
 
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] private Sound[] sounds;
-    public static SoundManager Instance;
+    private static SoundManager _instance;
+    public static SoundManager Instance 
+    { 
+        get
+        {
+            return _instance;
+        }
+    }
+
+    public static void CreateInstance(Transform soundManagerPf)
+    {
+        _instance = Instantiate(soundManagerPf, Vector3.zero, Quaternion.identity).GetComponent<SoundManager>();
+    }
 
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
 
-        if (Instance == null)
+        if (_instance == null)
         {
-            Instance = this;
+            _instance = this;
         }
         else
         {
@@ -108,7 +123,17 @@ public class SoundManager : MonoBehaviour
     {
         Sound currentSound = FindSound(soundName);
         float currentVolume = currentSound.source.volume;
-        StartCoroutine(FadeAway(currentSound, currentVolume, time));
+
+        if (currentSound.fadeInCoroutine != null)
+            StopCoroutine(currentSound.fadeInCoroutine);
+
+        if (currentSound.source.volume == 0)
+        {
+            currentSound.source.Stop();
+            return;
+        }
+
+        currentSound.fadeAwayCoroutine = StartCoroutine(FadeAway(currentSound, currentVolume, time));
     }
     IEnumerator FadeAway(Sound currentSound, float startVolume, float time)
     {
@@ -128,7 +153,17 @@ public class SoundManager : MonoBehaviour
     {
         Sound currentSound = FindSound(soundName);
         float currentVolume = currentSound.source.volume;
-        StartCoroutine(FadeIn(currentSound, currentVolume, targetVolume, time));
+
+        if (currentSound.fadeAwayCoroutine != null)
+            StopCoroutine(currentSound.fadeAwayCoroutine);
+
+        if (currentSound.source.volume == targetVolume)
+        {
+            Play(currentSound);
+            return;
+        }
+
+        currentSound.fadeInCoroutine = StartCoroutine(FadeIn(currentSound, currentVolume, targetVolume, time));
     }
 
     IEnumerator FadeIn(Sound currentSound, float startVolume, float targetVolume, float time)

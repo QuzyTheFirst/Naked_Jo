@@ -88,7 +88,7 @@ public class BigKatanaMan : AIBase
         }
 
         _currentState.UpdateStates(this);
-        Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
+        //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()}");
     }
 
 

@@ -26,7 +26,8 @@ public class Door : MonoBehaviour
         if(openDoorDirection == OpenDoorDirection.Right)
             _spriteRenderer.flipX = true;
 
-        SoundManager.Instance.Play("DoorOpen");
+
+        SoundManager.Instance?.Play("DoorOpen");
 
         _spriteRenderer.sprite = _openedSprite;
         _boxCollider.enabled = false;

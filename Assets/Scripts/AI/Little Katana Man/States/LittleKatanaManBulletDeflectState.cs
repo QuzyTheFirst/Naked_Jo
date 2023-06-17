@@ -102,6 +102,8 @@ public class LittleKatanaManBulletDeflectState : LittleKatanaManBaseState
             _lastBulletPos = bullet.transform.position;
         }
 
+        SoundManager.Instance.Play("KatanaDeflect");
+
         context.BulletsToDeflect = new Collider2D[0];
     }
 }

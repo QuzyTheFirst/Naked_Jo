@@ -10,6 +10,8 @@ public class GroundChecker : ComponentsGetter
 
     private bool _isGrounded;
 
+    private bool _oldGrounded;
+
     public bool IsGrounded { get { return _isGrounded; } }
 
     private void Awake()
@@ -19,7 +21,14 @@ public class GroundChecker : ComponentsGetter
 
     private void FixedUpdate()
     {
+        _oldGrounded = _isGrounded;
         _isGrounded = GroundCheck();
+
+        if(_oldGrounded == false && _isGrounded == true)
+        {
+            if(MyUnit.IsPlayer || MyEnemyController.IsPossessed)
+                SoundManager.Instance?.Play("Step");
+        }
     }
 
     private bool GroundCheck()

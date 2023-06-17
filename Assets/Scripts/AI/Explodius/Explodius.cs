@@ -104,6 +104,8 @@ public class Explodius : AIBase
         _isExploding = true;
         context.MyUnit.HasExploded = true;
 
+        bool hitted = false;
+
         Collider2D[] colls = Physics2D.OverlapCircleAll(context.transform.position, context.ExplosionRadius, _explosionMask);
         foreach (Collider2D coll in colls)
         {
@@ -129,13 +131,21 @@ public class Explodius : AIBase
                     rig.velocity = dir * 6;
                 }
 
+                hitted = true;
                 unit.Damage(transform.position, 100);
             }
+        }
+
+        if (hitted)
+        {
+            SoundManager.Instance.Play("Hit");
         }
 
         ParticleSystem particles = Instantiate(_explosionParticles);
         particles.transform.position = transform.position;
         particles.Play();
+
+        SoundManager.Instance.Play("ExplodeConsequences");
 
         context.MyUnit.Damage(transform.position, 100);
     }

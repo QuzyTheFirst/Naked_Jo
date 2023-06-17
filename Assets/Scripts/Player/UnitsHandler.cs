@@ -519,7 +519,7 @@ public class UnitsHandler : PlayerInputHandler
 
             _explosionTimer = 0;
             _explosionCooldownTimer = _explosionCooldownTime;
-            //SoundManager.Instance.Stop("Explode");
+            SoundManager.Instance.Play("ExplodeConsequences");
             _possessionCooldownTimer = 0f;
             ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
             _isExplosionGoing = false;
@@ -562,7 +562,7 @@ public class UnitsHandler : PlayerInputHandler
 
     private void KillEnemy(Unit unit)
     {
-        Debug.Log(unit.name);
+        //Debug.Log(unit.name);
 
         unit.MyWeaponController.DropWeapon(unit.MyFlip.LookDirection, 1f, .5f);
 
@@ -578,7 +578,7 @@ public class UnitsHandler : PlayerInputHandler
             ChangeSlowMotionTimer(_slowMotionTime * .25f, true);
             _postProcessingController.PlayKillPostProcessAnim();
 
-            Debug.Log(unit.transform.name + " : " + unit.HasExploded);
+            //Debug.Log(unit.transform.name + " : " + unit.HasExploded);
 
             if (unit.HasExploded)
             {
@@ -638,7 +638,7 @@ public class UnitsHandler : PlayerInputHandler
         GameUIController.Instance.ToggleRestartPanel(true);
 
         SetEnemiesTargetUnit(null, true);
-        Debug.Log("You are dead");
+        //Debug.Log("You are dead");
     }
     #endregion
 
@@ -771,7 +771,7 @@ public class UnitsHandler : PlayerInputHandler
             float playerRadius = .5f;
             float rayDistance = hit.distance;
 
-            Debug.Log(hit.transform.name);
+            //Debug.Log(hit.transform.name);
 
             if(rayDistance > 1.5f)
             {

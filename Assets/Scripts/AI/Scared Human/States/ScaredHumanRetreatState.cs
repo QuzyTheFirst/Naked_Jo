@@ -53,14 +53,14 @@ public class ScaredHumanRetreatState : ScaredHumanBaseState
 
         if (!context.CanISeeMyTarget)
         {
-            Debug.Log("GoToIdle!");
+            //Debug.Log("GoToIdle!");
             SwitchState(Factory.Idle());
         }
     }
 
     public override void OnExit(ScaredHuman context)
     {
-        Debug.Log("Retreat state exit");
+        //Debug.Log("Retreat state exit");
         context.MySpriteRenderer.sprite = context.NormalStateSprite;
     }
 
@@ -68,7 +68,7 @@ public class ScaredHumanRetreatState : ScaredHumanBaseState
     {
         if (context.TargetUnit == null)
         {
-            Debug.LogWarning("Target Unit hasn't been setted up!");
+            //Debug.LogWarning("Target Unit hasn't been setted up!");
             return;
         }
 

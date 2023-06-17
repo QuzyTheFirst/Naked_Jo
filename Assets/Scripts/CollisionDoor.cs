@@ -10,7 +10,7 @@ public class CollisionDoor : Door
             return;
 
         Vector2 dir = transform.position - collision.transform.position;
-        Debug.Log(dir);
+        //Debug.Log(dir);
         float sign = Mathf.Sign(dir.x);
 
         OpenDoor((OpenDoorDirection)sign);
