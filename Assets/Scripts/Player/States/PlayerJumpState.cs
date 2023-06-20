@@ -14,7 +14,10 @@ public class PlayerJumpState : PlayerBaseState
     public override void OnEnter(PlayerController player)
     {
         InitializeSubState(player);
-        //Debug.Log("Entered Jump State");
+
+        if (player.GroundRemember <= 0 && player.JumpPhase == 0)
+            player.JumpPhase = 1;
+
         if (player.JumpPressedRemember > 0)
         {
             JumpAction(player);
@@ -29,7 +32,7 @@ public class PlayerJumpState : PlayerBaseState
         }
 
         if (player.GroundRemember <= 0 && player.JumpPhase == 0)
-            player.JumpPhase++;
+            player.JumpPhase = 1;
 
         if (_isJumping && !player.IsJumpButtonPressed && player.Velocity.y > 0)
         {

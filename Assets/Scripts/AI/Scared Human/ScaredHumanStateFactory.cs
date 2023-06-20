@@ -27,7 +27,7 @@ public class ScaredHumanStateFactory
         _states.Add(ScaredHumanStates.Grounded, new ScaredHumanGroundedState(_context, this));
         _states.Add(ScaredHumanStates.Falling, new ScaredHumanFallingState(_context, this));
 
-        Debug.Log(_states[ScaredHumanStates.Grounded]);
+        //Debug.Log(_states[ScaredHumanStates.Grounded]);
     }
 
     public ScaredHumanBaseState Idle()

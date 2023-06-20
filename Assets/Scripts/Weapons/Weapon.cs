@@ -114,7 +114,7 @@ public class Weapon : MonoBehaviour, IWeapon
         _rig.angularVelocity = 480f;
     }
 
-    public void DropWeapon(Vector2 dropVector, float power, float distanceFromUnit)
+    public virtual void DropWeapon(Vector2 dropVector, float power, float distanceFromUnit)
     {
         DropWeapon();
 

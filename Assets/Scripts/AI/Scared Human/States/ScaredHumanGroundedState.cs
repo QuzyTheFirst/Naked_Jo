@@ -11,7 +11,7 @@ public class ScaredHumanGroundedState : ScaredHumanBaseState
 
     public override void OnEnter(ScaredHuman context)
     {
-        Debug.Log("Grounded State Enter");
+        //Debug.Log("Grounded State Enter");
 
         InitializeSubState(context);
     }
@@ -54,6 +54,6 @@ public class ScaredHumanGroundedState : ScaredHumanBaseState
 
     public override void OnExit(ScaredHuman context)
     {
-        Debug.Log("Ground state exit");
+        //Debug.Log("Ground state exit");
     }
 }

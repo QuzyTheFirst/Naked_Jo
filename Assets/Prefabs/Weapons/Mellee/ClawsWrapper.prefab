@@ -145,10 +145,11 @@ MonoBehaviour:
   _attackMask:
     serializedVersion: 2
     m_Bits: 0
+  _handle: {fileID: 0}
   _weaponParams: {fileID: 11400000, guid: a72e28c6f9c5d5a40a44c6fa5ad4cd94, type: 2}
 --- !u!95 &6960228006981742452
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -165,7 +166,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &1101051027009251487
 BoxCollider2D:
   m_ObjectHideFlags: 0

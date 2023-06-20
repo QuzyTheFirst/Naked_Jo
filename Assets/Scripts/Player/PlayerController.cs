@@ -28,7 +28,7 @@ public class PlayerController : ComponentsGetter
     private float _jumpPressedRemember;
 
     [SerializeField, Range(0, 5)] private int _maxAirJumps = 0;
-    private int _jumpPhase;
+    [SerializeField]private int _jumpPhase;
 
 
     [SerializeField, Range(0f, 5f)] private float _downwardMovementMultiplier = 3f;
@@ -96,6 +96,9 @@ public class PlayerController : ComponentsGetter
     public bool IsGrounded {
         get 
         {
+            if (_stepsSinceLastJump <= 2)
+                return false;
+
             return MyGroundChecker.IsGrounded; 
         }
     }
@@ -146,6 +149,9 @@ public class PlayerController : ComponentsGetter
         MyRigidbody.velocity = _velocity;
 
         _jumpPressedRemember -= Time.fixedDeltaTime;
+        _stepsSinceLastJump++;
+
+        //Debug.Log("Is Grounded: " + IsGrounded + " | Jump Phase: " + _jumpPhase + " | Current State: " + _currentState);
 
         //Debug.Log($"Current State: {_currentState} | Current Sub State: {_currentState.GetSubState()} | Direction: {_direction.x}");
     }

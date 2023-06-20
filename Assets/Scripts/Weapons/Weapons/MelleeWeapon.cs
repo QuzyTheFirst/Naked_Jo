@@ -288,6 +288,13 @@ public class MelleeWeapon : Weapon
         _anim.SetTrigger("Idle");
     }
 
+    public override void DropWeapon(Vector2 dropVector, float power, float distanceFromUnit)
+    {
+        base.DropWeapon(dropVector, power, distanceFromUnit);
+        Debug.Log("Set Trigger IDle");
+        _anim.SetTrigger("Idle");
+    }
+
     public override void ThrowWeapon(Vector2 targetPos)
     {
         base.ThrowWeapon(targetPos);

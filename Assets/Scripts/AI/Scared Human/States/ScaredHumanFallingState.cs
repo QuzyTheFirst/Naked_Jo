@@ -11,7 +11,7 @@ public class ScaredHumanFallingState : ScaredHumanBaseState
 
     public override void OnEnter(ScaredHuman context)
     {
-        Debug.Log("Falling State Enter");
+        //Debug.Log("Falling State Enter");
         InitializeSubState(context);
     }
 
@@ -53,7 +53,7 @@ public class ScaredHumanFallingState : ScaredHumanBaseState
 
     public override void OnExit(ScaredHuman context)
     {
-        Debug.Log("Falling State Exit");
+        //Debug.Log("Falling State Exit");
         context.MyRigidbody.gravityScale = context.MyPlayerController.DefaultGravityScale;
     }
 }

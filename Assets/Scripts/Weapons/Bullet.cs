@@ -50,6 +50,9 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.isTrigger)
+            return;
+
         if (_hittedTarget)
             return;
         _hittedTarget = true;

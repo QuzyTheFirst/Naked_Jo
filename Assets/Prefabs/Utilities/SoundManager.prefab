@@ -59,7 +59,7 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     randomPitch: 1
-    canPlayWhilePlaying: 1
+    canPlayWhilePlaying: 0
     source: {fileID: 0}
   - name: ClubAttack
     clip: {fileID: 8300000, guid: 973b0beddb3e8d44e8c319aace8ab87a, type: 3}
