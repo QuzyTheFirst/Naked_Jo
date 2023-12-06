@@ -76,6 +76,11 @@ public class GameUIController : MonoBehaviour
 
     public static GameUIController Instance;
 
+    [Header("Pause Menu - Settings - Volume")]
+    [SerializeField] private GameObject _settingsMenu;
+    [SerializeField] private Slider _volumeSlider;
+    [SerializeField] private TextMeshProUGUI _volumeText;
+
     public static bool IsPauseMenuOpened { get { return _isPauseMenuOpened; } }
 
     private void Awake()
@@ -334,5 +339,33 @@ public class GameUIController : MonoBehaviour
     public void Exit()
     {
         Application.Quit();
+    }
+
+    public void ToggleSettingsMenu(bool value)
+    {
+        if (value == false)
+        {
+            PlayerPrefs.SetFloat("Volume", _volumeSlider.value);
+        }
+
+        _settingsMenu.SetActive(value);
+    }
+
+    private void OnEnable()
+    {
+        _volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
+        _volumeText.text = $"Volume: {(int)(_volumeSlider.value * 100)}%";
+
+        _volumeSlider.onValueChanged.AddListener((value) =>
+        {
+            _volumeText.text = $"Volume: {(int)(value * 100)}%";
+            SoundManager.Instance.ChangeSoundManagerVolume(value);
+            PlayerPrefs.SetFloat("Volume", _volumeSlider.value);
+        });
+    }
+
+    private void OnDisable()
+    {
+        _volumeSlider.onValueChanged.RemoveAllListeners();
     }
 }

@@ -28,6 +28,9 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField] private Sound[] sounds;
     private static SoundManager _instance;
+
+    private static float _volume;
+
     public static SoundManager Instance 
     { 
         get
@@ -39,6 +42,16 @@ public class SoundManager : MonoBehaviour
     public static void CreateInstance(Transform soundManagerPf)
     {
         _instance = Instantiate(soundManagerPf, Vector3.zero, Quaternion.identity).GetComponent<SoundManager>();
+    }
+
+    public void ChangeSoundManagerVolume(float volume)
+    {
+        _volume = volume;
+
+        foreach (Sound s in sounds)
+        {
+            s.source.volume = s.volume * _volume;
+        }
     }
 
     private void Awake()
@@ -63,6 +76,8 @@ public class SoundManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
         }
+
+        _volume = PlayerPrefs.GetFloat("Volume", 1);
     }
 
     public void Play(string soundName)
@@ -73,20 +88,10 @@ public class SoundManager : MonoBehaviour
         {
             if (currentSound.randomPitch)
             {
-                //currentSound.source.volume = UnityEngine.Random.Range(.8f, 1f);
                 currentSound.source.pitch = UnityEngine.Random.Range(.8f, 1.1f);
             }
             currentSound.source.Play();
         }
-        /*else if (currentSound.source.isPlaying && currentSound.canPlayWhilePlaying)
-        {
-            if (currentSound.randomPitch)
-            {
-                currentSound.source.volume = UnityEngine.Random.Range(.8f, 1f);
-                currentSound.source.pitch = UnityEngine.Random.Range(.8f, 1.1f);
-            }
-            currentSound.source.Play();
-        }*/
     }
 
     public void Play(Sound currentSound)
